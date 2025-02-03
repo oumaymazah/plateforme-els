@@ -27,7 +27,6 @@
 	                        <div class="card">
 	                            <div class="card-body">
 	                                <div class="email-app-sidebar left-bookmark">
-	                                    
 	                                    <ul class="nav main-menu contact-options" role="tablist">
 	                                        <li class="nav-item">
 	                                            <button class="badge-light btn-block btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="me-2" data-feather="users"></i> New Contacts</button>
@@ -135,7 +134,7 @@
 	                                        </li>
 	                                    </ul>
 	                                </div>
-                                    
+
 	                            </div>
 	                        </div>
 	                    </div>
