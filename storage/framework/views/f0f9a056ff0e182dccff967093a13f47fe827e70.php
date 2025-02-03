@@ -13,4 +13,4 @@
 <!-- Plugins JS Ends-->
 <!-- Theme js-->
 <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>
-<!-- Plugin used--><?php /**PATH /Users/iheb/Herd/alibaba-tirage/resources/views/layouts/admin/partials/js.blade.php ENDPATH**/ ?>
+<!-- Plugin used--><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/layouts/admin/partials/js.blade.php ENDPATH**/ ?>

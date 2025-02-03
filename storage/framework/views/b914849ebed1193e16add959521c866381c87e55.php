@@ -22,4 +22,4 @@
 <link id="color" rel="stylesheet" href="<?php echo e(asset('assets/css/color-1.css')); ?>" media="screen" />
 <!-- Responsive css-->
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/responsive.css')); ?>" />
-<?php /**PATH /Users/iheb/Herd/alibaba-tirage/resources/views/admin/authentication/partials/css.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/authentication/partials/css.blade.php ENDPATH**/ ?>

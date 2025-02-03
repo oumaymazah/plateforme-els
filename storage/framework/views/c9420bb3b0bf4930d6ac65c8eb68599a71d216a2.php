@@ -57,4 +57,4 @@
     <!-- latest jquery-->
     <?php if ($__env->exists('layouts.admin.partials.js')) echo $__env->make('layouts.admin.partials.js', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
   </body>
-</html><?php /**PATH /Users/iheb/Herd/alibaba-tirage/resources/views/layouts/admin/master.blade.php ENDPATH**/ ?>
+</html><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/layouts/admin/master.blade.php ENDPATH**/ ?>

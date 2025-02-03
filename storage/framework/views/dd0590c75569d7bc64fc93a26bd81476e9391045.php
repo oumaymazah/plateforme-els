@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', 'Default Page'); ?>
 
 <?php $__env->startPush('breadcrumb'); ?>
@@ -1069,4 +1071,4 @@
     <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/iheb/Herd/alibaba-tirage/resources/views/admin/dashboard/default.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/dashboard/default.blade.php ENDPATH**/ ?>

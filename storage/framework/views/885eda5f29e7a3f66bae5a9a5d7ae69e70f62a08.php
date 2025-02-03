@@ -16,4 +16,4 @@
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/style.css')); ?>">
 <link id="color" rel="stylesheet" href="<?php echo e(asset('assets/css/color-1.css')); ?>" media="screen">
 <!-- Responsive css-->
-<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/responsive.css')); ?>"><?php /**PATH /Users/iheb/Herd/alibaba-tirage/resources/views/layouts/admin/partials/css.blade.php ENDPATH**/ ?>
+<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/responsive.css')); ?>"><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/layouts/admin/partials/css.blade.php ENDPATH**/ ?>

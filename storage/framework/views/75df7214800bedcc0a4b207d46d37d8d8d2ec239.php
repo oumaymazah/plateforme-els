@@ -1,22 +1,21 @@
-@extends('layouts.admin.master')
+<?php $__env->startSection('title'); ?>Contacts
+ <?php echo e($title); ?>
 
-@section('title')Contacts
- {{ $title }}
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('css')
-<link rel="stylesheet" type="text/css" href="{{asset('assets/css/select2.css')}}">
-<link rel="stylesheet" type="text/css" href="{{asset('assets/css/sweetalert2.css')}}">
-@endpush
+<?php $__env->startPush('css'); ?>
+<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/select2.css')); ?>">
+<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/sweetalert2.css')); ?>">
+<?php $__env->stopPush(); ?>
 
-@section('content')
-	@component('components.breadcrumb')
-		@slot('breadcrumb_title')
+<?php $__env->startSection('content'); ?>
+	<?php $__env->startComponent('components.breadcrumb'); ?>
+		<?php $__env->slot('breadcrumb_title'); ?>
 			<h3>Contacts</h3>
-		@endslot
+		<?php $__env->endSlot(); ?>
 		<li class="breadcrumb-item">Apps</li>
 		<li class="breadcrumb-item active">Contacts</li>
-	@endcomponent
+	<?php echo $__env->renderComponent(); ?>
 
 	<div class="container-fluid">
 	    <div class="email-wrap bookmark-wrap">
@@ -28,6 +27,7 @@
 	                        <div class="card">
 	                            <div class="card-body">
 	                                <div class="email-app-sidebar left-bookmark">
+	                                    
 	                                    <ul class="nav main-menu contact-options" role="tablist">
 	                                        <li class="nav-item">
 	                                            <button class="badge-light btn-block btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="me-2" data-feather="users"></i> New Contacts</button>
@@ -110,7 +110,7 @@
 	                                            </div>
 	                                        </li>
                                             <li>
-                                                <a class="show" href="{{ route('admin.roles.index') }}">
+                                                <a class="show" href="<?php echo e(route('admin.roles.index')); ?>">
                                                     <span class="title">Gestion Rôles</span>
                                                 </a>
                                             </li>
@@ -135,7 +135,7 @@
 	                                        </li>
 	                                    </ul>
 	                                </div>
-
+                                    
 	                            </div>
 	                        </div>
 	                    </div>
@@ -145,14 +145,16 @@
 	    </div>
 	</div>
 
-	@push('scripts')
-	<script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
-    <script src="{{asset('assets/js/sweet-alert/sweetalert.min.js')}}"></script>
-    <script src="{{asset('assets/js/select2/select2.full.min.js')}}"></script>
-    <script src="{{asset('assets/js/select2/select2-custom.js')}}"></script>
-    <script src="{{asset('assets/js/form-validation-custom.js')}}"></script>
-    <script src="{{asset('assets/js/bookmark/jquery.validate.min.js')}}"></script>
-    <script src="{{asset('assets/js/contacts/custom.js')}}"></script>
-	@endpush
+	<?php $__env->startPush('scripts'); ?>
+	<script src="<?php echo e(asset('assets/js/notify/bootstrap-notify.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/sweet-alert/sweetalert.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/select2/select2.full.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/select2/select2-custom.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/form-validation-custom.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/bookmark/jquery.validate.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/contacts/custom.js')); ?>"></script>
+	<?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/apps/contacts.blade.php ENDPATH**/ ?>

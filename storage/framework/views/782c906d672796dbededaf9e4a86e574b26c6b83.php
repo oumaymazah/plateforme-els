@@ -31,4 +31,4 @@
 
 
 
-<?php /**PATH /Users/iheb/Herd/alibaba-tirage/resources/views/admin/authentication/master.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/authentication/master.blade.php ENDPATH**/ ?>

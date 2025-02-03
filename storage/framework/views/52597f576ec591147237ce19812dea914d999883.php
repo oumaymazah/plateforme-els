@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title'); ?>login
  <?php echo e($title); ?>
 
@@ -94,4 +96,4 @@ unset($__errorArgs, $__bag); ?>
     <?php $__env->stopPush(); ?>
 
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.authentication.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/iheb/Herd/alibaba-tirage/resources/views/auth/login.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.authentication.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/auth/login.blade.php ENDPATH**/ ?>
