@@ -7,17 +7,21 @@
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/select2.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/sweetalert2.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/alert.css') }}">
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/role_permission.css')}}">
 @endpush
 
 @section('content')
+
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
 			<h3>Contacts</h3>
 		@endslot
 		<li class="breadcrumb-item">Apps</li>
 		<li class="breadcrumb-item active">Contacts</li>
+        <div id="alert-container" class="mt-3"></div>
 	@endcomponent
-
 	<div class="container-fluid">
 	    <div class="email-wrap bookmark-wrap">
 	        <div class="row">
@@ -30,7 +34,7 @@
 	                                <div class="email-app-sidebar left-bookmark">
 	                                    <ul class="nav main-menu contact-options" role="tablist">
 	                                        <li class="nav-item">
-	                                            <button class="badge-light btn-block btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="me-2" data-feather="users"></i> New Contacts</button>
+	                                            <button class="badge-light btn-block btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="me-2" data-feather="users"></i> Nouveau Contact</button>
 	                                            <div class="modal fade modal-bookmark" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	                                                <div class="modal-dialog modal-lg" role="document">
 	                                                    <div class="modal-content">
@@ -83,40 +87,18 @@
 	                                        </li>
 	                                        <li class="nav-item"><span class="main-title"> Views</span></li>
 	                                        <li>
-	                                            <a id="pills-personal-tab" data-bs-toggle="pill" href="#pills-personal" role="tab" aria-controls="pills-personal" aria-selected="true"><span class="title"> Personal</span></a>
+	                                            <a id="load-users" data-bs-toggle="pill" href="javascript:void(0)" data-user-url="{{ route('admin.users.index') }}" role="tab" aria-controls="pills-personal" aria-selected="true"><span class="title"> Utilisateurs</span></a>
 	                                        </li>
-	                                        <li>
-	                                            <button class="btn btn-category" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1"><span class="title"> + Add Category</span></button>
-	                                            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-	                                                <div class="modal-dialog" role="document">
-	                                                    <div class="modal-content">
-	                                                        <div class="modal-header">
-	                                                            <h5 class="modal-title" id="exampleModalLabel1">Add Category</h5>
-	                                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-	                                                        </div>
-	                                                        <div class="modal-body">
-	                                                            <form class="form-bookmark">
-	                                                                <div class="row g-2">
-	                                                                    <div class="mb-3 col-md-12">
-	                                                                        <input class="form-control" type="text" required="" placeholder="Enter category name" autocomplete="off" />
-	                                                                    </div>
-	                                                                </div>
-	                                                                <button class="btn btn-secondary" type="button">Save</button>
-	                                                                <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
-	                                                            </form>
-	                                                        </div>
-	                                                    </div>
-	                                                </div>
-	                                            </div>
-	                                        </li>
+
                                             <li>
-                                                <a class="show" href="{{ route('admin.roles.index') }}">
-                                                    <span class="title">Gestion Rôles</span>
+                                                <a href="javascript:void(0)" id="load-roles" data-roles-url="{{ route('admin.roles.index') }}">
+                                                <span class="title">Gestion Rôles</span>
                                                 </a>
                                             </li>
 
+
 	                                        <li>
-	                                            <a href="javascript:void(0)"><span class="title">Gestion Permissions</span></a>
+	                                            <a href="javascript:void(0)" id="load-permission" data-permission-url="{{ route('admin.permissions.index') }}"><span class="title">Gestion Permissions</span></a>
 	                                        </li>
 	                                        <li>
 	                                            <a href="javascript:void(0)"><span class="title">Favorites</span></a>
@@ -141,9 +123,17 @@
 	                    </div>
 	                </div>
 	            </div>
+
+                 <div class="col-xl-9">
+                    <div id="blog-container">
+
+                    </div>
+                </div>
+
 	        </div>
 	    </div>
 	</div>
+    <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050; max-width: 600px;"></div>
 
 	@push('scripts')
 	<script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
@@ -152,7 +142,20 @@
     <script src="{{asset('assets/js/select2/select2-custom.js')}}"></script>
     <script src="{{asset('assets/js/form-validation-custom.js')}}"></script>
     <script src="{{asset('assets/js/bookmark/jquery.validate.min.js')}}"></script>
+    <script src="{{ asset('assets/js/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset('assets/js/contacts/custom.js')}}"></script>
+    <script src="{{asset('assets/js/modal-animated.js')}}"></script>
+    <script src="{{asset('assets/ajax/roles/editRole.js')}}"></script>
+    <script src="{{asset('assets/ajax/roles/createRole.js')}}"></script>
+    <script src="{{asset('assets/ajax/roles/chargerRole.js')}}"></script>
+    <script src="{{asset('assets/ajax/permissions/chargerPermission.js')}}"></script>
+    <script src="{{asset('assets/ajax/permissions/createPermission.js')}}"></script>
+    <script src="{{asset('assets/ajax/permissions/editPermission.js')}}"></script>
+    <script src="{{asset('assets/ajax/users/chargerUser.js')}}"></script>
+    <script src="{{asset('assets/ajax/users/roles.js')}}"></script>
+    <script>
+
+    </script>
 	@endpush
 
 @endsection

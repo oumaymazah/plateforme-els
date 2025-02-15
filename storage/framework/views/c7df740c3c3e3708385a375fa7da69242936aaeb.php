@@ -1,53 +1,34 @@
-<?php $__env->startSection('title'); ?>  Roles
- <?php echo e($title); ?>
 
-<?php $__env->stopSection(); ?>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Gestion des Rôles</h5>
+        <a  id="open-create-role-modal" data-create-url="<?php echo e(route('admin.roles.create')); ?>" class="btn btn-success">Créer un Nouveau Rôle</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table" id="roles-table">  <thead class="table-primary">
+                    <tr>
+                        <th scope="col">Nom du Rôle</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr>
+                        <td><?php echo e($role->name); ?></td>
+                        <td class="d-flex justify-content-around">
+                            <a id="open-edit-role-modal" data-edit-url="<?php echo e(route('admin.roles.edit', $role->id)); ?>" class="btn btn-warning btn-sm">Modifier</a>
+                            <form action="<?php echo e(route('admin.roles.destroy', $role->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer ce rôle ?');">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
 
-<?php $__env->startPush('css'); ?>
-<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/select2.css')); ?>">
-<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/sweetalert2.css')); ?>">
-<?php $__env->stopPush(); ?>
-
-<?php $__env->startSection('content'); ?>
-	<?php $__env->startComponent('components.breadcrumb'); ?>
-		<?php $__env->slot('breadcrumb_title'); ?>
-			<h3>Roles</h3>
-		<?php $__env->endSlot(); ?>
-		<li class="breadcrumb-item">Apps</li>
-		<li class="breadcrumb-item active">Roles</li>
-    <?php echo $__env->renderComponent(); ?>
-    <div class="tab-pane fade" id="pills-organization" role="tabpanel" aria-labelledby="pills-organization-tab">
-        <div class="card">
-            <div class="card-header">
-                <h5>Gestion des Rôles</h5>
-                <a href="<?php echo e(route('admin.roles.create')); ?>" class="btn btn-primary float-end">Créer un Nouveau Rôle</a>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Nom du Rôle</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <td><?php echo e($role->name); ?></td>
-                            <td>
-                                <a href="<?php echo e(route('admin.roles.edit', $role->id)); ?>" class="btn btn-warning btn-sm">Modifier</a>
-                                <form action="<?php echo e(route('admin.roles.destroy', $role->id)); ?>" method="POST" style="display:inline;">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('DELETE'); ?>
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ce rôle ?');">Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </tbody>
-                </table>
-            </div>
+                    </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </tbody>
+            </table>
         </div>
     </div>
-
-<?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/role/index.blade.php ENDPATH**/ ?>
+</div>
+<?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/role/index.blade.php ENDPATH**/ ?>
