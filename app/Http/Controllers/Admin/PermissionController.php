@@ -13,23 +13,7 @@ class PermissionController extends Controller
 
     public function index()
     {
-        $permissions = Permission::query();
-
-        if (auth()->user()->hasRole('admin')) {
-            // Récupérer les permissions assignées UNIQUEMENT au Super Admin
-            $superAdminOnlyPermissions = Permission::whereHas('roles', function ($query) {
-                $query->where('name', 'super-admin');
-            })->whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'admin');
-            })->pluck('id')->toArray();
-
-
-            // Exclure ces permissions pour l'affichage de l'Admin
-            $permissions = $permissions->whereNotIn('id', $superAdminOnlyPermissions);
-        }
-
-        $permissions = $permissions->get();
-
+        $permissions = Permission::all();
         return view('admin.permission.index', compact('permissions'));
     }
 
@@ -74,7 +58,7 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         $permission->delete();
-        return back()->with('success', 'Permission supprimé avec succès');
-
+        //return back()->with('success', 'Permission supprimé avec succès');
+        return response()->json(['success' => 'Permission supprimée avec succès']);
     }
 }

@@ -20,10 +20,8 @@
                             <td><?php echo e($user->name); ?></td>
                             <td><?php echo e($user->lastname); ?></td>
                             <td><?php echo e($user->email); ?></td>
-                            <td class="d-flex justify-content-around">
-
-                                <a id="RoleUser" data-edit-url="<?php echo e(route('admin.users.roles', $user->id)); ?>" class="btn btn-outline-info-2x">Gérer les Accès</a>
-
+                            <td >
+                                <a id="RoleUser" data-edit-url="<?php echo e(route('admin.users.roles', $user->id)); ?>" class="btn btn-outline-info-2x" >Plus D'info</a>
                                 <form action="<?php echo e(route('admin.users.destroy', $user->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
                                     <?php echo csrf_field(); ?>
                                     <?php echo method_field('DELETE'); ?>

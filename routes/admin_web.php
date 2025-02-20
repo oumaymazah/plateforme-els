@@ -299,16 +299,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::view('knowledgebase', 'admin.miscellaneous.knowledgebase')->name('knowledgebase');
 
 });
-//route pour les gestions des roles et les permissions
+//route pour les gestions des roles et des permissions
 Route::middleware(['auth', 'role:admin|super-admin'])->name('admin.')->prefix('admin')->group(function () {
     Route::resource('/roles', RoleController::class);
     Route::resource('/permissions', PermissionController::class);
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::delete('/users/{user}',[UserController::class,'destroy'])->name('users.destroy');
     Route::get('/users/{user}',[UserController::class,'show'])->name('users.roles');
-    Route::post('/users/{user}/roles',[UserController::class,'assignRole'])->name('users.roles.assignRole');
     Route::delete('/users/{user}/roles/{role}',[UserController::class,'removeRole'])->name('users.roles.remove');
-    Route::post('/users/{user}/permissions',[UserController::class,'givePermission'])->name('users.permissions.assign');
     Route::delete('/users/{user}/permissions/{permission}',[UserController::class,'revokePermission'])->name('users.permissions.revoke');
 
 });

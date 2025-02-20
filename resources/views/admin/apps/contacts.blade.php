@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-
+<div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050; max-width: 600px;"></div>
 @section('title')Contacts
  {{ $title }}
 @endsection
@@ -85,7 +85,7 @@
 	                                                </div>
 	                                            </div>
 	                                        </li>
-	                                        <li class="nav-item"><span class="main-title"> Views</span></li>
+	                                        <li class="nav-item"><span class="main-title"> Vues</span></li>
 	                                        <li>
 	                                            <a id="load-users" data-bs-toggle="pill" href="javascript:void(0)" data-user-url="{{ route('admin.users.index') }}" role="tab" aria-controls="pills-personal" aria-selected="true"><span class="title"> Utilisateurs</span></a>
 	                                        </li>
@@ -96,25 +96,11 @@
                                                 </a>
                                             </li>
 
-
-	                                        <li>
-	                                            <a href="javascript:void(0)" id="load-permission" data-permission-url="{{ route('admin.permissions.index') }}"><span class="title">Gestion Permissions</span></a>
-	                                        </li>
-	                                        <li>
-	                                            <a href="javascript:void(0)"><span class="title">Favorites</span></a>
-	                                        </li>
-	                                        <li>
-	                                            <a href="javascript:void(0)"><span class="title">Ideas</span></a>
-	                                        </li>
-	                                        <li>
-	                                            <a href="javascript:void(0)"><span class="title">Important</span></a>
-	                                        </li>
-	                                        <li>
-	                                            <a href="javascript:void(0)"><span class="title">Business</span></a>
-	                                        </li>
-	                                        <li>
-	                                            <a href="javascript:void(0)"><span class="title">Holidays</span></a>
-	                                        </li>
+                                            @hasrole('super-admin')
+                                                <li>
+                                                    <a href="javascript:void(0)" id="load-permission" data-permission-url="{{ route('admin.permissions.index') }}"><span class="title">Gestion Permissions</span></a>
+                                                </li>
+                                            @endhasrole
 	                                    </ul>
 	                                </div>
 
@@ -133,7 +119,7 @@
 	        </div>
 	    </div>
 	</div>
-    <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050; max-width: 600px;"></div>
+    {{-- <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050; max-width: 600px;"></div> --}}
 
 	@push('scripts')
 	<script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
@@ -148,9 +134,11 @@
     <script src="{{asset('assets/ajax/roles/editRole.js')}}"></script>
     <script src="{{asset('assets/ajax/roles/createRole.js')}}"></script>
     <script src="{{asset('assets/ajax/roles/chargerRole.js')}}"></script>
+    <script src="{{asset('assets/ajax/roles/deleteRole.js')}}"></script>
     <script src="{{asset('assets/ajax/permissions/chargerPermission.js')}}"></script>
     <script src="{{asset('assets/ajax/permissions/createPermission.js')}}"></script>
     <script src="{{asset('assets/ajax/permissions/editPermission.js')}}"></script>
+    <script src="{{asset('assets/ajax/permissions/deletePermission.js')}}"></script>
     <script src="{{asset('assets/ajax/users/chargerUser.js')}}"></script>
     <script src="{{asset('assets/ajax/users/roles.js')}}"></script>
     <script>

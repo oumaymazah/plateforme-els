@@ -13,6 +13,7 @@
                         <div class="mb-3 col-md-12">
                             <label for="permissionName">Nom du permission</label>
                             <input class="form-control" type="text" id="permissionName" name="name" required value="<?php echo e(old('name', $permission->name)); ?>" autocomplete="off">
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
                     <button class="btn btn-secondary" type="submit">Modifier</button>

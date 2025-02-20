@@ -40,19 +40,6 @@
                 <p class="text-muted">Aucun rôle assigné.</p>
             @endif
 
-            <form action="{{ route('admin.users.roles.assignRole', $user->id) }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label class="form-label" for="role">Assigner un rôle :</label>
-                    <select id="role" name="role" class="form-select">
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Assigner</button>
-            </form>
-
             <hr>
 
             <h5>Permissions Actuelles</h5>
@@ -103,18 +90,6 @@
                 <p class="text-muted">Aucune permission assignée.</p>
             @endif
 
-            <form action="{{ route('admin.users.permissions.assign', $user->id) }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label class="form-label" for="permission">Assigner une permission :</label>
-                    <select id="permission" name="permission" class="form-select">
-                        @foreach ($permissions as $permission)
-                            <option value="{{ $permission->id }}">{{ $permission->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Assigner</button>
-            </form>
         </div>
     </div>
 </div>

@@ -1,76 +1,114 @@
 document.addEventListener("click", function (event) {
-    if (event.target.matches("#open-edit-role-modal")) {
+    if (event.target.classList.contains("edit-icon")) {
         let editUrl = event.target.getAttribute('data-edit-url');
+        console.log('URL de modification :', editUrl); // Log l'URL
+
         fetch(editUrl)
-            .then(response => response.text())
+            .then(response => {
+                console.log('Réponse du serveur :', response); // Log la réponse
+                if (!response.ok) {
+                    throw new Error('Erreur réseau : ' + response.status);
+                }
+                return response.text();
+            })
             .then(data => {
-                // Créer un conteneur pour la modale
-                let modalContainer = document.createElement('div');
-                modalContainer.innerHTML = data;
-                document.body.appendChild(modalContainer);
+                console.log('Données reçues :', data); // Log les données reçues
+
+                // Supprimer toute modale existante
+                const existingModal = document.querySelector('#EditRoleModal');
+                if (existingModal) {
+                    existingModal.remove();
+                }
+
+                // Ajouter la nouvelle modale
+                document.body.insertAdjacentHTML('beforeend', data);
+
+                // Sélectionner la nouvelle modale
+                const modal = document.querySelector('#EditRoleModal');
+                if (!modal) {
+                    throw new Error('La modale n\'a pas été trouvée dans la réponse.');
+                }
+
+                // Initialiser Select2 sur les selects multiples
+                $(modal).find('.js-example-basic-multiple').select2({
+                    placeholder: 'Sélectionnez des permissions',
+                    allowClear: true,
+                    width: '100%'
+                });
 
                 // Initialiser la modale Bootstrap
-                let modal = modalContainer.querySelector('.modal');
-                let bsModal = new bootstrap.Modal(modal);
+                const bsModal = new bootstrap.Modal(modal);
                 bsModal.show();
 
-                // Supprimer la modale après fermeture
+                // Nettoyer après la fermeture
                 modal.addEventListener('hidden.bs.modal', function () {
-                    modalContainer.remove();
+                    // Détruire les instances Select2 avant de supprimer la modale
+                    $(modal).find('.js-example-basic-multiple').select2('destroy');
+                    modal.remove();
                 });
 
-                // Attacher l'événement submit au formulaire
-                let form = modal.querySelector('form');
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault(); // Empêcher la soumission traditionnelle
+                // Gestion de la soumission du formulaire
+                const editRoleForm = modal.querySelector('#editRoleForm');
+                if (editRoleForm) {
+                    editRoleForm.addEventListener('submit', function (event) {
+                        event.preventDefault();
 
-                    let formData = new FormData(this);
+                        const formData = new FormData(this);
 
-                    fetch(this.action, {
-                        method: this.method, // Doit être 'PUT' ou 'PATCH'
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': window.csrfToken,
-                            'Accept': 'application/json', // Pour gérer les réponses JSON
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Erreur réseau');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            showSuccessAlert(data.success); // Afficher l'alerte de succès
-                            bsModal.hide(); // Fermer la modale
-                            document.getElementById("load-roles").click(); // Recharger la liste des rôles
-                        } else if (data.errors) {
-                            // Afficher les erreurs de validation sous les champs
-                            displayFormErrors(data.errors);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur:', error);
-                        showErrorAlert('Une erreur est survenue lors de la modification du rôle.');
+                        fetch(this.action, {
+                            method: this.method,
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': window.csrfToken,
+                                'Accept': 'application/json',
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => {
+                                    throw err;
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                showSuccessAlert(data.success);
+                                bsModal.hide();
+                                document.getElementById("load-roles").click();
+                            }
+                            if (data.danger) {
+                                showErrorAlert(data.danger);
+                                bsModal.hide();
+                                document.getElementById("load-roles").click();
+                            }
+                        })
+                        .catch(error => {
+                            if (error.errors) {
+                                displayFormErrors(error.errors, modal);
+                            } else {
+                                console.error('Erreur:', error);
+                                showErrorAlert('Une erreur est survenue lors de la modification du rôle.');
+                            }
+                        });
                     });
-                });
+                }
             })
-            .catch(error => console.error('Erreur lors du chargement de la modale :', error));
+            .catch(error => {
+                console.error('Erreur lors du chargement de la modale :', error);
+                showErrorAlert('Erreur lors du chargement de la modale : ' + error.message);
+            });
     }
 });
 
 // Fonction pour afficher les erreurs dans le formulaire
-function displayFormErrors(errors) {
-    // Réinitialiser les erreurs précédentes
-    const errorElements = document.querySelectorAll('.invalid-feedback');
+function displayFormErrors(errors, modal) {
+    const errorElements = modal.querySelectorAll('.invalid-feedback');
     errorElements.forEach(el => el.remove());
 
-    // Afficher les erreurs sous les champs
     for (let field in errors) {
-        const input = document.querySelector(`[name="${field}"]`);
+        const input = modal.querySelector(`[name="${field}"]`);
         if (input) {
-            // Ajouter la classe d'erreur et afficher le message
             input.classList.add('is-invalid');
             const errorMessage = document.createElement('div');
             errorMessage.classList.add('invalid-feedback');
@@ -80,7 +118,7 @@ function displayFormErrors(errors) {
     }
 }
 
-// Fonction générique pour afficher une alerte (success ou danger)
+// Fonctions d'alerte (les mêmes que dans deleteRole.js)
 function showSuccessAlert(message) {
     let alertContainer = document.getElementById("alert-container");
     let alertSuccess = document.createElement("div");
@@ -93,13 +131,10 @@ function showSuccessAlert(message) {
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
-
     alertContainer.appendChild(alertSuccess);
-
-    // Fermeture automatique après 5 secondes
     setTimeout(() => {
-        alertSuccess.classList.remove("show"); // Cache avec animation
-        setTimeout(() => alertSuccess.remove(), 500); // Supprime après animation
+        alertSuccess.classList.remove("show");
+        setTimeout(() => alertSuccess.remove(), 500);
     }, 5000);
 }
 
@@ -115,12 +150,10 @@ function showErrorAlert(message) {
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
-
     alertContainer.appendChild(alertError);
-
-    // Fermeture automatique après 5 secondes
     setTimeout(() => {
-        alertError.classList.remove("show"); // Cache avec animation
-        setTimeout(() => alertError.remove(), 500); // Supprime après animation
+        alertError.classList.remove("show");
+        setTimeout(() => alertError.remove(), 500);
     }, 5000);
 }
+

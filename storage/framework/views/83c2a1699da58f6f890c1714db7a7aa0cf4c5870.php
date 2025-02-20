@@ -40,19 +40,6 @@
                 <p class="text-muted">Aucun rôle assigné.</p>
             <?php endif; ?>
 
-            <form action="<?php echo e(route('admin.users.roles.assignRole', $user->id)); ?>" method="POST">
-                <?php echo csrf_field(); ?>
-                <div class="mb-3">
-                    <label class="form-label" for="role">Assigner un rôle :</label>
-                    <select id="role" name="role" class="form-select">
-                        <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($role->id); ?>"><?php echo e($role->name); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Assigner</button>
-            </form>
-
             <hr>
 
             <h5>Permissions Actuelles</h5>
@@ -103,18 +90,6 @@
                 <p class="text-muted">Aucune permission assignée.</p>
             <?php endif; ?>
 
-            <form action="<?php echo e(route('admin.users.permissions.assign', $user->id)); ?>" method="POST">
-                <?php echo csrf_field(); ?>
-                <div class="mb-3">
-                    <label class="form-label" for="permission">Assigner une permission :</label>
-                    <select id="permission" name="permission" class="form-select">
-                        <?php $__currentLoopData = $permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($permission->id); ?>"><?php echo e($permission->name); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Assigner</button>
-            </form>
         </div>
     </div>
 </div>

@@ -33,16 +33,22 @@ document.addEventListener("click", function (event) {
                             'Accept': 'application/json', // Pour gérer les réponses JSON
                         }
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => {
+                                throw err; // Lancer les erreurs de validation
+                            });
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.success) {
-                            showSuccessAlert(data.success); // Afficher l'alerte Bootstrap animée
-
+                            showSuccessAlert(data.success); // Afficher l'alerte de succès
                             bsModal.hide(); // Fermer la modale
                             document.getElementById("load-permission").click(); // Recharger la liste
                         } else if (data.errors) {
                             // Afficher les erreurs de validation sous les champs
-                            displayFormErrors(data.errors);
+                            displayFormErrors(data.errors, modal);
                         }
                     })
                     .catch(error => {
@@ -56,21 +62,24 @@ document.addEventListener("click", function (event) {
 });
 
 // Fonction pour afficher les erreurs dans le formulaire
-function displayFormErrors(errors) {
+function displayFormErrors(errors, modal) {
     // Réinitialiser les erreurs précédentes
-    const errorElements = document.querySelectorAll('.invalid-feedback');
+    const errorElements = modal.querySelectorAll('.invalid-feedback');
     errorElements.forEach(el => el.remove());
+
+    // Réinitialiser les classes d'erreur sur les champs
+    const inputs = modal.querySelectorAll('.is-invalid');
+    inputs.forEach(input => input.classList.remove('is-invalid'));
 
     // Afficher les erreurs sous les champs
     for (let field in errors) {
-        const input = document.querySelector(`[name="${field}"]`);
+        const input = modal.querySelector(`[name="${field}"]`);
         if (input) {
-            // Ajouter la classe d'erreur et afficher le message
-            input.classList.add('is-invalid');
+            input.classList.add('is-invalid'); // Ajouter la classe d'erreur
             const errorMessage = document.createElement('div');
             errorMessage.classList.add('invalid-feedback');
-            errorMessage.textContent = errors[field];
-            input.parentNode.appendChild(errorMessage);
+            errorMessage.textContent = errors[field][0]; // Afficher le premier message d'erreur
+            input.parentNode.appendChild(errorMessage); // Ajouter le message d'erreur sous le champ
         }
     }
 }

@@ -34,41 +34,8 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $roles = Role::query();
-        if (auth()->user()->hasRole('admin')) {
-            $roles = $roles->whereNotIn('name', ['super-admin', 'admin']);
-        }
-        $roles = $roles->get();
 
-        $permissions = Permission::query();
-
-        if (auth()->user()->hasRole('admin')) {
-            $superAdminOnlyPermissions = Permission::whereHas('roles', function ($query) {
-                $query->where('name', 'super-admin');
-            })->whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'admin');
-            })->pluck('id')->toArray();
-
-            $permissions = $permissions->whereNotIn('id', $superAdminOnlyPermissions);
-        }
-        $permissions = $permissions->get();
-
-        return view('admin.user.roles', compact('user', 'roles', 'permissions'));
-    }
-
-    public function assignRole(Request $request, User $user)
-    {
-        $role = Role::findById($request->role);
-        if (!$role) {
-            return response()->json(['message' => 'Le role est introuvable.','danger' => true]);
-        }
-        
-        if ($user->hasRole($role->name)) {
-            return response()->json(['message' => 'Le role existe deja.','danger' => true]);
-        }
-
-        $user->assignRole($role);
-        return response()->json(['message' => 'Role assigné avec succès.','success' => true]);
+        return view('admin.user.roles', compact('user'));
     }
 
     public function removeRole(User $user, Role $role)
@@ -78,17 +45,6 @@ class UserController extends Controller
             return response()->json(['message' => 'Role supprimé avec succès.','success' => true]);
         }
         return response()->json(['message' => "Ce rôle n'existe pas pour cet utilisateur.",'danger' => true]);
-    }
-
-    public function givePermission(Request $request, User $user)
-    {
-        $permission = Permission::find($request->permission);
-        if ($user->hasPermissionTo($permission)) {
-            return response()->json(['message' => 'Cette permission existe déjà.','danger' => true]);
-        }
-
-        $user->givePermissionTo($permission);
-        return response()->json(['message' => 'Permission ajoutée avec succès.','success' => true]);
     }
 
     public function revokePermission(User $user, Permission $permission)

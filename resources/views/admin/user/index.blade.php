@@ -20,10 +20,8 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->lastname }}</td>
                             <td>{{ $user->email }}</td>
-                            <td class="d-flex justify-content-around">
-
-                                <a id="RoleUser" data-edit-url="{{ route('admin.users.roles', $user->id) }}" class="btn btn-outline-info-2x">Gérer les Accès</a>
-
+                            <td >
+                                <a id="RoleUser" data-edit-url="{{ route('admin.users.roles', $user->id) }}" class="btn btn-outline-info-2x" >Plus D'info</a>
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
                                     @csrf
                                     @method('DELETE')

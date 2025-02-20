@@ -1,8 +1,18 @@
 .flag-icon-background, .flag-icon {
   background-size: contain;
   background-position: 50%;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
 
+ }
+  .action-icon {
+    margin-right: 80px;
+    cursor: pointer;/* l'espace entre le deux icons(sppression et edit)*/
+  }
+
+  /* Remove margin from the last element (delete icon) */
+  .action-icon:last-of-type {
+    margin-right: 0;
+  }
 .flag-icon {
   position: relative;
   display: inline-block;
