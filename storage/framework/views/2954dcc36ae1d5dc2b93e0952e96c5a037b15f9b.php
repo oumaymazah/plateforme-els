@@ -3,7 +3,7 @@
         <a class="setting-primary" href="javascript:void(0)"><i data-feather="settings"></i></a><img class="img-90 rounded-circle" src="<?php echo e(asset('assets/images/dashboard/1.png')); ?>" alt="" />
         <div class="badge-bottom"><span class="badge badge-primary">New</span></div>
         <a href="user-profile"> <h6 class="mt-3 f-14 f-w-600"><?php echo e(auth()->user()->name); ?></h6></a>
-    
+
     </div>
     <nav>
         <div class="main-navbar">
@@ -19,7 +19,7 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a class="nav-link menu-title <?php echo e(prefixActive('/dashboard')); ?>" href="javascript:void(0)"><i data-feather="home"></i><span>Dashboard</span></a>                  
+                        <a class="nav-link menu-title <?php echo e(prefixActive('/dashboard')); ?>" href="javascript:void(0)"><i data-feather="home"></i><span>Dashboard</span></a>
                         <ul class="nav-submenu menu-content" style="display: <?php echo e(prefixBlock('/dashboard')); ?>;">
                             <li><a href="<?php echo e(route('index')); ?>" class="<?php echo e(routeActive('index')); ?>">Default</a></li>
                             <li><a href="<?php echo e(route('dashboard-02')); ?>" class="<?php echo e(routeActive('dashboard-02')); ?>">Ecommerce</a></li>
@@ -298,7 +298,7 @@
                         <a class="nav-link menu-title link-nav <?php echo e(routeActive('bookmark')); ?>" href="<?php echo e(route('bookmark')); ?>"><i data-feather="heart"></i><span>Bookmarks</span></a>
                     </li>
                     <li class="dropdown">
-                        <a class="nav-link menu-title link-nav <?php echo e(routeActive('contacts')); ?>" href="<?php echo e(route('contacts')); ?>"><i data-feather="list"></i><span>Contacts</span></a>
+                        <a class="nav-link menu-title link-nav <?php echo e(routeActive('contacts')); ?>" href="<?php echo e(route('contacts')); ?>"><i data-feather="list"></i><span>Utilisateurs et Accès</span></a>
                     </li>
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav <?php echo e(routeActive('task')); ?>" href="<?php echo e(route('task')); ?>"><i data-feather="check-square"></i><span>Tasks</span></a>

@@ -11,6 +11,7 @@
                             <th scope="col">Nom</th>
                             <th scope="col">Prénom</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -20,8 +21,18 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->lastname }}</td>
                             <td>{{ $user->email }}</td>
-                            <td >
-                                <a id="RoleUser" data-edit-url="{{ route('admin.users.roles', $user->id) }}" class="btn btn-outline-info-2x" >Plus D'info</a>
+                            <td>
+                                <div class="media">
+                                    <div class="media-body text-end icon-state switch-outline">
+                                        <label class="switch">
+                                            <input type="checkbox" class="toggle-status" data-user-id="{{ $user->id }}" {{ $user->status === 'active' ? 'checked' : '' }}>
+                                            <span class="switch-state bg-primary"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a id="RoleUser" data-edit-url="{{ route('admin.users.roles', $user->id) }}" class="btn btn-outline-info-2x">Plus D'info</a>
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
                                     @csrf
                                     @method('DELETE')

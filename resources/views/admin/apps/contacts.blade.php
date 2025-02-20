@@ -96,11 +96,12 @@
                                                 </a>
                                             </li>
 
-                                            @hasrole('super-admin')
+                                            @can('gérer des permissions')
                                                 <li>
                                                     <a href="javascript:void(0)" id="load-permission" data-permission-url="{{ route('admin.permissions.index') }}"><span class="title">Gestion Permissions</span></a>
                                                 </li>
-                                            @endhasrole
+                                            @endcan
+
 	                                    </ul>
 	                                </div>
 
@@ -119,7 +120,7 @@
 	        </div>
 	    </div>
 	</div>
-    {{-- <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1050; max-width: 600px;"></div> --}}
+
 
 	@push('scripts')
 	<script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
@@ -141,6 +142,7 @@
     <script src="{{asset('assets/ajax/permissions/deletePermission.js')}}"></script>
     <script src="{{asset('assets/ajax/users/chargerUser.js')}}"></script>
     <script src="{{asset('assets/ajax/users/roles.js')}}"></script>
+    <script src="{{asset('assets/ajax/users/status.js')}}"></script>
     <script>
 
     </script>

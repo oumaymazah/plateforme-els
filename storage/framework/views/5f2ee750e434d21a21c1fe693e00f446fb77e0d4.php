@@ -11,6 +11,7 @@
                             <th scope="col">Nom</th>
                             <th scope="col">Prénom</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -20,8 +21,18 @@
                             <td><?php echo e($user->name); ?></td>
                             <td><?php echo e($user->lastname); ?></td>
                             <td><?php echo e($user->email); ?></td>
-                            <td >
-                                <a id="RoleUser" data-edit-url="<?php echo e(route('admin.users.roles', $user->id)); ?>" class="btn btn-outline-info-2x" >Plus D'info</a>
+                            <td>
+                                <div class="media">
+                                    <div class="media-body text-end icon-state switch-outline">
+                                        <label class="switch">
+                                            <input type="checkbox" class="toggle-status" data-user-id="<?php echo e($user->id); ?>" <?php echo e($user->status === 'active' ? 'checked' : ''); ?>>
+                                            <span class="switch-state bg-primary"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a id="RoleUser" data-edit-url="<?php echo e(route('admin.users.roles', $user->id)); ?>" class="btn btn-outline-info-2x">Plus D'info</a>
                                 <form action="<?php echo e(route('admin.users.destroy', $user->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
                                     <?php echo csrf_field(); ?>
                                     <?php echo method_field('DELETE'); ?>

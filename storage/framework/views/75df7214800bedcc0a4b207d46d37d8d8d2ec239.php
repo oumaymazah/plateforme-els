@@ -96,11 +96,12 @@
                                                 </a>
                                             </li>
 
-                                            <?php if(auth()->check() && auth()->user()->hasRole('super-admin')): ?>
+                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('gérer des permissions')): ?>
                                                 <li>
                                                     <a href="javascript:void(0)" id="load-permission" data-permission-url="<?php echo e(route('admin.permissions.index')); ?>"><span class="title">Gestion Permissions</span></a>
                                                 </li>
                                             <?php endif; ?>
+
 	                                    </ul>
 	                                </div>
 
@@ -119,7 +120,7 @@
 	        </div>
 	    </div>
 	</div>
-    
+
 
 	<?php $__env->startPush('scripts'); ?>
 	<script src="<?php echo e(asset('assets/js/notify/bootstrap-notify.min.js')); ?>"></script>
@@ -141,6 +142,7 @@
     <script src="<?php echo e(asset('assets/ajax/permissions/deletePermission.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/ajax/users/chargerUser.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/ajax/users/roles.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/ajax/users/status.js')); ?>"></script>
     <script>
 
     </script>

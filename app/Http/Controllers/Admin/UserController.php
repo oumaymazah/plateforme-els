@@ -55,4 +55,15 @@ class UserController extends Controller
         }
         return response()->json(['message' => "Cette permission n'existe pas pour cet utilisateur.",'danger' => true], 404);
     }
+    public function toggleStatus(User $user)
+    {
+        $user->status = $user->status === 'active' ? 'inactive' : 'active';
+        $user->save();
+        return response()->json([
+            'message' => 'Statut modifié avec succès.',
+            'success' => true,
+            'status' => $user->status
+        ]);
+    }
+
 }

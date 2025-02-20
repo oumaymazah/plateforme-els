@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,4 +58,5 @@
     <!-- latest jquery-->
     <?php if ($__env->exists('layouts.admin.partials.js')) echo $__env->make('layouts.admin.partials.js', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
   </body>
-</html><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/layouts/admin/master.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH D:\apprendre laravel\platformeEls\resources\views/layouts/admin/master.blade.php ENDPATH**/ ?>

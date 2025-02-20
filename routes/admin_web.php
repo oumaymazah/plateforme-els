@@ -308,5 +308,6 @@ Route::middleware(['auth', 'role:admin|super-admin'])->name('admin.')->prefix('a
     Route::get('/users/{user}',[UserController::class,'show'])->name('users.roles');
     Route::delete('/users/{user}/roles/{role}',[UserController::class,'removeRole'])->name('users.roles.remove');
     Route::delete('/users/{user}/permissions/{permission}',[UserController::class,'revokePermission'])->name('users.permissions.revoke');
+    Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
 
 });
