@@ -1,4 +1,4 @@
-<div class="card">
+ <div class="card">
     <div class="card-header">
         <h5>Utilisateurs</h5>
     </div>
@@ -11,6 +11,7 @@
                             <th scope="col">Nom</th>
                             <th scope="col">Prénom</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -22,9 +23,16 @@
                             <td>{{ $user->lastname }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
+                                @if ($user->roles->isNotEmpty())
+                                {{ $user->roles->pluck('name')->implode(', ') }}
+                                @else
+                                    Aucun rôle
+                                @endif
+                            </td>
+                            <td>
                                 <div class="media">
-                                    <div class="media-body text-end icon-state switch-outline">
-                                        <label class="switch">
+                                    <div class="media-body text-end icon-state switch-outline" style="margin-right: 80px;">
+                                        <label class="switch" style="transform: scale(0.7); ">
                                             <input type="checkbox" class="toggle-status" data-user-id="{{ $user->id }}" {{ $user->status === 'active' ? 'checked' : '' }}>
                                             <span class="switch-state bg-primary"></span>
                                         </label>
@@ -32,12 +40,13 @@
                                 </div>
                             </td>
                             <td>
-                                <a id="RoleUser" data-edit-url="{{ route('admin.users.roles', $user->id) }}" class="btn btn-outline-info-2x">Plus D'info</a>
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger-2x">Supprimer</button>
-                                </form>
+
+                                <div class="col-sm-6 col-md-4 col-xl-3">
+                                    <i class="fa fa-info-circle edit-user-icon action action-icon" data-editUser-url="{{ route('admin.users.roles', $user->id) }}" style="cursor: pointer;"></i>
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-xl-3">
+                                    <i class="icofont icofont-ui-delete delete-user-icon action-icon" data-deleteUser-url="{{ route('admin.users.destroy', $user->id) }}" data-csrf="{{ csrf_token() }}" style="cursor: pointer; color: rgb(204, 28, 28);"></i>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -47,3 +56,4 @@
         </div>
     </div>
 </div>
+

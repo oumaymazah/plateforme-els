@@ -7,11 +7,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Support\Str;
 class UserController extends Controller
 {
     public function index()
     {
+
         $user = auth()->user();
         if ($user->hasRole('admin')) {
             $users = User::whereDoesntHave('roles', function ($query) {
@@ -26,10 +27,52 @@ class UserController extends Controller
         return view('admin.user.index', compact('users'));
     }
 
+    public function create()
+    {
+        $roles = Role::query();
+        if(auth()->user()->hasRole('admin')){
+            $roles=$roles->whereNotIn('name',['super-admin','admin']);
+        }
+        elseif(auth()->user()->hasRole('super-admin')){
+            $roles=$roles->whereNotIn('name',['super-admin']);
+        }
+        $roles = $roles->get();
+        return view('admin.user.create',compact('roles'));
+    }
+    public function store(Request $request)
+    {
+        $messages = [
+            'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
+        ];
+
+        $request->validate([
+            'name' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'roles' => 'required'
+        ],$messages);
+        $password = Str::random(8);
+        $user = User::create([
+            'name' => $request->name,
+            'lastname' => $request->lastname,
+            'email' => $request->email,
+            'password' => bcrypt($password),
+            'status' => 'active',
+        ]);
+        $user->assignRole($request->roles);
+        return response()->json([
+            'success' => true,
+            'message' => 'Utilisateur créé avec succès.',
+            'password' => $password,
+        ]);
+    }
+
+
+
     public function destroy(User $user)
     {
         $user->delete();
-        return back()->with('success', 'Utilisateur supprimé avec succès.');
+        return response()->json(['success' => 'User a été supprimé avec succès']);
     }
 
     public function show(User $user)

@@ -1,4 +1,4 @@
-<div class="card">
+ <div class="card">
     <div class="card-header">
         <h5>Utilisateurs</h5>
     </div>
@@ -11,6 +11,7 @@
                             <th scope="col">Nom</th>
                             <th scope="col">Prénom</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -22,9 +23,17 @@
                             <td><?php echo e($user->lastname); ?></td>
                             <td><?php echo e($user->email); ?></td>
                             <td>
+                                <?php if($user->roles->isNotEmpty()): ?>
+                                <?php echo e($user->roles->pluck('name')->implode(', ')); ?>
+
+                                <?php else: ?>
+                                    Aucun rôle
+                                <?php endif; ?>
+                            </td>
+                            <td>
                                 <div class="media">
-                                    <div class="media-body text-end icon-state switch-outline">
-                                        <label class="switch">
+                                    <div class="media-body text-end icon-state switch-outline" style="margin-right: 80px;">
+                                        <label class="switch" style="transform: scale(0.7); ">
                                             <input type="checkbox" class="toggle-status" data-user-id="<?php echo e($user->id); ?>" <?php echo e($user->status === 'active' ? 'checked' : ''); ?>>
                                             <span class="switch-state bg-primary"></span>
                                         </label>
@@ -32,12 +41,13 @@
                                 </div>
                             </td>
                             <td>
-                                <a id="RoleUser" data-edit-url="<?php echo e(route('admin.users.roles', $user->id)); ?>" class="btn btn-outline-info-2x">Plus D'info</a>
-                                <form action="<?php echo e(route('admin.users.destroy', $user->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('DELETE'); ?>
-                                    <button type="submit" class="btn btn-outline-danger-2x">Supprimer</button>
-                                </form>
+
+                                <div class="col-sm-6 col-md-4 col-xl-3">
+                                    <i class="fa fa-info-circle edit-user-icon action action-icon" data-editUser-url="<?php echo e(route('admin.users.roles', $user->id)); ?>" style="cursor: pointer;"></i>
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-xl-3">
+                                    <i class="icofont icofont-ui-delete delete-user-icon action-icon" data-deleteUser-url="<?php echo e(route('admin.users.destroy', $user->id)); ?>" data-csrf="<?php echo e(csrf_token()); ?>" style="cursor: pointer; color: rgb(204, 28, 28);"></i>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -47,4 +57,5 @@
         </div>
     </div>
 </div>
+
 <?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/user/index.blade.php ENDPATH**/ ?>

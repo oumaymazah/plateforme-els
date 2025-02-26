@@ -39,5 +39,13 @@ class PermissionsDemoSeeder extends Seeder
             'password' => bcrypt('admin123'),
             'status' =>'active'
         ])->assignRole($admin);
+        \App\Models\User::factory()->create([
+            'name' => 'kacem',
+            'lastname' => 'bbbbbb',
+            'email' => 'kacem@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('kacem123'),
+            'status' =>'active'
+        ])->assignRole($etudiant);
     }
 }

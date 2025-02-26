@@ -34,57 +34,12 @@
 	                                <div class="email-app-sidebar left-bookmark">
 	                                    <ul class="nav main-menu contact-options" role="tablist">
 	                                        <li class="nav-item">
-	                                            <button class="badge-light btn-block btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="me-2" data-feather="users"></i> Nouveau Contact</button>
-	                                            <div class="modal fade modal-bookmark" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	                                                <div class="modal-dialog modal-lg" role="document">
-	                                                    <div class="modal-content">
-	                                                        <div class="modal-header">
-	                                                            <h5 class="modal-title" id="exampleModalLabel">Add Contact</h5>
-	                                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-	                                                        </div>
-	                                                        <div class="modal-body">
-	                                                            <form class="form-bookmark needs-validation" id="bookmark-form" novalidate="">
-	                                                                <div class="row g-2">
-	                                                                    <div class="mb-3 col-md-12 mt-0">
-	                                                                        <label for="con-name">Name</label>
-	                                                                        <div class="row">
-	                                                                            <div class="col-sm-6">
-	                                                                                <input class="form-control" id="con-name" type="text" required="" placeholder="First Name" autocomplete="off" />
-	                                                                            </div>
-	                                                                            <div class="col-sm-6">
-	                                                                                <input class="form-control" id="con-last" type="text" required="" placeholder="Last Name" autocomplete="off" />
-	                                                                            </div>
-	                                                                        </div>
-	                                                                    </div>
-	                                                                    <div class="mb-3 col-md-12 mt-0">
-	                                                                        <label for="con-mail">Email Address</label>
-	                                                                        <input class="form-control" id="con-mail" type="text" required="" autocomplete="off" />
-	                                                                    </div>
-	                                                                    <div class="mb-3 col-md-12 my-0">
-	                                                                        <label for="con-phone">Phone</label>
-	                                                                        <div class="row">
-	                                                                            <div class="col-sm-6">
-	                                                                                <input class="form-control" id="con-phone" type="number" required="" autocomplete="off" />
-	                                                                            </div>
-	                                                                            <div class="col-sm-6">
-	                                                                                <select class="form-control" id="con-select">
-	                                                                                    <option>Mobile</option>
-	                                                                                    <option>Work</option>
-	                                                                                    <option>Others</option>
-	                                                                                </select>
-	                                                                            </div>
-	                                                                        </div>
-	                                                                    </div>
-	                                                                </div>
-	                                                                <input id="index_var" type="hidden" value="5" />
-	                                                                <button class="btn btn-secondary" type="submit" onclick="submitContact()">Save</button>
-	                                                                <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
-	                                                            </form>
-	                                                        </div>
-	                                                    </div>
-	                                                </div>
-	                                            </div>
-	                                        </li>
+                                                <button class="badge-light btn-block btn-mail w-100" type="button" id="loadCreateUserForm" data-create-url="{{ route('admin.users.create') }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <i class="me-2" data-feather="users"></i> Nouveau Utilisateur
+                                                </button>
+                                            </li>
+
+
 	                                        <li class="nav-item"><span class="main-title"> Vues</span></li>
 	                                        <li>
 	                                            <a id="load-users" data-bs-toggle="pill" href="javascript:void(0)" data-user-url="{{ route('admin.users.index') }}" role="tab" aria-controls="pills-personal" aria-selected="true"><span class="title"> Utilisateurs</span></a>
@@ -143,6 +98,8 @@
     <script src="{{asset('assets/ajax/users/chargerUser.js')}}"></script>
     <script src="{{asset('assets/ajax/users/roles.js')}}"></script>
     <script src="{{asset('assets/ajax/users/status.js')}}"></script>
+    <script src="{{asset('assets/ajax/users/supprimerUser.js')}}"></script>
+    <script src="{{asset('assets/ajax/users/createUser.js')}}"></script>
     <script>
 
     </script>

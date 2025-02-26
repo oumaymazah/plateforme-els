@@ -6,7 +6,8 @@
  }
   .action-icon {
     margin-right: 80px;
-    cursor: pointer;/* l'espace entre le deux icons(sppression et edit)*/
+    cursor: pointer;
+    font-size: 22px;/* l'espace entre le deux icons(sppression et edit)*/
   }
 
   /* Remove margin from the last element (delete icon) */

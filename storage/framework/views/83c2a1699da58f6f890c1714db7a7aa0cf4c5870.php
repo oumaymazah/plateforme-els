@@ -94,4 +94,6 @@
     </div>
 </div>
 
+
+
 <?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/user/roles.blade.php ENDPATH**/ ?>
