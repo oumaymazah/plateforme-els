@@ -3,6 +3,15 @@
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\ChapitreController;
+use App\Http\Controllers\CoursController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\FormationController;
+use App\Http\Controllers\LessonController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\ReponseController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\RoleMiddleware;
 
@@ -311,7 +320,104 @@ Route::middleware(['auth', 'role:admin|super-admin'])->name('admin.')->prefix('a
     Route::delete('/users/{user}/roles/{role}',[UserController::class,'removeRole'])->name('users.roles.remove');
     Route::delete('/users/{user}/permissions/{permission}',[UserController::class,'revokePermission'])->name('users.permissions.revoke');
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
- 
-
 
 });
+
+Route::prefix('formation')->group( function(){
+    Route::get('formations', [FormationController::class, 'index'])->name('formations');
+    Route::get('formationcreate', [FormationController::class, 'create'])->name('formationcreate');
+    Route::post('store', [FormationController::class, 'store'])->name('formationstore');
+    Route::get('/{id}/edit', [FormationController::class, 'edit'])->name('formationedit');
+    Route::put('/{id}', [FormationController::class, 'update'])->name('formationupdate');
+    Route::delete('/{id}', [FormationController::class, 'destroy'])->name('formationdestroy');
+    Route::get('/{id}', [FormationController::class, 'show'])->name('formationshow');
+
+});
+
+Route::prefix('categorie')->group(function () {
+    Route::get('categories', [CategorieController::class, 'index'])->name('categories'); // Liste
+    Route::get('categoriecreate', [CategorieController::class, 'create'])->name('categoriecreate'); // Formulaire de création
+    Route::post('store', [CategorieController::class, 'store'])->name('categoriestore'); // Enregistrement d'une nouvelle catégorie
+    Route::get('/{id}', [CategorieController::class, 'show'])->name('categorieshow'); // Détails d'une catégorie
+    Route::get('/{id}/edit', [CategorieController::class, 'edit'])->name('categorieedit'); // Formulaire de modification
+    Route::put('/{id}', [CategorieController::class, 'update'])->name('categorieupdate'); // Mise à jour d'une catégorie
+    Route::delete('/{id}', [CategorieController::class, 'destroy'])->name('categoriedestroy');
+});
+
+Route::prefix('cours')->group(function () {
+    Route::get('cours', [CoursController::class, 'index'])->name('cours');
+    Route::get('/courscreate', [CoursController::class, 'create'])->name('courscreate');
+    Route::post('store', [CoursController::class, 'store'])->name('coursstore');
+    Route::get('/{id}', [CoursController::class, 'show'])->name('coursshow');
+    Route::get('/{id}/edit', [CoursController::class, 'edit'])->name('coursedit');
+    Route::put('/{id}', [CoursController::class, 'update'])->name('coursupdate');
+    Route::delete('/{id}', [CoursController::class, 'destroy'])->name('coursdestroy');
+
+});
+
+Route::prefix('chapitres')->group(function () {
+    Route::get('chapitres', [ChapitreController::class, 'index'])->name('chapitres');
+    Route::get('chapitrecreate', [ChapitreController::class, 'create'])->name('chapitrecreate');
+    Route::post('store', [ChapitreController::class, 'store'])->name('chapitrestore');
+    Route::get('{id}', [ChapitreController::class, 'show'])->name('chapitreshow');
+    Route::get('{id}/edit', [ChapitreController::class, 'edit'])->name('chapitreedit');
+    Route::put('{id}', [ChapitreController::class, 'update'])->name('chapitreupdate');
+    Route::delete('{id}', [ChapitreController::class, 'destroy'])->name('chapitredestroy');
+});
+
+
+
+Route::prefix('lessons')->group(function () {
+    Route::get('lessons', [LessonController::class, 'index'])->name('lessons');
+    Route::get('lessoncreate', [LessonController::class, 'create'])->name('lessoncreate');
+    Route::post('store', [LessonController::class, 'store'])->name('lessonstore');
+    Route::get('/{lesson}', [LessonController::class, 'show'])->name('lessonshow');
+    Route::get('/{lesson}/edit', [LessonController::class, 'edit'])->name('lessonedit');
+    Route::put('/{lesson}', [LessonController::class, 'update'])->name('lessonupdate');
+    Route::delete('/{lesson}', [LessonController::class, 'destroy'])->name('lessondestroy');
+});
+
+Route::prefix('quizzes')->group(function () {
+    Route::get('quizzes', [QuizController::class, 'index'])->name('quizzes');
+    Route::get('quizcreate', [QuizController::class, 'create'])->name('quizcreate');
+    Route::post('store', [QuizController::class, 'store'])->name('quizstore');
+    Route::get('{quiz}', [QuizController::class, 'show'])->name('quizshow');
+    Route::get('{quiz}/edit', [QuizController::class, 'edit'])->name('quizedit');
+    Route::put('{quiz}', [QuizController::class, 'update'])->name('quizupdate');
+    Route::delete('{quiz}', [QuizController::class, 'destroy'])->name('quizdestroy');
+});
+
+Route::prefix('questions')->group(function () {
+    Route::get('questions', [QuestionController::class, 'index'])->name('questions');
+    Route::get('questioncreate', [QuestionController::class, 'create'])->name('questioncreate');
+    Route::post('store', [QuestionController::class, 'store'])->name('questionstore');
+    Route::get('{question}', [QuestionController::class, 'show'])->name('questionshow');
+    Route::get('{question}/edit', [QuestionController::class, 'edit'])->name('questionedit');
+    Route::put('{question}', [QuestionController::class, 'update'])->name('questionupdate');
+    Route::delete('{question}', [QuestionController::class, 'destroy'])->name('questiondestroy');
+});
+
+
+Route::prefix('reponses')->group(function () {
+    Route::get('reponses', [ReponseController::class, 'index'])->name('reponses');
+    Route::get('reponsecreate', [ReponseController::class, 'create'])->name('reponsecreate');
+    Route::post('store', [ReponseController::class, 'store'])->name('reponsestore');
+    Route::get('/{reponse}', [ReponseController::class, 'show'])->name('reponseshow');
+    Route::get('/{reponse}/edit', [ReponseController::class, 'edit'])->name('reponseedit');
+    Route::put('/{reponse}', [ReponseController::class, 'update'])->name('reponseupdate');
+    Route::delete('/{reponse}', [ReponseController::class, 'destroy'])->name('reponsedestroy');
+});
+
+Route::prefix('feedbacks')->group(function () {
+    Route::get('/', [FeedbackController::class, 'index'])->name('feedbacks');
+    Route::get('/feedbackcreate', [FeedbackController::class, 'create'])->name('feedbackcreate');
+    Route::post('/', [FeedbackController::class, 'store'])->name('feedbackstore');
+    Route::get('/{id}', [FeedbackController::class, 'show'])->name('feedbackshow');
+    Route::get('/{id}/edit', [FeedbackController::class, 'edit'])->name('feedbackedit');
+    Route::put('/{id}', [FeedbackController::class, 'update'])->name('feedbackupdate');
+    Route::delete('/{id}', [FeedbackController::class, 'destroy'])->name('feedbackdestroy');
+    Route::post('/deleteSelected', [FeedbackController::class, 'deleteSelected'])->name('deleteSelected');
+
+});
+
+

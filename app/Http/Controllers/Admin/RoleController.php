@@ -43,9 +43,47 @@ class RoleController extends Controller
         return response()->json(['success' => 'Role ajouté avec succès', 'role' => $role]);
     }
 
+    // public function edit(Role $role)
+    // {
+    //     $permissions = Permission::all();
+    //     return view('admin.role.edit', compact('role', 'permissions'));
+    // }
     public function edit(Role $role)
     {
-        $permissions = Permission::all();
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+
+        // Récupérer le rôle de l'utilisateur connecté
+        $userRole = $user->roles->first();
+
+        // Si l'utilisateur est super admin, afficher toutes les permissions
+        if ($userRole->name === 'super-admin') {
+            $permissions = Permission::all();
+        }
+        // Si l'utilisateur est admin, afficher toutes les permissions sauf celles
+        // qui sont exclusives au super admin
+        elseif ($userRole->name === 'admin') {
+            // Récupérer le rôle super admin
+            $superAdminRole = Role::where('name', 'super-admin')->first();
+            // Récupérer le rôle admin
+            $adminRole = Role::where('name', 'admin')->first();
+
+            // Récupérer les permissions du super admin
+            $superAdminPermissions = $superAdminRole->permissions->pluck('id')->toArray();
+
+            // Récupérer les permissions de l'admin
+            $adminPermissions = $adminRole->permissions->pluck('id')->toArray();
+
+            // Permissions exclusives au super admin (celles que le super admin a mais que l'admin n'a pas)
+            $exclusiveSuperAdminPermissions = array_diff($superAdminPermissions, $adminPermissions);
+
+            // Récupérer toutes les permissions sauf celles exclusives au super admin
+            $permissions = Permission::whereNotIn('id', $exclusiveSuperAdminPermissions)->get();
+        } else {
+            // Pour les autres rôles, comportement par défaut
+            $permissions = Permission::all();
+        }
+
         return view('admin.role.edit', compact('role', 'permissions'));
     }
 
