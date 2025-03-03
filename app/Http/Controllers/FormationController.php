@@ -1,86 +1,74 @@
 <?php
+//code jdid
+
 namespace App\Http\Controllers;
 
 use App\Models\Formation;
 use App\Models\Categorie;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FormationController extends Controller
 {
     // Afficher la liste des formations
     public function index()
     {
-        // yjib les formations lkol mel table 
-        $formations = Formation::all();  
-
-        //renvoie les formations avec les donnees 
+        $formations = Formation::all();
         return view('admin.apps.formation.formations', compact('formations'));
-
     }
 
-    // Afficher le formulaire de création
-    //responsable de l'affichage du formulaire de création d'une nouvelle formation.
+    // Afficher le formulaire de création avec la liste des professeurs
     public function create()
     {
-        // Récupère toutes les catégories disponibles dans la base de données.
         $categories = Categorie::all();
-        return view('admin.apps.formation.formationcreate', compact('categories'));
+        $professeurs = User::whereHas('roles', function ($query) {
+            $query->where('name', 'professeur');
+        })->pluck('name', 'id'); // Récupérer ID et nom des professeurs
 
-        // Renvoie la vue formations.create avec les catégories disponibles.
+        return view('admin.apps.formation.formationcreate', compact('categories', 'professeurs'));
     }
-    
 
-    // Enregistrer une nouvelle formation
-    public function store(Request $request)
+    // Enregistrer une nouvelle formation et l'assigner à un professeur
+        public function store(Request $request)
     {
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            // 'duree' => 'required',
-            'duree' => 'required|date_format:H:i', // Validation du format de la durée
-
+            'duree' => 'required|date_format:H:i',
             'type' => 'required|string',
-            // 'prix' => 'required|numeric',
-            'prix' => 'required|numeric|regex:/^\d+(\.\d{1,3})?/', // Accepte jusqu'à 3 décimales
-
+            'prix' => 'required|numeric|regex:/^\d+(\.\d{1,3})?/',
             'categorie_id' => 'required|integer|exists:categories,id',
+            'user_id' => 'required|integer|exists:users,id', // Validation de l'ID professeur
         ]);
 
 
-        // Crée une nouvelle formation avec toutes les données validées de la requête.
-         Formation::create($request->all());
-         session()->flash('success', 'Formation créée avec succès !');
 
+        // Création de la formation liée au professeur sélectionné
+        Formation::create([
+            'titre' => $request->titre,
+            'description' => $request->description,
+            'duree' => $request->duree,
+            'type' => $request->type,
+            'prix' => $request->prix,
+            'categorie_id' => $request->categorie_id,
+            'user_id' => $request->user_id, // Correction ici
+        ]);
 
-        // return redirect()->route('formations.index')->with('success', 'Formation ajoutée avec succès.');
-                // return redirect()->route('formations.index');
-                return redirect()->route('formations');
-
-
-
-        // yhezek  lel  liste des formations avec  message de succès.
+        session()->flash('success', 'Formation créée avec succès !');
+        return redirect()->route('formations');
     }
-    
-
-    // Afficher une formation spécifique
-    public function show($id)
-    {
-        $formation = Formation::findOrFail($id); // Recherche la formation par son ID et génère une erreur 404 si elle n'est pas trouvée.
-        
-        // Renvoie la vue admin.apps.formation.formationshow avec les données de la formation trouvée.
-        return view('admin.apps.formation.formationshow', compact('formation'));
-
-    
-    }
-
-    
 
     // Afficher le formulaire de modification
     public function edit($id)
     {
         $formation = Formation::findOrFail($id);
         $categories = Categorie::all();
-        return view('admin.apps.formation.formationedit', compact('formation', 'categories'));
+        $professeurs = User::whereHas('roles', function ($query) {
+            $query->where('name', 'professeur');
+        })->pluck('name', 'id');
+
+        return view('admin.apps.formation.formationedit', compact('formation', 'categories', 'professeurs'));
     }
 
     // Mettre à jour une formation
@@ -89,16 +77,29 @@ class FormationController extends Controller
         $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'duree' => 'required|date_format:H:i', // Validation du format de la durée
+            'duree' => 'required|date_format:H:i',
             'type' => 'required|string',
-            // 'prix' => 'required|numeric',
-            'prix' => 'required|numeric|regex:/^\d+(\.\d{1,2})?/',  // Validation pour un prix avec 2 décimales
-
+            'prix' => 'required|numeric|regex:/^\d+(\.\d{1,2})?/',
             'categorie_id' => 'required|integer|exists:categories,id',
+            'user_id' => 'required|integer|exists:users,id',
         ]);
 
         $formation = Formation::findOrFail($id);
-        $formation->update($request->all());
+
+        // Vérifier que l'utilisateur sélectionné est bien un professeur
+        $professeur = User::whereHas('roles', function ($query) {
+            $query->where('name', 'professeur');
+        })->findOrFail($request->user_id);
+
+        $formation->update([
+            'titre' => $request->titre,
+            'description' => $request->description,
+            'duree' => $request->duree,
+            'type' => $request->type,
+            'prix' => $request->prix,
+            'categorie_id' => $request->categorie_id,
+            'user_id' => $request->user->id,
+        ]);
 
         return redirect()->route('formations')->with('success', 'Formation mise à jour avec succès.');
     }
@@ -109,7 +110,5 @@ class FormationController extends Controller
         $formation = Formation::findOrFail($id);
         $formation->delete();
         return redirect()->route('formations')->with('delete', 'Formation supprimée avec succès.');
-
-
     }
 }

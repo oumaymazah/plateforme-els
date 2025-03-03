@@ -57,14 +57,12 @@
                         <h5>Cours Disponibles</h5>
                     </div>
                     <div class="card-body">
-                        <!-- Message de succès si le cours a été ajouté -->
                         @if(session('success'))
                             <div class="alert alert-success" id="success-message">
                                 {{ session('success') }}
                             </div>
                         @endif
 
-                        <!-- Message de succès si le cours a été supprimé -->
                         @if(session('delete'))
                             <div class="alert alert-danger" id="delete-message">
                                 {{ session('delete') }}
@@ -92,7 +90,6 @@
                                     <th>Description</th>
                                     <th>Date debut</th>
                                     <th>Date fin</th>
-                                    <th>Professeur</th>
                                     <th>Formation</th>
                                     <th>Actions</th>
                                 </tr>
@@ -105,20 +102,11 @@
                                             <td>{{ $cour->description }}</td>
                                             <td>{{ $cour->date_debut }}</td>
                                             <td>{{ $cour->date_fin }}</td>
-                                            <td>{{ $cour->user ? $cour->user->name : 'Aucun utilisateur' }}</td>
                                             <td>{{ $cour->formation ? $cour->formation->titre : 'Aucune formation' }}</td>
                                             <td>
-                                                {{-- <a href="{{ route('coursshow', $cour->id) }}" class="btn btn-info btn-sm">Voir</a> --}}
-                                                {{-- <a href="{{ route('coursedit', $cour->id) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                                <form action="{{ route('coursdestroy', $cour->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce cours ?')">Supprimer</button>
-                                                </form> --}}
 
                                                 <i class="icofont icofont-edit edit-icon action-icon" data-edit-url="{{ route('coursedit', $cour->id) }}" style="cursor: pointer;"></i>
-                                                
-                                                    <!-- Icône Supprimer -->
+
                                                     <i class="icofont icofont-ui-delete delete-icon action-icon" data-delete-url="{{ route('coursdestroy', $cour->id) }}" data-csrf="{{ csrf_token() }}" style="cursor: pointer; color: rgb(204, 28, 28);"></i>
                                                 </div>
                                             </td>

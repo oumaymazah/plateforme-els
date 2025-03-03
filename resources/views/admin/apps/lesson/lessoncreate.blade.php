@@ -83,7 +83,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="4" name="description" required placeholder="Description">{{ old('description') }}</textarea>
+                                        <textarea class="form-control" rows="4" name="description"  placeholder="Description" required>{{ old('description') }}</textarea>
                                         <div class="invalid-feedback">Veuillez entrer une description valide.</div>
                                     </div>
                                 </div>
@@ -102,7 +102,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                
+
                                         <div class="mb-3">
                                             <label class="form-label">Chapitre</label>
                                             <select class="form-select select2-chapitre" name="chapitre_id" required>
@@ -115,7 +115,7 @@
                                             </select>
                                             <div class="invalid-feedback">Veuillez sélectionner un chapitre valide.</div>
                                         </div>
-    
+
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
 
 @endpush
 
-@endsection 
+@endsection
 
 
 
@@ -174,7 +174,7 @@
 
 {{-- maymshish :feha upload  --}}
 
-{{-- 
+{{--
 @extends('layouts.admin.master')
 
 @section('title') Ajouter une Leçon @endsection

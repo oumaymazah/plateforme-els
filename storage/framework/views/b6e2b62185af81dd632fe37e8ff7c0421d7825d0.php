@@ -61,13 +61,11 @@
                                 </ul>
                             </div>
                         <?php endif; ?>
-                        
-                        <!-- Formulaire d'ajout de cours avec validation Bootstrap -->
+
                         <div class="form theme-form">
                             <form action="<?php echo e(route('coursstore')); ?>" method="POST" class="needs-validation" novalidate>
                                 <?php echo csrf_field(); ?>
-                                
-                                <!-- Titre -->
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
@@ -77,19 +75,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Description -->
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label" for="description">Description</label>
                                             <textarea id="description" class="form-control" rows="4" name="description" placeholder="Description" required><?php echo e(old('description')); ?></textarea>
-                                            <div class="invalid-feedback">Veuillez entrer une description valide.</div>
+                                            <div class="invalid-feedback">Veuillez entrer une description valide .</div>
+
+
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Dates -->
+
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="mb-3">
@@ -106,23 +104,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Sélection des professeurs et formations -->
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="user_id">Professeurs</label>
-                                            <select id="user_id" class="form-select select2-professeur" name="user_id" required>
-                                                <option value="" disabled selected>Sélectionnez un professeur</option>
-                                                <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <option value="<?php echo e($user->id); ?>" <?php echo e(old('user_id') == $user->id ? 'selected' : ''); ?>>
-                                                        <?php echo e($user->name); ?>
 
-                                                    </option>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            </select>
-                                            <div class="invalid-feedback">Veuillez sélectionner un professeur valide.</div>
-                                        </div>
+                                <div class="row">
+
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="mb-3">
@@ -140,8 +124,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Boutons -->
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="text-end">
@@ -167,27 +150,15 @@
     <script src="<?php echo e(asset('assets/js/form-validation/form-validation.js')); ?>"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Écoutez l'événement de soumission du formulaire
-            document.querySelector('form.needs-validation').addEventListener('submit', function (event) {
-                event.preventDefault(); // Empêchez la soumission par défaut du formulaire
-
-                // Simulez une soumission réussie (remplacez ceci par votre logique de soumission réelle)
-                setTimeout(function () {
-                    // Affichez l'alerte de succès
-                    alert('Cours créé avec succès !');
-
-                    // Demandez à l'utilisateur s'il souhaite créer un chapitre
-                    if (confirm('Voulez-vous créer un chapitre pour ce cours ?')) {
-                        // Redirigez vers la page de création de chapitre
-                        window.location.href = '<?php echo e(route("chapitrecreate")); ?>';
-                    } else {
-                        // Redirigez vers la page des cours
-                        window.location.href = '<?php echo e(route("cours")); ?>';
-                    }
-                }, 1000); // Simule un délai de soumission
-            });
+        document.getElementById('categoryForm').addEventListener('submit', function(event) {
+            var form = this;
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
         });
-    </script>
+        </script>
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/apps/cours/courscreate.blade.php ENDPATH**/ ?>

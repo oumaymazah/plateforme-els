@@ -54,7 +54,6 @@
                         <h5>Cours Disponibles</h5>
                     </div>
                     <div class="card-body">
-                        <!-- Message de succès si le cours a été ajouté -->
                         <?php if(session('success')): ?>
                             <div class="alert alert-success" id="success-message">
                                 <?php echo e(session('success')); ?>
@@ -62,7 +61,6 @@
                             </div>
                         <?php endif; ?>
 
-                        <!-- Message de succès si le cours a été supprimé -->
                         <?php if(session('delete')): ?>
                             <div class="alert alert-danger" id="delete-message">
                                 <?php echo e(session('delete')); ?>
@@ -91,7 +89,6 @@
                                     <th>Description</th>
                                     <th>Date debut</th>
                                     <th>Date fin</th>
-                                    <th>Professeur</th>
                                     <th>Formation</th>
                                     <th>Actions</th>
                                 </tr>
@@ -104,15 +101,11 @@
                                             <td><?php echo e($cour->description); ?></td>
                                             <td><?php echo e($cour->date_debut); ?></td>
                                             <td><?php echo e($cour->date_fin); ?></td>
-                                            <td><?php echo e($cour->user ? $cour->user->name : 'Aucun utilisateur'); ?></td>
                                             <td><?php echo e($cour->formation ? $cour->formation->titre : 'Aucune formation'); ?></td>
                                             <td>
-                                                
-                                                
 
                                                 <i class="icofont icofont-edit edit-icon action-icon" data-edit-url="<?php echo e(route('coursedit', $cour->id)); ?>" style="cursor: pointer;"></i>
-                                                
-                                                    <!-- Icône Supprimer -->
+
                                                     <i class="icofont icofont-ui-delete delete-icon action-icon" data-delete-url="<?php echo e(route('coursdestroy', $cour->id)); ?>" data-csrf="<?php echo e(csrf_token()); ?>" style="cursor: pointer; color: rgb(204, 28, 28);"></i>
                                                 </div>
                                             </td>

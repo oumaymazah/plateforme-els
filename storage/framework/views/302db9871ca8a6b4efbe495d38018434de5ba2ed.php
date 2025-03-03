@@ -30,7 +30,6 @@
                         <?php endif; ?>
                         <div class="form theme-form">
                             <form action="<?php echo e(route('formationupdate', $formation->id)); ?>" method="POST">
-
                                 <?php echo csrf_field(); ?>
                                 <?php echo method_field('PUT'); ?>
 
@@ -47,7 +46,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label">Description</label>
-                                            <textarea class="form-control" rows="4" name="description" placeholder="Description" required><?php echo e(old('description', $formation->description)); ?></textarea>
+                                            <textarea class="form-control" rows="4" name="description" placeholder="Description" required ><?php echo e(old('description', $formation->description)); ?></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -77,7 +76,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label">Catégorie</label>
-                                            <select class="form-select select2-categorie" name="categorie_id"  required>
+                                            <select class="form-select select2-categorie" name="categorie_id" required>
                                                 <option value="" disabled selected>Choisir une catégorie</option>
                                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <option value="<?php echo e($categorie->id); ?>" <?php echo e(old('categorie_id', $formation->categorie_id) == $categorie->id ? 'selected' : ''); ?>>
@@ -90,9 +89,27 @@
                                     </div>
                                 </div>
 
+                                <!-- Sélection du professeur -->
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label class="form-label">Professeur</label>
+                                            <select class="form-select select2-professeur" name="user_id" required>
+                                                <option value="" disabled>Choisir un professeur</option>
+                                                <?php $__currentLoopData = $professeurs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $nom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($id); ?>" <?php echo e(old('user_id', $formation->user_id) == $id ? 'selected' : ''); ?>>
+                                                        <?php echo e($nom); ?>
+
+                                                    </option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col text-end">
-                                            <button class="btn btn-secondary me-3" type="submit">Mettre à jour</button>
+                                        <button class="btn btn-secondary me-3" type="submit">Mettre à jour</button>
                                         <button class="btn btn-danger" type="button" onclick="window.location.href='<?php echo e(route('formations')); ?>'">Annuler</button>
                                     </div>
                                 </div>
@@ -103,22 +120,34 @@
             </div>
         </div>
     </div>
-    
+
 <?php $__env->startPush('scripts'); ?>
     <script src="<?php echo e(asset('assets/js/dropzone/dropzone.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/dropzone/dropzone-script.js')); ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script src="<?php echo e(asset('assets/js/select2-init/single-select.js')); ?>"></script>
-    <?php $__env->startPush('scripts'); ?>
-    <!--  lel update-->
-    
-<?php $__env->stopPush(); ?>
+
+    <script>
+        $(document).ready(function() {
+            // Initialisation spécifique pour la page d'édition
+            $('.select2-categorie, .select2-professeur').select2({
+                width: '100%',
+                placeholder: "Sélectionner une option",
+                allowClear: true
+            });
+
+            // Forcer Select2 à reconnaître la valeur pré-sélectionnée
+            setTimeout(function() {
+                $('.select2-categorie, .select2-professeur').trigger('change');
+            }, 100);
+        });
+    </script>
 <?php $__env->stopPush(); ?>
 
 <style>
     .custom-btn {
-        background-color: #2b786a; 
-        color: white; 
+        background-color: #2b786a;
+        color: white;
         border-color: #2b786a;
     }
     .custom-btn:hover {
@@ -129,6 +158,42 @@
 </style>
 
 <?php $__env->stopSection(); ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

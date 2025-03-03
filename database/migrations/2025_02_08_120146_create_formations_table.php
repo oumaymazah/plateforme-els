@@ -17,11 +17,14 @@ class CreateFormationsTable extends Migration
             $table->id();
             $table->string('titre');
             $table->string('description');
-            $table->time('duree'); 
-            $table->string('type'); 
+            $table->time('duree');
+            $table->string('type');
             $table->decimal('prix', 8, 3);
             $table->unsignedBigInteger('categorie_id');
             $table->boolean('statut')->default(true);
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });

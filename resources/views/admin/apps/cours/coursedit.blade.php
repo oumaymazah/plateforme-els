@@ -61,7 +61,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <textarea name="description" class="form-control" rows="4" required>{{ old('description', $cours->description) }}</textarea>
+                                        <textarea name="description" class="form-control" rows="4"  required>{{ old('description', $cours->description) }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@
                             </div>
 
                             <!-- Utilisateur avec Select2 -->
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="user_id" class="form-label">Professeurs</label>
@@ -117,7 +117,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
 
                             <!-- Boutons -->
@@ -133,7 +133,7 @@
             </div>
         </div>
     </div>
-    
+
 @push('scripts')
     <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
     <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>

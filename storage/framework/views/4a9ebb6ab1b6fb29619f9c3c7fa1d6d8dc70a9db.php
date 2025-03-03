@@ -6,15 +6,15 @@
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/select2.min.css')); ?>">
 <style>
     .custom-btn {
-        background-color: #2b786a; 
-        color: white; 
-        border-color: #2b786a; 
+        background-color: #2b786a;
+        color: white;
+        border-color: #2b786a;
     }
 
     .custom-btn:hover {
-        background-color: #1f5c4d; 
+        background-color: #1f5c4d;
         border-color: #1f5c4d;
-        color: white; 
+        color: white;
     }
 </style>
 <?php $__env->stopPush(); ?>
@@ -59,8 +59,10 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="4" name="description" placeholder="Description" required><?php echo e(old('description')); ?></textarea>
-                                        <div class="invalid-feedback">Veuillez entrer une description valide.</div>
+                                        <textarea class="form-control" rows="4" name="description" placeholder="Description" required ><?php echo e(old('description')); ?></textarea>
+                                        <div class="invalid-feedback">Veuillez entrer une description valide .</div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +114,7 @@
     <script src="<?php echo e(asset('assets/js/select2-init/single-select.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/form-validation/form-validation.js')); ?>"></script>
 <?php $__env->stopPush(); ?>
-<?php $__env->stopSection(); ?> 
+<?php $__env->stopSection(); ?>
 
 
 

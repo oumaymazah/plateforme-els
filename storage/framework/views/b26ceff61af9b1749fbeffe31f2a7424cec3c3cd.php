@@ -1,24 +1,19 @@
+<?php $__env->startSection('title'); ?> Modifier un Chapitre <?php $__env->stopSection(); ?>
 
-
-
-@extends('layouts.admin.master')
-
-@section('title') Modifier un Chapitre @endsection
-
-@push('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/dropzone.css') }}">
+<?php $__env->startPush('css'); ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/dropzone.css')); ?>">
     <!-- CSS de Select2 via CDN -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
-    @component('components.breadcrumb')
-        @slot('breadcrumb_title')
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+        <?php $__env->slot('breadcrumb_title'); ?>
             <h3>Modifier un Chapitre</h3>
-        @endslot
+        <?php $__env->endSlot(); ?>
         <li class="breadcrumb-item">Chapitre</li>
         <li class="breadcrumb-item active">Modifier</li>
-    @endcomponent
+    <?php echo $__env->renderComponent(); ?>
 
     <div class="container-fluid">
         <div class="row">
@@ -26,34 +21,35 @@
                 <div class="card">
                     <div class="card-body">
                         <!-- Affichage des erreurs -->
-                        @if ($errors->any())
+                        <?php if($errors->any()): ?>
                             <div class="alert alert-danger">
                                 <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
+                                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><?php echo e($error); ?></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <!-- Affichage du message flash de succès -->
-                        @if (session('success'))
+                        <?php if(session('success')): ?>
                             <div class="alert alert-success">
-                                {{ session('success') }}
+                                <?php echo e(session('success')); ?>
+
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <!-- Formulaire de modification du chapitre -->
-                        <form action="{{ route('chapitreupdate', $chapitre->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
+                        <form action="<?php echo e(route('chapitreupdate', $chapitre->id)); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('PUT'); ?>
 
                             <!-- Titre -->
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="titre" class="form-label">Titre</label>
-                                        <input type="text" name="titre" class="form-control" value="{{ old('titre', $chapitre->titre) }}" required>
+                                        <input type="text" name="titre" class="form-control" value="<?php echo e(old('titre', $chapitre->titre)); ?>" required>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +59,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <textarea name="description" class="form-control" rows="4"  required>{{ old('description', $chapitre->description) }}</textarea>
+                                        <textarea name="description" class="form-control" rows="4"  required><?php echo e(old('description', $chapitre->description)); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +69,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="duree" class="form-label">Durée (HH:mm)</label>
-                                        <input type="text" name="duree" class="form-control" value="{{ old('duree', \Carbon\Carbon::parse($chapitre->duree)->format('H:i')) }}" pattern="\d{2}:\d{2}" title="Format: HH:mm" required>
+                                        <input type="text" name="duree" class="form-control" value="<?php echo e(old('duree', \Carbon\Carbon::parse($chapitre->duree)->format('H:i'))); ?>" pattern="\d{2}:\d{2}" title="Format: HH:mm" required>
                                     </div>
                                 </div>
                             </div>
@@ -85,11 +81,12 @@
                                         <label for="cours_id" class="form-label">Cours</label>
                                         <select name="cours_id" class="form-select select2-cours" required>
                                             <option value="" disabled selected>Choisir un cours</option>
-                                            @foreach($cours as $coursItem)
-                                                <option value="{{ $coursItem->id }}" {{ old('cours_id', $chapitre->cours_id) == $coursItem->id ? 'selected' : '' }}>
-                                                    {{ $coursItem->titre }}
+                                            <?php $__currentLoopData = $cours; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $coursItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($coursItem->id); ?>" <?php echo e(old('cours_id', $chapitre->cours_id) == $coursItem->id ? 'selected' : ''); ?>>
+                                                    <?php echo e($coursItem->titre); ?>
+
                                                 </option>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </div>
                                 </div>
@@ -99,7 +96,7 @@
                             <div class="row">
                                 <div class="col text-end">
                                     <button class="btn btn-secondary me-3" type="submit">Mettre à jour</button>
-                                    <button class="btn btn-danger" type="button" onclick="window.location.href='{{ route('chapitres') }}'">Annuler</button>
+                                    <button class="btn btn-danger" type="button" onclick="window.location.href='<?php echo e(route('chapitres')); ?>'">Annuler</button>
                                 </div>
                             </div>
                         </form>
@@ -109,16 +106,16 @@
         </div>
     </div>
 
-@push('scripts')
-    <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
-    <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
+<?php $__env->startPush('scripts'); ?>
+    <script src="<?php echo e(asset('assets/js/dropzone/dropzone.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/dropzone/dropzone-script.js')); ?>"></script>
     <!-- Inclusion de Select2 JS via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <!-- Inclusion du fichier externe pour l'initialisation de Select2 -->
-    <script src="{{ asset('assets/js/select2-init/single-select.js') }}"></script>
-@endpush
+    <script src="<?php echo e(asset('assets/js/select2-init/single-select.js')); ?>"></script>
+<?php $__env->stopPush(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
     <style>
         .custom-btn {
             background-color: #2b786a; /* Vert foncé */
@@ -131,6 +128,8 @@
             color: white;
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/apps/chapitre/chapitreedit.blade.php ENDPATH**/ ?>

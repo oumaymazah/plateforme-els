@@ -49,8 +49,10 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="4" name="description" placeholder="Description" required><?php echo e(old('description')); ?></textarea>
-                                        <div class="invalid-feedback">Veuillez entrer une description valide.</div>
+                                        <textarea class="form-control" rows="4" name="description" placeholder="Description" required ><?php echo e(old('description')); ?></textarea>
+                                        <div class="invalid-feedback">Veuillez entrer une description valide .</div>
+
+
                                     </div>
                                 </div>
                             </div>

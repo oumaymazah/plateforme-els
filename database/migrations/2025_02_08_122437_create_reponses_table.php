@@ -15,11 +15,9 @@ class CreateReponsesTable extends Migration
     {
         Schema::create('reponses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('question_id'); 
-            
+            $table->unsignedBigInteger('question_id');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-
-            $table->string('contenu'); 
+            $table->string('contenu');
             $table->boolean('est_correcte')->default(false); // Indique si la réponse est correcte
 
             $table->timestamps();

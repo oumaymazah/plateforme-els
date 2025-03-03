@@ -87,7 +87,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <textarea name="description" class="form-control" rows="4" required><?php echo e(old('description', $quiz->description)); ?></textarea>
+                                        <textarea name="description" class="form-control" rows="4"  required><?php echo e(old('description', $quiz->description)); ?></textarea>
                                     </div>
                                 </div>
                             </div>

@@ -39,7 +39,7 @@ class LessonController extends Controller
         'duree' => 'required|date_format:H:i',
         'chapitre_id' => 'required|exists:chapitres,id',
         // 'file_path' => 'nullable|file|mimes:jpg,jpeg,png,mp4,avi,pdf,doc,docx|max:20480',
-        'file_path' => 'nullable|file|max:20480', // Suppression de 'mimes'
+        'file_path' => 'file|max:20480', // Suppression de 'mimes'
 
     ]);
 
@@ -91,7 +91,7 @@ class LessonController extends Controller
             'description' => 'required|string',
             'duree' => 'required|date_format:H:i',
             'chapitre_id' => 'required|exists:chapitres,id',
-            'file_path' => 'nullable|file|max:20480', 
+            'file_path' => 'file|max:20480',
         ]);
 
         $data = $request->all();
@@ -105,7 +105,7 @@ class LessonController extends Controller
             $path = $file->store('uploads/lessons', 'public');
             $data['file_path'] = $path;
         }
-        
+
         $lesson->update($data);
 
         return redirect()->route('lessons')->with('success', 'Lesson mise à jour avec succès.');

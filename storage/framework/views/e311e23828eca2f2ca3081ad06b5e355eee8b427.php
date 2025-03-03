@@ -80,7 +80,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="4" name="description" required placeholder="Description"><?php echo e(old('description')); ?></textarea>
+                                        <textarea class="form-control" rows="4" name="description"  placeholder="Description" required><?php echo e(old('description')); ?></textarea>
                                         <div class="invalid-feedback">Veuillez entrer une description valide.</div>
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                
+
                                         <div class="mb-3">
                                             <label class="form-label">Chapitre</label>
                                             <select class="form-select select2-chapitre" name="chapitre_id" required>
@@ -113,7 +113,7 @@
                                             </select>
                                             <div class="invalid-feedback">Veuillez sélectionner un chapitre valide.</div>
                                         </div>
-    
+
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +162,8 @@
 
 <?php $__env->stopPush(); ?>
 
-<?php $__env->stopSection(); ?> 
+<?php $__env->stopSection(); ?>
+
 
 
 

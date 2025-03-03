@@ -48,7 +48,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="4" name="description" required placeholder="Description"><?php echo e(old('description', $lesson->description)); ?></textarea>
+                                        <textarea class="form-control" rows="4" name="description"  placeholder="Description" required><?php echo e(old('description', $lesson->description)); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        
+
                                         <!-- Affichage de l'ancien fichier s'il existe -->
                                         <?php if($lesson->file_path): ?>
                                             <div>
@@ -128,7 +128,7 @@
 <script src="<?php echo e(asset('assets/js/dropzone/dropzone-script.js')); ?>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="<?php echo e(asset('assets/js/select2-init/single-select.js')); ?>"></script>
-<?php $__env->stopPush(); ?>  
+<?php $__env->stopPush(); ?>
 
 
 

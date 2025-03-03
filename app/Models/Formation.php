@@ -12,7 +12,7 @@ class Formation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titre', 'description', 'duree', 'type','statut', 'prix', 'categorie_id'];
+    protected $fillable = ['titre', 'description', 'duree', 'type','statut', 'prix', 'categorie_id','user_id'];
 
     public function categorie()
     {
@@ -22,6 +22,12 @@ class Formation extends Model
     public function cours()
     {
         return $this->hasMany(Cours::class);
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function feedbacks()

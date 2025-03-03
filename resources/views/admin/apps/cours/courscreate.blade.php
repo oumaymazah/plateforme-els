@@ -1,4 +1,4 @@
-{{-- 
+{{--
  @extends('layouts.admin.master')
 
 @section('title') Ajouter un Cours @endsection
@@ -64,12 +64,12 @@
                                 </ul>
                             </div>
                         @endif
-                        
+
                         <!-- Formulaire d'ajout de cours avec validation Bootstrap -->
                         <div class="form theme-form">
                             <form action="{{ route('coursstore') }}" method="POST" class="needs-validation" novalidate>
                                 @csrf
-                                
+
                                 <!-- Titre -->
                                 <div class="row">
                                     <div class="col">
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Description -->
                                 <div class="row">
                                     <div class="col">
@@ -91,7 +91,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Dates -->
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -109,7 +109,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Sélection des professeurs et formations -->
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -141,7 +141,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Boutons -->
                                 <div class="row">
                                     <div class="col">
@@ -153,7 +153,7 @@
                                 </div>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -168,7 +168,7 @@
 
     <!-- Inclusion du script de validation global pour tous les formulaires -->
     <script src="{{ asset('assets/js/form-validation/form-validation.js') }}"></script>
-   
+
 
     @endpush
 
@@ -241,13 +241,11 @@
                                 </ul>
                             </div>
                         @endif
-                        
-                        <!-- Formulaire d'ajout de cours avec validation Bootstrap -->
+
                         <div class="form theme-form">
                             <form action="{{ route('coursstore') }}" method="POST" class="needs-validation" novalidate>
                                 @csrf
-                                
-                                <!-- Titre -->
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
@@ -257,19 +255,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Description -->
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label" for="description">Description</label>
                                             <textarea id="description" class="form-control" rows="4" name="description" placeholder="Description" required>{{ old('description') }}</textarea>
-                                            <div class="invalid-feedback">Veuillez entrer une description valide.</div>
+                                            <div class="invalid-feedback">Veuillez entrer une description valide .</div>
+
+
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Dates -->
+
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="mb-3">
@@ -286,22 +284,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Sélection des professeurs et formations -->
+
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="user_id">Professeurs</label>
-                                            <select id="user_id" class="form-select select2-professeur" name="user_id" required>
-                                                <option value="" disabled selected>Sélectionnez un professeur</option>
-                                                @foreach($users as $user)
-                                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                                        {{ $user->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <div class="invalid-feedback">Veuillez sélectionner un professeur valide.</div>
-                                        </div>
+
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="mb-3">
@@ -318,8 +303,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Boutons -->
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="text-end">
@@ -345,26 +329,13 @@
     <script src="{{ asset('assets/js/form-validation/form-validation.js') }}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Écoutez l'événement de soumission du formulaire
-            document.querySelector('form.needs-validation').addEventListener('submit', function (event) {
-                event.preventDefault(); // Empêchez la soumission par défaut du formulaire
-
-                // Simulez une soumission réussie (remplacez ceci par votre logique de soumission réelle)
-                setTimeout(function () {
-                    // Affichez l'alerte de succès
-                    alert('Cours créé avec succès !');
-
-                    // Demandez à l'utilisateur s'il souhaite créer un chapitre
-                    if (confirm('Voulez-vous créer un chapitre pour ce cours ?')) {
-                        // Redirigez vers la page de création de chapitre
-                        window.location.href = '{{ route("chapitrecreate") }}';
-                    } else {
-                        // Redirigez vers la page des cours
-                        window.location.href = '{{ route("cours") }}';
-                    }
-                }, 1000); // Simule un délai de soumission
-            });
+        document.getElementById('categoryForm').addEventListener('submit', function(event) {
+            var form = this;
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
         });
-    </script>
+        </script>
 @endpush

@@ -16,15 +16,12 @@ class Cours extends Model
         'description',
         'date_debut',
         'date_fin',
-        'user_id',
         'formation_id',
+        
     ];
 
     // // Relation avec Professeur
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+
 
     // Relation avec Formation
     public function formation()

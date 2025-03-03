@@ -58,7 +58,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <textarea name="description" class="form-control" rows="4" required><?php echo e(old('description', $cours->description)); ?></textarea>
+                                        <textarea name="description" class="form-control" rows="4"  required><?php echo e(old('description', $cours->description)); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -102,21 +102,7 @@
                             </div>
 
                             <!-- Utilisateur avec Select2 -->
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label for="user_id" class="form-label">Professeurs</label>
-                                        <select name="user_id" class="form-select select2-professeur" required>
-                                            <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($user->id); ?>" <?php echo e(old('user_id', $cours->user_id) == $user->id ? 'selected' : ''); ?>>
-                                                    <?php echo e($user->name); ?>
-
-                                                </option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
 
                             <!-- Boutons -->
@@ -132,7 +118,7 @@
             </div>
         </div>
     </div>
-    
+
 <?php $__env->startPush('scripts'); ?>
     <script src="<?php echo e(asset('assets/js/dropzone/dropzone.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/dropzone/dropzone-script.js')); ?>"></script>

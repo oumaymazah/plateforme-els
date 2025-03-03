@@ -73,7 +73,6 @@
                 <div class="card-header">
                     <h5>Leçons Disponibles</h5>
                     <span>Ce tableau affiche la liste des leçons disponibles. Vous pouvez rechercher, trier et paginer les données.</span>
-                    <span>Les fonctionnalités de recherche et de pagination sont activées par défaut.</span>
                 </div>
                 <div class="card-body">
                     <?php if(session('success')): ?>
@@ -151,7 +150,7 @@
 <script src="<?php echo e(asset('assets/js/height-equal.js')); ?>"></script>
 <script src="<?php echo e(asset('assets/js/actions-icon/actions-icon.js')); ?>"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
 
 <script>
     window.onload = function() {

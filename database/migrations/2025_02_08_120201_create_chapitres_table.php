@@ -15,10 +15,9 @@ class CreateChapitresTable extends Migration
     {
         Schema::create('chapitres', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
+            $table->text('description');
             $table->string('titre');
-
-            $table->time('duree'); 
+            $table->time('duree');
             $table->unsignedBigInteger('cours_id');
             $table->foreign('cours_id')->references('id')->on('cours')->onDelete('cascade');
             $table->timestamps();

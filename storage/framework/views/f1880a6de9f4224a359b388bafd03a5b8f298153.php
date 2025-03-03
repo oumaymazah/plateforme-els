@@ -1,5 +1,3 @@
-   
-
 <?php $__env->startSection('title'); ?>
     Liste des Formations <?php echo e($title); ?>
 
@@ -66,26 +64,31 @@
                         <div class="col-md-6 p-0">
                             <ul class="nav nav-tabs border-tab" id="top-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="true"><i data-feather="target"></i>All</a>
+                                    <a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="true">
+                                        <i data-feather="target"></i> Toutes les formations
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false"><i data-feather="check-circle"></i>Published</a>
+                                    <a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false">
+                                        <i data-feather="check-circle"></i> Publiées
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="false"><i data-feather="info"></i>Upublished</a>
+                                    <a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="false">
+                                        <i data-feather="info"></i> Non publiées
+                                    </a>
                                 </li>
-                               
                             </ul>
                         </div>
                         <div class="col-md-6 p-0">
-                            <div class="form-group mb-0 me-0"></div>
                             <a class="btn btn-primary custom-btn" href="<?php echo e(route('formationcreate')); ?>">
-                                <i data-feather="plus-square"></i>Ajouter une formation
+                                <i data-feather="plus-square"></i> Ajouter une formation
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
@@ -117,7 +120,10 @@
                                     <?php $__currentLoopData = $formations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $formation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="col-xxl-4 col-lg-6">
                                             <div class="project-box">
-                                                <span class="badge badge-primary">Published</span>
+                                                <span class="badge <?php echo e($formation->statut ? 'badge-primary' : 'badge-warning'); ?>">
+                                                    <?php echo e($formation->statut ? 'Publié' : 'Non publié'); ?>
+
+                                                </span>
                                                 <h6><?php echo e($formation->titre); ?></h6>
                                                 <p><?php echo e($formation->description); ?></p>
                                                 <div class="row details">
@@ -129,12 +135,14 @@
                                                     <div class="col-6 font-primary"><?php echo e(number_format($formation->prix, 3)); ?> Dt</div>
                                                     <div class="col-6"><span>Catégorie</span></div>
                                                     <div class="col-6 font-primary"><?php echo e($formation->categorie->titre ?? 'N/A'); ?></div>
+                                                    <div class="col-6"><span>Professeur</span></div>
+                                                    <div class="col-6 font-primary"><?php echo e($formation->user->name ?? ''); ?></div>
                                                 </div>
-                                                
-                                                 <div class="mt-3">
+
+                                                <div class="mt-3">
                                                     <!-- Icône Modifier -->
                                                     <i class="icofont icofont-edit edit-icon action-icon" data-edit-url="<?php echo e(route('formationedit', $formation->id)); ?>" style="cursor: pointer;"></i>
-                                                
+
                                                     <!-- Icône Supprimer -->
                                                     <i class="icofont icofont-ui-delete delete-icon action-icon" data-delete-url="<?php echo e(route('formationdestroy', $formation->id)); ?>" data-csrf="<?php echo e(csrf_token()); ?>" style="cursor: pointer; color: rgb(204, 28, 28);"></i>
                                                 </div>
@@ -145,12 +153,12 @@
                             </div>
                             <div class="tab-pane fade" id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
                                 <div class="row">
-                                    <!-- Ajoutez ici les formations en cours -->
+                                    <!-- Formations non publiées -->
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
                                 <div class="row">
-                                    <!-- Ajoutez ici les formations terminées -->
+                                    <!-- Formations publiées -->
                                 </div>
                             </div>
                         </div>
@@ -160,50 +168,28 @@
         </div>
     </div>
 
-    <?php $__env->startPush('scripts'); ?>
-        <script src="<?php echo e(asset('assets/js/prism/prism.min.js')); ?>"></script>
-        <script src="<?php echo e(asset('assets/js/clipboard/clipboard.min.js')); ?>"></script>
-        <script src="<?php echo e(asset('assets/js/custom-card/custom-card.js')); ?>"></script>
-        <script src="<?php echo e(asset('assets/js/height-equal.js')); ?>"></script>
-        <script src="<?php echo e(asset('assets/js/actions-icon/actions-icon.js')); ?>"></script>
+<?php $__env->startPush('scripts'); ?>
+    <script src="<?php echo e(asset('assets/js/prism/prism.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/clipboard/clipboard.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/custom-card/custom-card.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/height-equal.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/actions-icon/actions-icon.js')); ?>"></script>
 
-        <script>
-            window.onload = function() {
-                // Messages de succès, suppression et création
-                const successMessage = document.getElementById('success-message');
-                const deleteMessage = document.getElementById('delete-message');
-                const createMessage = document.getElementById('create-message');
 
-                if (successMessage) {
-                    successMessage.style.opacity = 1;
+    <script>
+        window.onload = function() {
+            document.querySelectorAll('#success-message, #delete-message, #create-message').forEach(message => {
+                if (message) {
+                    message.style.opacity = 1;
                     setTimeout(() => {
-                        successMessage.style.transition = 'opacity 0.3s ease';
-                        successMessage.style.opacity = 0;
+                        message.style.transition = 'opacity 0.3s ease';
+                        message.style.opacity = 0;
                     }, 2000);
                 }
-
-                if (deleteMessage) {
-                    deleteMessage.style.opacity = 1;
-                    setTimeout(() => {
-                        deleteMessage.style.transition = 'opacity 0.3s ease';
-                        deleteMessage.style.opacity = 0;
-                    }, 2000);
-                }
-
-                if (createMessage) {
-                    createMessage.style.opacity = 1;
-                    setTimeout(() => {
-                        createMessage.style.transition = 'opacity 0.3s ease';
-                        createMessage.style.opacity = 0;
-                    }, 2000);
-                }
-            }
-        </script>
-    <?php $__env->stopPush(); ?>
+            });
+        }
+    </script>
+<?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
-
-
-
-
 
 <?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/apps/formation/formations.blade.php ENDPATH**/ ?>

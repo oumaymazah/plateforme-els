@@ -9,28 +9,20 @@ use Illuminate\Http\Request;
 
 class CoursController extends Controller
 {
-    /**
-     * Afficher la liste des cours.
-     */
+
     public function index()
     {
-        $cours = Cours::with('user', 'formation')->get();
+        $cours = Cours::with('formation')->get();
         return view('admin.apps.cours.cours', compact('cours'));
     }
 
-    /**
-     * Afficher le formulaire de création d'un cours.
-     */
     public function create()
     {
-        $users = User::all();
         $formations = Formation::all();
-        return view('admin.apps.cours.courscreate', compact('users', 'formations'));
+        return view('admin.apps.cours.courscreate', compact( 'formations'));
     }
 
-    /**
-     * Enregistrer un nouveau cours.
-     */
+
     public function store(Request $request)
     {
         // dd($request->all());
@@ -40,7 +32,6 @@ class CoursController extends Controller
             'description' => 'required|string',
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after_or_equal:date_debut',
-            'user_id' => 'required|exists:users,id',
             'formation_id' => 'required|exists:formations,id',
         ]);
 
@@ -55,7 +46,7 @@ class CoursController extends Controller
      */
     public function show($id)
     {
-        $cours = Cours::with('user', 'formation')->findOrFail($id);
+        $cours = Cours::with('formation')->findOrFail($id);
         return view('admin.apps.cours.coursshow', compact('cours'));
     }
 
@@ -65,14 +56,12 @@ class CoursController extends Controller
     public function edit($id)
     {
         $cours = Cours::findOrFail($id);
-        $users = User::all();
+        // $users = User::all();
         $formations = Formation::all();
-        return view('admin.apps.cours.coursedit', compact('cours', 'users', 'formations'));
+        return view('admin.apps.cours.coursedit', compact('cours', 'formations'));
     }
 
-    /**
-     * Mettre à jour un cours.
-     */
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -80,7 +69,6 @@ class CoursController extends Controller
             'description' => 'required|string',
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after_or_equal:date_debut',
-            'user_id' => 'required|exists:users,id',
             'formation_id' => 'required|exists:formations,id',
         ]);
 
@@ -92,9 +80,6 @@ class CoursController extends Controller
         return redirect()->route('cours')->with('success', 'Cours mis à jour avec succès.');
     }
 
-    /**
-     * Supprimer un cours.
-     */
     public function destroy($id)
     {
         $cours = Cours::findOrFail($id);

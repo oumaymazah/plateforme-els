@@ -51,7 +51,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="4" name="description" required placeholder="Description">{{ old('description', $lesson->description) }}</textarea>
+                                        <textarea class="form-control" rows="4" name="description"  placeholder="Description" required>{{ old('description', $lesson->description) }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        
+
                                         <!-- Affichage de l'ancien fichier s'il existe -->
                                         @if($lesson->file_path)
                                             <div>
@@ -130,7 +130,7 @@
 <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="{{ asset('assets/js/select2-init/single-select.js') }}"></script>
-@endpush  
+@endpush
 
 
 

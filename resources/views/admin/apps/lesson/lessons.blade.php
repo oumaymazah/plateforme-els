@@ -248,7 +248,6 @@
                 <div class="card-header">
                     <h5>Leçons Disponibles</h5>
                     <span>Ce tableau affiche la liste des leçons disponibles. Vous pouvez rechercher, trier et paginer les données.</span>
-                    <span>Les fonctionnalités de recherche et de pagination sont activées par défaut.</span>
                 </div>
                 <div class="card-body">
                     @if(session('success'))
