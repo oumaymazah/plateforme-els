@@ -20,6 +20,22 @@
                             <div class="invalid-feedback">Veuillez entrer un nom.</div>
                         </div>
                         <div class="mb-3 col-md-12 mt-0">
+                            <label for="phone">Numéro de téléphone</label>
+                            <div class="input-group">
+
+                                <span class="input-group-text" id="country-code">+216</span>
+
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="92 125 420" required>
+                                <div class="invalid-feedback">
+                                    Veuillez entrer un numéro de téléphone valide.
+                                </div>
+                            </div>
+                            {{-- <small class="form-text text-muted">
+                                Veuillez entrer votre numéro de téléphone sans l'indicatif pays (exemple : 92 125 420).
+                            </small> --}}
+
+                        </div>
+                        <div class="mb-3 col-md-12 mt-0">
                             <label for="email">Adresse Email</label>
                             <input class="form-control" id="email" name="email" type="email" required autocomplete="off" />
                             <div class="invalid-feedback">Veuillez entrer une adresse email valide.</div>
@@ -27,14 +43,23 @@
                         <div class="mb-3 col-md-12 mt-0">
                             <label for="role_id">Rôle</label>
                             <select class="form-control" id="role_id" name="roles" required>
-                                <option value="" disabled selected>Sélectionnez un rôle</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                @endforeach
+                                @if (auth()->user()->hasRole('admin'))
+
+                                    @foreach ($roles as $role)
+                                        @if ($role->name === 'professeur')
+                                            <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
+                                        @endif
+                                    @endforeach
+                                @elseif (auth()->user()->hasRole('super-admin'))
+                                    <option value="" disabled selected>Sélectionnez un rôle</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                             <div class="invalid-feedback">Veuillez sélectionner un rôle.</div>
                         </div>
-                        <!-- Champ caché pour le mot de passe généré automatiquement -->
+
                         <input type="hidden" name="password_auto_generate" value="1">
                     </div>
                     <button class="btn btn-secondary" type="submit">Enregistrer</button>

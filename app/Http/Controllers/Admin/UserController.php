@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Propaganistas\LaravelPhone\PhoneNumber;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Str;
+use App\Mail\UserCreatedMail;
 class UserController extends Controller
 {
     public function index()
@@ -31,41 +34,110 @@ class UserController extends Controller
     {
         $roles = Role::query();
         if(auth()->user()->hasRole('admin')){
-            $roles=$roles->whereNotIn('name',['super-admin','admin']);
+            $roles=$roles->whereIn('name',['professeur']);
         }
         elseif(auth()->user()->hasRole('super-admin')){
-            $roles=$roles->whereNotIn('name',['super-admin']);
+            $roles=$roles->whereIn('name',['professeur','admin']);
         }
         $roles = $roles->get();
         return view('admin.user.create',compact('roles'));
     }
+    // public function store(Request $request)
+    // {
+    //     $messages = [
+    //         'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
+    //         'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
+    //     ];
+
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'lastname' => 'required',
+    //         'phone'=>'required|phone:TN',
+    //         'email' => 'required|email|unique:users,email',
+    //         'roles' => 'required'
+    //     ],$messages);
+    //     $password = Str::random(8);
+    //     $countryCode = '+216';
+    //     $localNumber = $request->input('phone');
+    //     $fullPhoneNumber = $countryCode . ' ' . $localNumber;
+
+
+    //     $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'lastname' => $request->lastname,
+    //         'phone'=>$formattedPhoneNumber,
+    //         'email' => $request->email,
+    //         'password' => bcrypt($password),
+    //         'status' => 'active',
+    //         'first_login' => true,
+    //     ]);
+    //     $user->assignRole($request->roles);
+    //     Mail::to($user->email)->send(new UserCreated($user, $password));
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Utilisateur créé avec succès.',
+    //         'password' => $password,
+    //     ]);
+
+
+    // }
     public function store(Request $request)
-    {
+{
+
+
         $messages = [
             'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
+            'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
         ];
 
         $request->validate([
             'name' => 'required',
             'lastname' => 'required',
+            'phone' => 'required|phone:TN',
             'email' => 'required|email|unique:users,email',
             'roles' => 'required'
-        ],$messages);
+        ], $messages);
+
         $password = Str::random(8);
+        $countryCode = '+216';
+        $localNumber = $request->input('phone');
+        $fullPhoneNumber = $countryCode . ' ' . $localNumber;
+
+        $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
+
+
         $user = User::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
+            'phone' => $formattedPhoneNumber,
             'email' => $request->email,
             'password' => bcrypt($password),
             'status' => 'active',
+            'first_login' => true,
         ]);
+
+
         $user->assignRole($request->roles);
+
+
+        try {
+            Mail::to($user->email)->send(new UserCreatedMail($user, $password));
+
+        } catch (\Exception $e) {
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'envoi de l\'e-mail.',
+            ], 500);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Utilisateur créé avec succès.',
             'password' => $password,
         ]);
-    }
+}
 
 
 

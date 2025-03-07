@@ -20,6 +20,20 @@
                             <div class="invalid-feedback">Veuillez entrer un nom.</div>
                         </div>
                         <div class="mb-3 col-md-12 mt-0">
+                            <label for="phone">Numéro de téléphone</label>
+                            <div class="input-group">
+
+                                <span class="input-group-text" id="country-code">+216</span>
+
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="92 125 420" required>
+                                <div class="invalid-feedback">
+                                    Veuillez entrer un numéro de téléphone valide.
+                                </div>
+                            </div>
+                            
+
+                        </div>
+                        <div class="mb-3 col-md-12 mt-0">
                             <label for="email">Adresse Email</label>
                             <input class="form-control" id="email" name="email" type="email" required autocomplete="off" />
                             <div class="invalid-feedback">Veuillez entrer une adresse email valide.</div>
@@ -27,14 +41,23 @@
                         <div class="mb-3 col-md-12 mt-0">
                             <label for="role_id">Rôle</label>
                             <select class="form-control" id="role_id" name="roles" required>
-                                <option value="" disabled selected>Sélectionnez un rôle</option>
-                                <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($role->id); ?>"><?php echo e($role->name); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php if(auth()->user()->hasRole('admin')): ?>
+
+                                    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php if($role->name === 'professeur'): ?>
+                                            <option value="<?php echo e($role->id); ?>" selected><?php echo e($role->name); ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php elseif(auth()->user()->hasRole('super-admin')): ?>
+                                    <option value="" disabled selected>Sélectionnez un rôle</option>
+                                    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($role->id); ?>"><?php echo e($role->name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
                             </select>
                             <div class="invalid-feedback">Veuillez sélectionner un rôle.</div>
                         </div>
-                        <!-- Champ caché pour le mot de passe généré automatiquement -->
+
                         <input type="hidden" name="password_auto_generate" value="1">
                     </div>
                     <button class="btn btn-secondary" type="submit">Enregistrer</button>
