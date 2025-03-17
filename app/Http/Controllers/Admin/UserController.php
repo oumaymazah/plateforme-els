@@ -42,46 +42,7 @@ class UserController extends Controller
         $roles = $roles->get();
         return view('admin.user.create',compact('roles'));
     }
-    // public function store(Request $request)
-    // {
-    //     $messages = [
-    //         'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
-    //         'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
-    //     ];
 
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'lastname' => 'required',
-    //         'phone'=>'required|phone:TN',
-    //         'email' => 'required|email|unique:users,email',
-    //         'roles' => 'required'
-    //     ],$messages);
-    //     $password = Str::random(8);
-    //     $countryCode = '+216';
-    //     $localNumber = $request->input('phone');
-    //     $fullPhoneNumber = $countryCode . ' ' . $localNumber;
-
-
-    //     $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
-    //     $user = User::create([
-    //         'name' => $request->name,
-    //         'lastname' => $request->lastname,
-    //         'phone'=>$formattedPhoneNumber,
-    //         'email' => $request->email,
-    //         'password' => bcrypt($password),
-    //         'status' => 'active',
-    //         'first_login' => true,
-    //     ]);
-    //     $user->assignRole($request->roles);
-    //     Mail::to($user->email)->send(new UserCreated($user, $password));
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Utilisateur créé avec succès.',
-    //         'password' => $password,
-    //     ]);
-
-
-    // }
     public function store(Request $request)
 {
 
@@ -92,8 +53,8 @@ class UserController extends Controller
         ];
 
         $request->validate([
-            'name' => 'required',
-            'lastname' => 'required',
+            'name' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
             'phone' => 'required|phone:TN',
             'email' => 'required|email|unique:users,email',
             'roles' => 'required'
@@ -125,7 +86,7 @@ class UserController extends Controller
             Mail::to($user->email)->send(new UserCreatedMail($user, $password));
 
         } catch (\Exception $e) {
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Erreur lors de l\'envoi de l\'e-mail.',

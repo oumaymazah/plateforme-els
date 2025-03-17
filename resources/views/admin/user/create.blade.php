@@ -19,7 +19,7 @@
                             <input class="form-control" id="last_name" name="lastname" type="text" required placeholder="Nom" autocomplete="off" />
                             <div class="invalid-feedback">Veuillez entrer un nom.</div>
                         </div>
-                        <div class="mb-3 col-md-12 mt-0">
+                        {{-- <div class="mb-3 col-md-12 mt-0">
                             <label for="phone">Numéro de téléphone</label>
                             <div class="input-group">
 
@@ -30,10 +30,35 @@
                                     Veuillez entrer un numéro de téléphone valide.
                                 </div>
                             </div>
-                            {{-- <small class="form-text text-muted">
-                                Veuillez entrer votre numéro de téléphone sans l'indicatif pays (exemple : 92 125 420).
-                            </small> --}}
 
+                        </div> --}}
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label" for="phone">Numéro de téléphone</label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text" id="country-code">
+                                        <i class="flag-icon flag-icon-tn"></i>
+                                        <span class="ms-1">TN</span>
+                                    </span>
+
+                                    <input
+                                        type="tel"
+                                        class="form-control"
+                                        id="phone"
+                                        name="phone"
+                                        placeholder="92 125 420"
+                                        aria-describedby="country-code phoneHelpText"
+                                        required
+                                    >
+
+                                    <div class="invalid-feedback">
+                                        Veuillez entrer un numéro de téléphone valide.
+                                    </div>
+                                </div>
+
+                                
+                            </div>
                         </div>
                         <div class="mb-3 col-md-12 mt-0">
                             <label for="email">Adresse Email</label>

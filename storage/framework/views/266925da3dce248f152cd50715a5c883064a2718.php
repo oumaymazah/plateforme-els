@@ -1,20 +1,21 @@
-@extends('admin.authentication.master')
 
-@section('title')login
- {{ $title }}
-@endsection
 
-@push('css')
-@endpush
+<?php $__env->startSection('title'); ?>login
+ <?php echo e($title); ?>
 
-@section('content')
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('css'); ?>
+<?php $__env->stopPush(); ?>
+
+<?php $__env->startSection('content'); ?>
     <section>
 	    <div class="container-fluid">
 	        <div class="row">
-	            <div class="col-xl-5"><img class="bg-img-cover bg-center" src="{{ asset('assets/images/login/3.jpg') }}" alt="looginpage" /></div>
+	            <div class="col-xl-5"><img class="bg-img-cover bg-center" src="<?php echo e(asset('assets/images/login/3.jpg')); ?>" alt="looginpage" /></div>
 	            <div class="col-xl-7 p-0">
 	                <div class="login-card">
-	                    <form class="theme-form login-form" method="POST" action="{{ route('login_two')}}">
+	                    <form class="theme-form login-form">
 	                        <h4>Login</h4>
 	                        <h6>Welcome back! Log in to your account.</h6>
 	                        <div class="form-group">
@@ -37,9 +38,9 @@
 	                                <input id="checkbox1" type="checkbox" />
 	                                <label class="text-muted" for="checkbox1">Remember password</label>
 	                            </div>
-	                            <a class="link" href="{{ route('forget-password') }}">Forgot password?</a>
+	                            <a class="link" href="<?php echo e(route('forget-password')); ?>">Forgot password?</a>
 	                        </div>
-	                        <div class="form-group"><a class="btn btn-primary btn-block" href="{{route('index')  }}" type="submit">Sign in</a></div>
+	                        <div class="form-group"><a class="btn btn-primary btn-block" href="<?php echo e(route('index')); ?>" type="submit">Sign in</a></div>
 	                        <div class="login-social-title">
 	                            <h5>Sign in with</h5>
 	                        </div>
@@ -59,7 +60,7 @@
 	                                </li>
 	                            </ul>
 	                        </div>
-	                        <p>Don't have account?<a class="ms-2" href="{{ route('sign-up') }}">Create Account</a></p>
+	                        <p>Don't have account?<a class="ms-2" href="<?php echo e(route('sign-up')); ?>">Create Account</a></p>
 	                    </form>
 	                </div>
 	            </div>
@@ -67,8 +68,9 @@
 	    </div>
 	</section>
 
+	
+    <?php $__env->startPush('scripts'); ?>
+    <?php $__env->stopPush(); ?>
 
-    @push('scripts')
-    @endpush
-
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.authentication.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/authentication/login_two.blade.php ENDPATH**/ ?>

@@ -1,8 +1,6 @@
 @extends('admin.authentication.master')
 
-@section('title')login
- {{ $title }}
-@endsection
+@section('title') Connexion {{ $title }} @endsection
 
 @push('css')
 @endpush
@@ -11,50 +9,71 @@
     <section>
 	    <div class="container-fluid">
 	        <div class="row">
-	            <div class="col-xl-7"><img class="bg-img-cover bg-center" src="{{ asset('assets/images/login/2.jpg') }}" alt="looginpage" /></div>
-	            <div class="col-xl-5 p-0">
+	            <div class="col-xl-5"><img class="bg-img-cover bg-center" src="{{ asset('assets/images/login/3.jpg') }}" alt="page de connexion" /></div>
+	            <div class="col-xl-7 p-0">
 	                <div class="login-card">
-	                    <form class="theme-form login-form" method="POST" action="{{ route('login') }}">
-							@csrf
-	                        <h4>Login</h4>
-	                        <h6>Welcome back! Log in to your account.</h6>
+	                    <form class="theme-form login-form needs-validation" method="POST" action="{{ route('login') }}" novalidate>
+	                        @csrf
+
+	                        <h4>Connexion</h4>
+	                        <h6>Bienvenue ! Connectez-vous à votre compte.</h6>
+
+
 	                        <div class="form-group">
-	                            <label>Email Address</label>
+	                            <label>Adresse Email</label>
 	                            <div class="input-group">
 	                                <span class="input-group-text"><i class="icon-email"></i></span>
-	                                <input class="form-control @error('email') is-invalid @enderror" type="email" required="" placeholder="Test@gmail.com" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus />
-
-									@error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+	                                <input class="form-control @error('email') is-invalid @enderror" type="email" name="email" required placeholder="exemple@gmail.com" value="{{ old('email') }}" />
+	                                <div class="invalid-feedback js-error">Veuillez entrer votre email.</div>
+	                                @error('email')
+	                                    <div class="invalid-feedback laravel-error" style="display: block;">{{ $message }}</div>
+	                                @enderror
 	                            </div>
 	                        </div>
+
+
 	                        <div class="form-group">
-	                            <label>Password</label>
+	                            <label>Mot de passe</label>
 	                            <div class="input-group">
 	                                <span class="input-group-text"><i class="icon-lock"></i></span>
-	                                <input  type="password" name="password" required="" placeholder="*********"  class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password"/>
+	                                <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" required placeholder="*********" />
 	                                <div class="show-hide"><span class="show"> </span></div>
-									@error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+	                                <div class="invalid-feedback js-error">Veuillez entrer votre mot de passe.</div>
+	                                @error('password')
+	                                    <div class="invalid-feedback laravel-error" style="display: block;">{{ $message }}</div>
+	                                @enderror
 	                            </div>
 	                        </div>
+
+
 	                        <div class="form-group">
 	                            <div class="checkbox">
-	                                <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} />
-	                                <label class="text-muted" for="checkbox1">Remember password</label>
+	                                <input id="checkbox1" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} />
+	                                <label class="text-muted" for="checkbox1">Se souvenir de moi</label>
 	                            </div>
+	                            <a class="link" href="{{ route('forgot.password') }}">Mot de passe oublié ?</a>
+	                        </div>
+
+
+	                        <div class="form-group">
+	                            <button class="btn btn-primary btn-block" type="submit">Se connecter</button>
+	                        </div>
+
+
+	                        <div class="login-social-title">
+	                            <h5>Se connecter avec</h5>
 	                        </div>
 	                        <div class="form-group">
-	                            <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+	                            <ul class="login-social">
+	                                <li><a href="https://www.linkedin.com/login" target="_blank"><i data-feather="linkedin"></i></a></li>
+	                                <li><a href="https://www.linkedin.com/login" target="_blank"><i data-feather="twitter"></i></a></li>
+	                                <li><a href="https://www.linkedin.com/login" target="_blank"><i data-feather="facebook"></i></a></li>
+	                                <li><a href="https://www.instagram.com/login" target="_blank"><i data-feather="instagram"> </i></a></li>
+	                            </ul>
 	                        </div>
-	                       
-	                        
+
+
+	                        <p>Vous n'avez pas encore de compte ? <a class="ms-2" href="{{ route('sign-up') }}">Créer un compte</a></p>
 	                    </form>
 	                </div>
 	            </div>
@@ -62,8 +81,7 @@
 	    </div>
 	</section>
 
-	
-    @push('scripts')
-    @endpush
-
+@push('scripts')
+    <script src="{{ asset('assets/js/form-validation/form_validation2.js') }}"></script>
+@endpush
 @endsection

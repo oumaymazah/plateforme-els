@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ChapitreController;
 use App\Http\Controllers\CoursController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\LessonController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ReponseController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\RoleMiddleware;
 
@@ -22,6 +24,29 @@ use Spatie\Permission\Middleware\RoleMiddleware;
 
 
 
+
+
+Route::get('sign-up', [RegisterController::class, 'showRegistrationForm'])->name('sign-up');
+Route::post('sign-up', [RegisterController::class, 'register'])->name('register');
+Route::get('validation', [RegisterController::class, 'showValidationForm'])->name('validation.form');
+Route::post('validation', [RegisterController::class, 'validateAccount'])->name('validation.code');
+Route::get('resend-code', [RegisterController::class, 'resendCode'])->name('resend.code');
+
+// Routes pour la réinitialisation du mot de passe
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('forgot.password');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode'])->name('forgot.password.send');
+
+// Route pour afficher le formulaire de vérification du code
+Route::get('/verify-code', [ForgotPasswordController::class, 'showVerifyForm'])->name('reset.password.form');
+
+// Route pour vérifier le code de réinitialisation
+Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode'])->name('reset.password.verify');
+
+// Route pour afficher le formulaire de réinitialisation du mot de passe
+Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
+
+// Route pour mettre à jour le mot de passe
+Route::post('/update-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::prefix('admin')->group(function () {
@@ -226,7 +251,7 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	Route::view('bookmark', 'admin.apps.bookmark')->name('bookmark');
-	Route::view('contacts', 'admin.apps.contacts')->name('contacts');
+	Route::view('users', 'admin.apps.contacts')->name('contacts');
 	Route::view('task', 'admin.apps.task')->name('task');
 	Route::view('calendar-basic', 'admin.apps.calendar-basic')->name('calendar-basic');
 	Route::view('social-app', 'admin.apps.social-app')->name('social-app');
@@ -246,12 +271,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::view('login-bs-validation', 'admin.authentication.login-bs-validation')->name('login-bs-validation');
 	Route::view('login-bs-tt-validation', 'admin.authentication.login-bs-tt-validation')->name('login-bs-tt-validation');
 	Route::view('login-sa-validation', 'admin.authentication.login-sa-validation')->name('login-sa-validation');
-	Route::view('sign-up', 'admin.authentication.sign-up')->name('sign-up');
+
 	Route::view('sign-up-one', 'admin.authentication.sign-up-one')->name('sign-up-one');
 	Route::view('sign-up-two', 'admin.authentication.sign-up-two')->name('sign-up-two');
 	Route::view('unlock', 'admin.authentication.unlock')->name('unlock');
-	Route::view('forget-password', 'admin.authentication.forget-password')->name('forget-password');
-	Route::view('creat-password', 'admin.authentication.creat-password')->name('creat-password');
+	// Route::view('forget-password', 'admin.authentication.forget-password')->name('forget-password');
+
 	Route::view('maintenance', 'admin.authentication.maintenance')->name('maintenance');
 
 	Route::view('comingsoon', 'admin.comingsoon.comingsoon')->name('comingsoon');

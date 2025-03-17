@@ -1,67 +1,4 @@
-{{-- @extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h4>Validation de votre compte</h4>
-                </div>
-
-                <div class="card-body">
-                    <p class="text-center">
-                        Un code de validation a été envoyé à votre adresse e-mail. <br>
-                        Veuillez entrer ce code pour activer votre compte.
-                    </p>
-
-                    <!-- Afficher un message d'erreur si le code est incorrect -->
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                    @if (session('warning'))
-                        <div class="alert alert-warning">
-                            {{ session('warning') }}
-                        </div>
-                    @endif
-
-                    <!-- Formulaire de validation -->
-                    <form method="POST" action="{{ route('validation.code') }}">
-                        @csrf
-                        <div class="form-group mb-3">
-                            <label for="validation_code">Code de validation</label>
-                            <input type="text" class="form-control" id="validation_code" name="validation_code" required placeholder="Entrez le code">
-                        </div>
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Valider mon compte</button>
-                        </div>
-                    </form>
-
-                    <hr>
-
-                    <p class="text-center">
-                        Vous n'avez pas reçu de code ? <br>
-                        <a href="{{ route('resend.code') }}" class="btn btn-link">Renvoyer un code</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection --}}
-
-@extends('layouts.app')
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -76,49 +13,53 @@
                     </p>
 
                     <!-- Afficher un message d'erreur si le code est incorrect -->
-                    @if (session('success'))
+                    <?php if(session('success')): ?>
                         <div class="alert alert-success">
-                            {{ session('success') }}
+                            <?php echo e(session('success')); ?>
+
                         </div>
-                    @endif
-                    @if (session('error'))
+                    <?php endif; ?>
+                    <?php if(session('error')): ?>
                         <div class="alert alert-danger">
-                            {{ session('error') }}
+                            <?php echo e(session('error')); ?>
+
                         </div>
-                    @endif
-                    @if (session('warning'))
+                    <?php endif; ?>
+                    <?php if(session('warning')): ?>
                         <div class="alert alert-warning">
-                            {{ session('warning') }}
+                            <?php echo e(session('warning')); ?>
+
                         </div>
-                    @endif
-                    @if (session('info'))
+                    <?php endif; ?>
+                    <?php if(session('info')): ?>
                         <div class="alert alert-info">
-                            {{ session('info') }}
+                            <?php echo e(session('info')); ?>
+
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- Formulaire de validation -->
-                    <form method="POST" action="{{ route('validation.code') }}">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('validation.code')); ?>">
+                        <?php echo csrf_field(); ?>
                         <div class="form-group mb-5">
                             <label for="validation_code" style="display: none;">Code de validation</label>
                             <input type="hidden" id="validation_code" name="validation_code">
 
                             <!-- Affichage des cases de code individuelles -->
                             <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;">
-                                @for ($i = 1; $i <= 6; $i++)
+                                <?php for($i = 1; $i <= 6; $i++): ?>
                                 <div style="width: 55px; height: 55px;">
                                     <input type="text"
                                            class="code-input"
                                            style="width: 100%; height: 100%; text-align: center; font-size: 24px; font-weight: bold;
                                                   border-radius: 12px; border: 1px solid #ddd; background-color: #f5f5f5;
-                                                  @if($i == 4) border: 1.5px solid #4285F4; background-color: white; @endif
-                                                  @if($i == 6) border: 1.5px solid #333; background-color: white; @endif"
+                                                  <?php if($i == 4): ?> border: 1.5px solid #4285F4; background-color: white; <?php endif; ?>
+                                                  <?php if($i == 6): ?> border: 1.5px solid #333; background-color: white; <?php endif; ?>"
                                            maxlength="1"
-                                           data-index="{{ $i }}"
+                                           data-index="<?php echo e($i); ?>"
                                            autocomplete="off">
                                 </div>
-                                @endfor
+                                <?php endfor; ?>
                             </div>
                         </div>
 
@@ -132,7 +73,7 @@
                     </form>
 
                     <div class="text-center" style="margin-top: 30px;">
-                        <a href="{{ route('resend.code') }}"
+                        <a href="<?php echo e(route('resend.code')); ?>"
                            style="color: #666; text-decoration: none; font-size: 16px; font-weight: 400;">
                             Renvoyer un code
                         </a>
@@ -178,4 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/auth/verify.blade.php ENDPATH**/ ?>
