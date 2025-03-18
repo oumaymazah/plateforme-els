@@ -438,8 +438,8 @@
                                                     <li><a href="<?php echo e(route('sign-up-one')); ?>" class="<?php echo e(routeActive('sign-up-one')); ?>" target="_blank">Register with Bg Image </a></li>
                                                     <li><a href="<?php echo e(route('sign-up-two')); ?>" class="<?php echo e(routeActive('sign-up-two')); ?>" target="_blank">Register with Bg video </a></li>
                                                     <li><a href="<?php echo e(route('unlock')); ?>" class="<?php echo e(routeActive('unlock')); ?>">Unlock User</a></li>
-                                                    <li><a href="<?php echo e(route('forget-password')); ?>" class="<?php echo e(routeActive('forget-password')); ?>">Forget Password</a></li>
-                                                    <li><a href="<?php echo e(route('creat-password')); ?>" class="<?php echo e(routeActive('creat-password')); ?>">Creat Password</a></li>
+                                                    
+                                                    
                                                     <li><a href="<?php echo e(route('maintenance')); ?>" class="<?php echo e(routeActive('maintenance')); ?>">Maintenance</a></li>
                                                 </ul>
                                             </div>

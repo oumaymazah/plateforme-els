@@ -456,8 +456,8 @@
                                                     <li><a href="{{ route('sign-up-one') }}" class="{{routeActive('sign-up-one')}}" target="_blank">Register with Bg Image </a></li>
                                                     <li><a href="{{ route('sign-up-two') }}" class="{{routeActive('sign-up-two')}}" target="_blank">Register with Bg video </a></li>
                                                     <li><a href="{{ route('unlock') }}" class="{{routeActive('unlock')}}">Unlock User</a></li>
-                                                    <li><a href="{{ route('forget-password') }}" class="{{routeActive('forget-password')}}">Forget Password</a></li>
-                                                    <li><a href="{{ route('creat-password') }}" class="{{routeActive('creat-password')}}">Creat Password</a></li>
+                                                    {{-- <li><a href="{{ route('forget-password') }}" class="{{routeActive('forget-password')}}">Forget Password</a></li> --}}
+                                                    {{-- <li><a href="{{ route('creat-password') }}" class="{{routeActive('creat-password')}}">Creat Password</a></li> --}}
                                                     <li><a href="{{ route('maintenance') }}" class="{{routeActive('maintenance')}}">Maintenance</a></li>
                                                 </ul>
                                             </div>

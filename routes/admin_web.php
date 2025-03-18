@@ -38,7 +38,6 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode
 
 // Route pour afficher le formulaire de vérification du code
 Route::get('/verify-code', [ForgotPasswordController::class, 'showVerifyForm'])->name('reset.password.form');
-
 // Route pour vérifier le code de réinitialisation
 Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode'])->name('reset.password.verify');
 
@@ -46,7 +45,7 @@ Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode'])->na
 Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
 
 // Route pour mettre à jour le mot de passe
-Route::post('/update-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+Route::post('/reset-password', [ForgotPasswordController::class, 'changePassword'])->name('password.reset.update');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::prefix('admin')->group(function () {
