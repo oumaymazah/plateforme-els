@@ -1,3 +1,7 @@
+
+
+
+
 <?php $__env->startSection('title'); ?>
     Liste des Formations <?php echo e($title); ?>
 

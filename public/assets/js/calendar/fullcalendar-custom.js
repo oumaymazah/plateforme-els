@@ -28,7 +28,7 @@ var basic_calendar = {
                 title: 'All Day Event',
                 start: '2016-06-01'
             },
-            {       
+            {
                 title: 'Long Event',
                 start: '2016-06-07',
                 end: '2016-06-10'
@@ -132,7 +132,7 @@ var basic_calendar = {
             {
                 title: 'Lunch',
                 start: '2016-06-12T12:00:00'
-            },  
+            },
             {
                 title: 'Meeting',
                 start: '2016-06-12T14:30:00'
@@ -178,7 +178,7 @@ var basic_calendar = {
                         end: end._d,
                         allDay: allDay
                     },
-                    true 
+                    true
                     );
                 }
                 $('#cal-agenda-view').fullCalendar('unselect');
@@ -197,7 +197,7 @@ var basic_calendar = {
                 id: 999,
                 title: 'Repeating Event',
                 start: '2016-06-09T16:00:00'
-            },  
+            },
             {
                 id: 999,
                 title: 'Repeating Event',
@@ -246,12 +246,12 @@ var basic_calendar = {
             right: 'month,agendaWeek,agendaDay'
             },
             defaultDate: '2018-02-03',
-            businessHours: true, 
+            businessHours: true,
             editable: true,
             selectable: true,
             selectHelper: true,
             droppable: true,
-            eventLimit: true, 
+            eventLimit: true,
             select: function(start, end, allDay) {
                 var title = prompt('Event Title:');
                 if (title) {
@@ -276,8 +276,8 @@ var basic_calendar = {
             {
                 title: 'Meeting',
                 start: '2018-02-13T11:00:00',
-                constraint: 'availableForMeeting', 
-                color: '#ba895d'
+                constraint: 'availableForMeeting',
+                color: '#717171'
             },
             {
                 title: 'Conference',
@@ -305,15 +305,15 @@ var basic_calendar = {
                 end: '2018-02-28',
                 overlap: false,
                 rendering: 'background',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 start: '2018-02-06',
                 end: '2018-02-08',
                 overlap: false,
                 rendering: 'background',
-                color: '#ba895d'
-            }   
+                color: '#717171'
+            }
             ]
         }), $('#cal-event-colors').fullCalendar({
             header: {
@@ -347,19 +347,19 @@ var basic_calendar = {
             {
                 title: 'All Day Event',
                 start: '2016-06-01',
-                color: '#24695c'
+                color: '#2B6ED4'
             },
             {
                 title: 'Long Event',
                 start: '2016-06-07',
                 end: '2016-06-10',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 id: 999,
                 title: 'Repeating Event',
                 start: '2016-06-09T16:00:00',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 id: 999,
@@ -371,38 +371,38 @@ var basic_calendar = {
                 title: 'Conference',
                 start: '2016-06-11',
                 end: '2016-06-13',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 title: 'Meeting',
                 start: '2016-06-12T10:30:00',
                 end: '2016-06-12T12:30:00',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 title: 'Lunch',
                 start: '2016-06-12T12:00:00',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 title: 'Meeting',
                 start: '2016-06-12T14:30:00',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 title: 'Happy Hour',
                 start: '2016-06-12T17:30:00',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 title: 'Dinner',
                 start: '2016-06-12T20:00:00',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 title: 'Birthday Party',
                 start: '2016-06-13T07:00:00',
-                color: '#ba895d'
+                color: '#717171'
             },
             {
                 title: 'Click for Google',
@@ -414,126 +414,14 @@ var basic_calendar = {
         }), $('#external-events .fc-event').each(function() {
                 $(this).css({'backgroundColor': $(this).data('color'), 'borderColor': $(this).data('color')});
                 $(this).data('event', {
-                    title: $.trim($(this).text()), 
-                    color: $(this).data('color'),
-                    stick: true 
-                });
-                $(this).draggable({
-                    zIndex: 999,
-                    revert: true,      
-                    revertDuration: 0  
-                });
-        }), $('#fc-external-drag').fullCalendar({
-            header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-            },
-            editable: true,
-            defaultDate: '2018-06-12',
-            selectable: true,
-            selectHelper: true,
-            droppable: true,
-            eventLimit: true,
-            select: function(start, end, allDay) {
-                var title = prompt('Event Title:');
-                if (title) {
-                    $('#fc-external-drag').fullCalendar('renderEvent',
-                    {
-                        title: title,
-                        start: start._d,
-                        end: end._d,
-                        allDay: allDay
-                    },
-                    true 
-                    );
-                }
-                $('#fc-external-drag').fullCalendar('unselect');
-            },
-            events: [
-            {
-                title: 'All Day Event',
-                start: '2018-06-01',
-                color: '#24695c'
-            },
-            {
-                title: 'Long Event',
-                start: '2018-06-07',
-                end: '2018-06-10',
-                color: '#22af47'
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: '2018-06-09T16:00:00',
-                color: '#22af47'
-            },
-            {
-                id: 999,
-                title: 'Repeating Event',
-                start: '2018-06-16T16:00:00',
-                color: '#ff9f40'
-            },
-            {
-                title: 'Conference',
-                start: '2018-06-11',
-                end: '2018-06-13',
-                color: '#FF5370'
-            },
-            {
-                title: 'Meeting',
-                start: '2018-06-12T10:30:00',
-                end: '2018-06-12T12:30:00',
-                color: '#FF5370'
-            },
-            {
-                title: 'Lunch',
-                start: '2018-06-12T12:00:00',
-                color: '#FF5370'
-            },
-            {
-                title: 'Meeting',
-                start: '2018-06-12T14:30:00',
-                color: '#FF5370'
-            },
-            {
-                title: 'Happy Hour',
-                start: '2018-06-12T17:30:00',
-                color: '#FF5370'
-            },
-            {
-                title: 'Dinner',
-                start: '2018-06-12T20:00:00',
-                color: '#FF5370'
-            },
-            {
-                title: 'Birthday Party',
-                start: '2018-06-13T07:00:00',
-                color: '#FF5370'
-            },
-            {
-                title: 'Click for Google',
-                url: 'http://google.com/',
-                start: '2018-06-28',
-                color: '#ba895d'
-            }
-            ],
-            drop: function() {
-                if ($('#drop-remove').is(':checked')) {
-                    $(this).remove();
-                }
-            }   
-        }), $('#external-events .fc-event').each(function() {
-                $(this).css({'backgroundColor': $(this).data('color'), 'borderColor': $(this).data('color')});
-                $(this).data('event', {
                     title: $.trim($(this).text()),
                     color: $(this).data('color'),
                     stick: true
                 });
                 $(this).draggable({
                     zIndex: 999,
-                    revert: true, 
-                    revertDuration: 0 
+                    revert: true,
+                    revertDuration: 0
                 });
         }), $('#fc-external-drag').fullCalendar({
             header: {
@@ -566,7 +454,7 @@ var basic_calendar = {
             {
                 title: 'All Day Event',
                 start: '2018-06-01',
-                color: '#24695c'
+                color: '#2B6ED4'
             },
             {
                 title: 'Long Event',
@@ -627,7 +515,119 @@ var basic_calendar = {
                 title: 'Click for Google',
                 url: 'http://google.com/',
                 start: '2018-06-28',
-                color: '#ba895d'
+                color: '#717171'
+            }
+            ],
+            drop: function() {
+                if ($('#drop-remove').is(':checked')) {
+                    $(this).remove();
+                }
+            }
+        }), $('#external-events .fc-event').each(function() {
+                $(this).css({'backgroundColor': $(this).data('color'), 'borderColor': $(this).data('color')});
+                $(this).data('event', {
+                    title: $.trim($(this).text()),
+                    color: $(this).data('color'),
+                    stick: true
+                });
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,
+                    revertDuration: 0
+                });
+        }), $('#fc-external-drag').fullCalendar({
+            header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+            },
+            editable: true,
+            defaultDate: '2018-06-12',
+            selectable: true,
+            selectHelper: true,
+            droppable: true,
+            eventLimit: true,
+            select: function(start, end, allDay) {
+                var title = prompt('Event Title:');
+                if (title) {
+                    $('#fc-external-drag').fullCalendar('renderEvent',
+                    {
+                        title: title,
+                        start: start._d,
+                        end: end._d,
+                        allDay: allDay
+                    },
+                    true
+                    );
+                }
+                $('#fc-external-drag').fullCalendar('unselect');
+            },
+            events: [
+            {
+                title: 'All Day Event',
+                start: '2018-06-01',
+                color: '#2B6ED4'
+            },
+            {
+                title: 'Long Event',
+                start: '2018-06-07',
+                end: '2018-06-10',
+                color: '#22af47'
+            },
+            {
+                id: 999,
+                title: 'Repeating Event',
+                start: '2018-06-09T16:00:00',
+                color: '#22af47'
+            },
+            {
+                id: 999,
+                title: 'Repeating Event',
+                start: '2018-06-16T16:00:00',
+                color: '#ff9f40'
+            },
+            {
+                title: 'Conference',
+                start: '2018-06-11',
+                end: '2018-06-13',
+                color: '#FF5370'
+            },
+            {
+                title: 'Meeting',
+                start: '2018-06-12T10:30:00',
+                end: '2018-06-12T12:30:00',
+                color: '#FF5370'
+            },
+            {
+                title: 'Lunch',
+                start: '2018-06-12T12:00:00',
+                color: '#FF5370'
+            },
+            {
+                title: 'Meeting',
+                start: '2018-06-12T14:30:00',
+                color: '#FF5370'
+            },
+            {
+                title: 'Happy Hour',
+                start: '2018-06-12T17:30:00',
+                color: '#FF5370'
+            },
+            {
+                title: 'Dinner',
+                start: '2018-06-12T20:00:00',
+                color: '#FF5370'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2018-06-13T07:00:00',
+                color: '#FF5370'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2018-06-28',
+                color: '#717171'
             }
             ],
             drop: function() {

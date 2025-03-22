@@ -90,7 +90,7 @@
         });
 })(jQuery);
 
- 
+
 var options = {
           series: [{
           name: 'TEAM A',
@@ -113,7 +113,7 @@ var options = {
           curve: 'smooth',
           width: [5, 2],
           dashArray: [0, 8]
-          
+
         },
         fill: {
           type:'solid',
@@ -215,7 +215,7 @@ var options25 = {
           },
         ],
       colors:[vihoAdminConfig.primary, vihoAdminConfig.secondary],
-      stroke:{       
+      stroke:{
         width:3
       },
       dataLabels: {
@@ -282,7 +282,7 @@ var options25 = {
         fillOpacity: 0.7
       },
     };
-    var chart25 = new ApexCharts(document.querySelector("#timeline-chart"), 
+    var chart25 = new ApexCharts(document.querySelector("#timeline-chart"),
     options25
     );
     chart25.render();
@@ -310,7 +310,7 @@ var options25 = {
 
 //new charts
 
-          
+
 var options51 = {
   series: [
     {
@@ -327,7 +327,7 @@ var options51 = {
         {
           x: "2003",
           y: 5500
-          
+
         },
         {
           x: "2004",
@@ -336,7 +336,7 @@ var options51 = {
         {
           x: "2005",
           y: 1500
-          
+
         },
         {
           x: "2006",
@@ -524,7 +524,7 @@ var options51 = {
           x: "2047",
           y: 4000
         }
-        
+
       ]
     }
   ],
@@ -578,7 +578,7 @@ var options51 = {
         }
       }
     }
-  ], 
+  ],
   colors:["#d8e3e5"]
 };
 
@@ -586,10 +586,10 @@ var chart51 = new ApexCharts(document.querySelector("#chart-yearly-growth-dash-2
  options51
  );
 chart51.render();
-// column charts in apex charts 
+// column charts in apex charts
 
 // var options27 = {
-  
+
 //   series: [
 //     {
 //       data: [400, 230, 448, 370, 540, 580, 690, 1100, 1200, 1380,1150,580,330,580,1355,1280,1485,875,356,587,954,325,469,1254,1587,543,370,987,675,345,895,1200,1265,987,1400,852,654,254,155,899,754,254,789,235,456,256,900]
@@ -623,7 +623,7 @@ chart51.render();
 //       lines: {
 //         show: false
 //       },
-      
+
 //     }
 //   },
 //   yaxis: {
@@ -655,7 +655,7 @@ chart51.render();
 //         axisTicks:{
 //                show:false,
 //              },
-            
+
 //   },
 //   colors: [
 //     "#d8e3e5",
@@ -663,13 +663,13 @@ chart51.render();
 //     "#d8e3e5",
 //     "#d8e3e5",
 //     "#d8e3e5",
-//     "#24695c",
-//     "#24695c",
-//     "#24695c",
-//     "#24695c",
-//     "#24695c",
-//     "#24695c",
-//     "#24695c",
+//     "#2B6ED4",
+//     "#2B6ED4",
+//     "#2B6ED4",
+//     "#2B6ED4",
+//     "#2B6ED4",
+//     "#2B6ED4",
+//     "#2B6ED4",
 //     "#d8e3e5",
 //     "#d8e3e5",
 //     "#d8e3e5",
@@ -679,29 +679,29 @@ chart51.render();
 //     "#d8e3e5",
 //     "#d8e3e5",
 //     "#d8e3e5",
-//     "#ba895d",
-//     "#ba895d",
-//     "#ba895d",
-//     "#ba895d",
-//     "#ba895d",
-//     "#ba895d"
+//     "#717171",
+//     "#717171",
+//     "#717171",
+//     "#717171",
+//     "#717171",
+//     "#717171"
 //   ],
-  
+
 //   legend: {
 //     show: false
 //   }
 // };
 
 
-// var chart27 = new ApexCharts(document.querySelector("#chart-unique-2"), 
+// var chart27 = new ApexCharts(document.querySelector("#chart-unique-2"),
 //   options27
 //   );
 // chart27.render();
 
-// 
+//
 var barOptions = {
   curvature: 1,
-  
+
   animationSteps: 15,
 
   responsive: true,
@@ -709,14 +709,14 @@ var barOptions = {
   scaleShowVerticalLines: false,
 
   scaleShowHorizontalLines: false,
-  
+
   scaleShowLabels: false,
-   
+
   // String - Template string for single tooltips
   tooltipTemplate: "<%if (label){%><%=label %>: <%}%><%= value + ' %' %>",
   // String - Template string for multiple tooltips
   multiTooltipTemplate: "<%= value + ' %' %>",
-  
+
   // Array - Array of string names to attach tooltip events
   tooltipEvents: ["mousemove", "touchstart", "touchmove"],
 
@@ -775,12 +775,12 @@ Chart.types.Bar.extend({
   name: "BarAlt",
   initialize: function (data) {
       Chart.types.Bar.prototype.initialize.apply(this, arguments);
-      
+
       if (this.options.curvature !== undefined && this.options.curvature <= 1) {
           var rectangleDraw = this.datasets[0].bars[0].draw;
           var self = this;
           var radius = this.datasets[0].bars[0].width * this.options.curvature * 0.2;
-          
+
           // override the rectangle draw with ours
           this.datasets.forEach(function (dataset) {
               dataset.bars.forEach(function (bar) {
@@ -792,11 +792,11 @@ Chart.types.Bar.extend({
                       // adjust the bar radius depending on how much of a curve we can draw
                       var barRadius = (bar.y - y);
                       rectangleDraw.apply(bar, arguments);
-                      
+
                       // draw a rounded rectangle on top
                       Chart.helpers.drawRoundedRectangle(self.chart.ctx, bar.x - bar.width / 2, bar.y - barRadius + 1, bar.width, bar.height, barRadius);
                       ctx.fill();
-                      
+
                       // restore the y value
                       bar.y = y;
                   }
@@ -822,17 +822,17 @@ var barData = {
 // document.getElementById("addData").onclick = function addData() {
 //        // Update one of the points in the second dataset
 //        myLine.addData([Math.random() * 100]);
-       
+
 //    Chart.types.Bar.extend({
 //   name: "BarAlt",
 //   initialize: function (data) {
 //       Chart.types.Bar.prototype.initialize.apply(this, arguments);
-      
+
 
 //           var rectangleDraw = this.datasets[0].bars[0].draw;
 //           var self = this;
 //           var radius = this.datasets[0].bars[0].width * this.options.curvature * 0.2;
-          
+
 //           // override the rectangle draw with ours
 //           this.datasets.forEach(function (dataset) {
 //               dataset.bars.forEach(function (bar) {
@@ -844,11 +844,11 @@ var barData = {
 //                       // adjust the bar radius depending on how much of a curve we can draw
 //                       var barRadius = (bar.y - y);
 //                       rectangleDraw.apply(bar, arguments);
-                      
+
 //                       // draw a rounded rectangle on top
 //                       Chart.helpers.drawRoundedRectangle(self.chart.ctx, bar.x - bar.width / 2, bar.y - barRadius + 1, bar.width, bar.height, barRadius);
 //                       ctx.fill();
-                      
+
 //                       // restore the y value
 //                       bar.y = y;
 //                   }
@@ -903,11 +903,11 @@ var options3 = {
             colors: ["#912efc"]
           }
         },
-        
+
         xaxis: {
           categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           position: 'bottom',
-        
+
           axisBorder: {
             show: false
           },
@@ -954,5 +954,5 @@ var options3 = {
        var chart3 = new ApexCharts(document.querySelector("#column-chart"),
           options3
       );
-      
+
       chart3.render();

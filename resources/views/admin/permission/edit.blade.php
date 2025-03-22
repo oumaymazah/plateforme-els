@@ -16,8 +16,8 @@
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
-                    <button class="btn btn-secondary" type="submit">Modifier</button>
-                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" type="submit">Modifier</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Annuler</button>
                 </form>
             </div>
         </div>

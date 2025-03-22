@@ -9200,9 +9200,9 @@ var mmin = Math.min;
  *       id: '1',
  *       name: 'My Calendar',
  *       color: '#ffffff',
- *       bgColor: '#24695c',
- *       dragBgColor: '#24695c',
- *       borderColor: '#24695c'
+ *       bgColor: '#2B6ED4',
+ *       dragBgColor: '#2B6ED4',
+ *       borderColor: '#2B6ED4'
  *     },
  *     {
  *       id: '2',
@@ -10050,9 +10050,9 @@ Calendar.prototype._getCurrentView = function() {
  * @example
  * calendar.setCalendarColor('1', {
  *     color: '#e8e8e8',
- *     bgColor: '#585858',
+ *     bgColor: '#717171',
  *     borderColor: '#a1b56c'
- *     dragBgColor: '#585858',
+ *     dragBgColor: '#717171',
  * });
  * calendar.setCalendarColor('2', {
  *     color: '#282828',
@@ -18778,7 +18778,7 @@ module.exports = ScheduleViewModel;
 var theme = {
     'common.border': '1px solid #e5e5e5',
     'common.backgroundColor': 'white',
-    'common.holiday.color': '#ba895d',
+    'common.holiday.color': '#717171',
     'common.saturday.color': '#333',
     'common.dayname.color': '#333',
     'common.today.color': '#333',
@@ -19025,7 +19025,7 @@ module.exports = Theme;
  var themeConfig = {
     'common.border': '1px solid #e5e5e5',
     'common.backgroundColor': 'white',
-    'common.holiday.color': '#ba895d',
+    'common.holiday.color': '#717171',
     'common.saturday.color': '#333',
     'common.dayname.color': '#333',
     'common.today.color': '#333',
@@ -19145,7 +19145,7 @@ module.exports = Theme;
 var themeConfig = {
     'common.border': '1px solid #e5e5e5',
     'common.backgroundColor': 'white',
-    'common.holiday.color': '#ba895d',
+    'common.holiday.color': '#717171',
     'common.saturday.color': '#333',
     'common.dayname.color': '#333',
     'common.today.color': '#333',

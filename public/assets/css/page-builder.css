@@ -15,7 +15,7 @@
   background-color: transparent;
   border: none;
   font-size: 12px;
-  border-right: 1px solid #e6edef;
+  border-right: 1px solid #ADD8E633;
   color: #cccccc; }
 
 .page-builder .btn-grid {
@@ -48,13 +48,13 @@
     margin: 0; }
     .page-builder .ge-mainControls .ge-addRowGroup .ge-row-icon .column {
       height: 10px;
-      background: #24695c;
+      background: #2B6ED4;
       padding: 0;
       border-left: 3px solid #fff; }
   .page-builder .ge-mainControls .ge-layout-mode ul li a {
     cursor: pointer; }
     .page-builder .ge-mainControls .ge-layout-mode ul li a:active {
-      background-color: #ba895d;
+      background-color: #717171;
       color: #fff; }
   .page-builder .ge-mainControls .btn:focus {
     -webkit-box-shadow: none;
@@ -80,7 +80,7 @@
     padding: 5px; }
     .page-builder .ge-canvas.ge-editing .ge-tools-drawer > a:hover {
       cursor: pointer;
-      color: #24695c !important; }
+      color: #2B6ED4 !important; }
   .page-builder .ge-canvas.ge-editing .ge-tools-drawer .ge-details {
     padding: 5px;
     border-top: 1px solid #2c323f;
@@ -107,7 +107,7 @@
 
 .page-builder .ge-canvas.ge-editing .column {
   background-color: #f5f7fb;
-  border: 1px solid #e6edef;
+  border: 1px solid #ADD8E633;
   padding: 15px;
   border-radius: 4px; }
   .page-builder .ge-canvas.ge-editing .column > .ge-tools-drawer a {
@@ -117,12 +117,12 @@
     color: #2c323f; }
 
 .page-builder .ge-canvas.ge-editing .ui-sortable-placeholder {
-  background: #e6edef;
+  background: #ADD8E633;
   visibility: visible !important;
   min-height: 50px; }
 
 .page-builder .ge-canvas.ge-editing .ge-content-type-tinymce.active {
-  outline: 1px dotted #e6edef; }
+  outline: 1px dotted #ADD8E633; }
 
 .page-builder .ge-canvas.ge-layout-phone {
   max-width: 450px;

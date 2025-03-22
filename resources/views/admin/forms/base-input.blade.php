@@ -16,7 +16,7 @@
 		<li class="breadcrumb-item">Form Controls</li>
         <li class="breadcrumb-item active">Base inputs</li>
 	@endcomponent
-	
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
@@ -162,7 +162,7 @@
 									<div class="mb-3 row">
 										<label class="col-sm-3 col-form-label pt-0">Color picker</label>
 										<div class="col-sm-9">
-											<input class="form-control form-control-color" type="color" value="#24695c" />
+											<input class="form-control form-control-color" type="color" value="#2B6ED4" />
 										</div>
 									</div>
 									<div class="mb-3 row">
@@ -586,8 +586,8 @@
 			</div>
 		</div>
 	</div>
-	
-	
+
+
 	@push('scripts')
 	@endpush
 

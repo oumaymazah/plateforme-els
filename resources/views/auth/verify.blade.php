@@ -59,249 +59,187 @@
     </div>
 </div>
 @endsection --}}
-@extends('layouts.app')
+
+
+
+@extends('admin.authentication.master')
 @section('content')
-<div class="container py-5">
+<div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <!-- Messages de succès avec icône -->
-            @if (session('success'))
-                <div class="alert alert-success mb-4 shadow-sm fade-in">
-                    <div class="d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill me-2" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                        </svg>
-                        {{ session('success') }}
+        <div class="col-md-6">
+            <div class="card" style="border: none; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); padding: 25px; margin-top: 20px;">
+                <div class="card-header text-center" style="background: transparent; border-bottom: 1px solid #eaeaea; padding: 15px 0 20px;">
+                    <i class="fa fa-lock" style="font-size: 26px; color: #2B6ED4; margin-bottom: 15px;"></i>
+                    <h4 style="font-weight: 600; font-size: 24px; color: #333; margin-bottom: 0;">Validation de votre compte</h4>
+                </div>
+                <div class="card-body" style="padding: 25px 20px 20px;">
+                    <div style="margin-bottom: 25px; background-color: #f5f7fd; border-radius: 6px; padding: 15px; border-left: 3px solid #2B6ED4;">
+                        <p style="color: #555; font-size: 15px; line-height: 1.5; margin: 0;">
+                            <i class="fa fa-info-circle" style="color: #2B6ED4; margin-right: 8px;"></i>
+                            Un code de validation a été envoyé à votre adresse e-mail.<br>
+                            Veuillez entrer ce code pour activer votre compte.
+                        </p>
                     </div>
-                </div>
-            @endif
 
-            <!-- Messages d'erreur avec icône -->
-            @if (session('error'))
-                <div class="alert alert-danger mb-4 shadow-sm fade-in">
-                    <div class="d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-circle-fill me-2" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-                        </svg>
-                        {{ session('error') }}
-                    </div>
-                </div>
-            @endif
-
-            <div class="card shadow border-0 rounded-lg">
-                <!-- Force la couleur de fond de l'en-tête avec !important -->
-                <div class="card-header text-white text-center py-4" style="background-color: #2B6ED4 !important;">
-                    <h2 class="font-weight-bold mb-0">Réinitialisation du mot de passe</h2>
-                </div>
-                <div class="card-body p-4 p-md-5">
-                    <div class="text-center mb-4">
-                        <!-- Modification de la couleur du SVG pour correspondre à #2B6ED4 -->
-                        <div class="mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#2B6ED4" viewBox="0 0 16 16">
-                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/>
-                            </svg>
+                    <!-- Messages d'alerte -->
+                    @if (session('success'))
+                        <div class="alert alert-success" style="border-radius: 6px; background-color: #e6f4ea; color: #1e7e34; padding: 12px 15px; margin-bottom: 20px;">
+                            <i class="fa fa-check-circle" style="margin-right: 8px;"></i>
+                            {{ session('success') }}
                         </div>
-                        <h4 class="font-weight-bold">Vérification du code</h4>
-                        <p class="text-muted">Un code a été envoyé à votre adresse email. Veuillez le saisir ci-dessous pour continuer.</p>
-                    </div>
-
-                    <!-- Affichage de toutes les erreurs de validation -->
-                    @if ($errors->any())
-                        <div class="alert alert-danger mb-4 fade-in">
-                            <div class="d-flex align-items-center mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
-                                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                </svg>
-                                <strong>Veuillez corriger les erreurs suivantes:</strong>
-                            </div>
-                            <ul class="mb-0 ps-4">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger" style="border-radius: 6px; background-color: #fae3e5; color: #d62839; padding: 12px 15px; margin-bottom: 20px;">
+                            <i class="fa fa-exclamation-circle" style="margin-right: 8px;"></i>
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if (session('warning'))
+                        <div class="alert alert-warning" style="border-radius: 6px; background-color: #fff8e6; color: #b7791f; padding: 12px 15px; margin-bottom: 20px;">
+                            <i class="fa fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                            {{ session('warning') }}
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('reset.password.verify') }}">
+                    <!-- Formulaire de validation -->
+                    <form method="POST" action="{{ route('validation.code') }}">
                         @csrf
                         <div class="form-group mb-4">
-                            <label for="verification-code" class="form-label fw-bold">Code de vérification</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                                    </svg>
-                                </span>
-                                <input type="text" id="verification-code" name="code" class="form-control form-control-lg @error('code') is-invalid @enderror" placeholder="Entrez le code à 6 chiffres" required autofocus>
-                                @error('code')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            <label for="validation_code" style="display: none;">Code de validation</label>
+                            <input type="hidden" id="validation_code" name="validation_code">
+
+                            <p style="text-align: center; margin-bottom: 15px; font-size: 14px; color: #666;">
+                                <i class="fa fa-paste" style="margin-right: 5px;"></i> Vous pouvez saisir ou coller votre code
+                            </p>
+
+                            <!-- Affichage des cases de code individuelles -->
+                            <div style="display: flex; justify-content: space-between; gap: 8px; margin-bottom: 20px;">
+                                @for ($i = 1; $i <= 6; $i++)
+                                <div style="flex: 1;">
+                                    <input type="text"
+                                           class="code-input"
+                                           style="width: 100%; height: 55px; text-align: center; font-size: 22px; font-weight: 500;
+                                                  border-radius: 8px; border: 1px solid #cfd7e6; background-color: #f8faff;
+                                                  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease;
+                                                  color: #2B6ED4; text-transform: uppercase;"
+                                           maxlength="1"
+                                           data-index="{{ $i }}"
+                                           autocomplete="off">
+                                </div>
+                                @endfor
                             </div>
-
-
                         </div>
 
-                        <div class="d-grid gap-2 mt-4">
-
-                            <button type="submit" class="btn btn-lg verify-btn" style="background-color: #2B6ED4 !important; border-color: #2B6ED4 !important; color: #ffffff !important;">
-                                <span class="d-flex align-items-center justify-content-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-shield-check me-2" viewBox="0 0 16 16">
-                                        <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
-                                        <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                                    </svg>
-                                    Vérifier le code
-                                </span>
+                        <div class="text-center mb-3" style="margin-top: 25px;">
+                            <button type="submit" class="btn"
+                                    style="background-color: #2B6ED4; border: none; border-radius: 6px;
+                                    width: 100%; padding: 14px; font-size: 16px; font-weight: 600; color: white;
+                                    box-shadow: 0 2px 6px rgba(43, 110, 212, 0.3);">
+                                <i class="fa fa-check" style="margin-right: 8px;"></i>
+                                Valider mon compte
                             </button>
-                            <a href="{{ route('login') }}" class="btn btn-outline-secondary">
-                                <span class="d-flex align-items-center justify-content-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                                    </svg>
-                                    Retour à la connexion
-                                </span>
-                            </a>
                         </div>
                     </form>
+
+                    <div class="text-center" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eaeaea;">
+                        <a href="{{ route('resend.code') }}"
+                           style="color: #2B6ED4; text-decoration: none; font-size: 15px; font-weight: 500;">
+                            <i class="fa fa-sync" style="margin-right: 5px;"></i>
+                            Renvoyer un code
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
 
-@push('styles')
-<style>
-    
-    .card-header {
-        background-color: #2B6ED4 !important;
-        color: #ffffff !important;
-    }
-
-    .card {
-        background-color: #ffffff !important;
-        transition: all 0.3s ease;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .form-control:focus {
-        border-color: #2B6ED4 !important;
-        box-shadow: 0 0 0 0.25rem rgba(43, 110, 212, 0.25) !important;
-    }
-
-    /* Assurer que le bouton principal est bien de couleur #2B6ED4 */
-    .btn-primary, .verify-btn {
-        background-color: #2B6ED4 !important;
-        border-color: #2B6ED4 !important;
-        color: #ffffff !important;
-    }
-
-    /* Supprimer la classe bg-primary qui pourrait être appliquée par Bootstrap */
-    .bg-primary {
-        background-color: #2B6ED4 !important;
-    }
-
-    .btn-outline-secondary {
-        color: #6c757d !important;
-        border-color: #6c757d !important;
-    }
-
-    .btn-primary:hover, .verify-btn:hover {
-        background-color: #184a94 !important;
-        border-color: #154283 !important;
-    }
-
-    /* Assurer que le texte est bien visible */
-    h2, h4 {
-        color: inherit !important;
-    }
-
-    .card-footer {
-        background-color: #f8f9fa !important;
-    }
-
-    /* Éviter les problèmes de transparence */
-    body, html {
-        background-color: #f0f2f5 !important;
-    }
-
-    /* Animation pour les alertes */
-    .fade-in {
-        animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Styling amélioré pour les alertes */
-    .alert {
-        border-radius: 8px;
-        border-left-width: 4px;
-    }
-
-    .alert-success {
-        border-left-color: #28a745;
-    }
-
-    .alert-danger {
-        border-left-color: #dc3545;
-    }
-
-    /* Améliorer l'affichage du champ de saisie invalide */
-    .is-invalid {
-        border-color: #dc3545 !important;
-        background-image: none !important;
-    }
-</style>
-@endpush
-
-@push('scripts')
+<!-- Script pour gérer les cases de code avec collage corrigé pour caractères alphanumériques -->
 <script>
-    // Animation d'apparition
-    document.addEventListener('DOMContentLoaded', function() {
-        const card = document.querySelector('.card');
-        card.style.opacity = 0;
-        setTimeout(function() {
-            card.style.opacity = 1;
-        }, 100);
+document.addEventListener('DOMContentLoaded', function() {
+    const codeInputs = document.querySelectorAll('.code-input');
+    const validationInput = document.getElementById('validation_code');
 
-        // S'assurer que les éléments ont la bonne couleur même après le chargement
-        document.querySelector('.card-header').style.backgroundColor = '#2B6ED4';
-        const verifyBtn = document.querySelector('.verify-btn');
-        if (verifyBtn) {
-            verifyBtn.style.backgroundColor = '#2B6ED4';
-            verifyBtn.style.borderColor = '#2B6ED4';
-        }
+    // Fonction pour mettre à jour le champ caché avec tous les codes
+    function updateValidationCode() {
+        let code = '';
+        codeInputs.forEach(input => {
+            code += input.value;
+        });
+        validationInput.value = code;
+    }
 
-        // Fermeture automatique des alertes après 5 secondes
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
-            setTimeout(function() {
-                if (alert) {
-                    // Animation de disparition
-                    alert.style.transition = 'all 0.5s ease';
-                    alert.style.opacity = '0';
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500);
+    // Ajouter un gestionnaire global de collage pour tout le conteneur de code
+    document.addEventListener('paste', function(e) {
+        // Vérifier si un élément de saisie de code est actif ou à proximité
+        if (document.activeElement && document.activeElement.classList.contains('code-input')) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            // Nettoyons le texte mais gardons les lettres et les chiffres
+            const cleanedText = pastedText.replace(/[^A-Za-z0-9]/g, '').substring(0, 6).toUpperCase();
+
+            if (cleanedText.length > 0) {
+                // Distribuer les caractères dans les cases
+                for (let i = 0; i < codeInputs.length && i < cleanedText.length; i++) {
+                    codeInputs[i].value = cleanedText[i];
                 }
-            }, 5000);
+
+                updateValidationCode();
+
+                // Focus sur la case après la dernière case remplie ou sur la dernière case
+                const focusIndex = Math.min(cleanedText.length, codeInputs.length - 1);
+                codeInputs[focusIndex].focus();
+            }
+        }
+    });
+
+    // Ajouter les écouteurs d'événements pour chaque case
+    codeInputs.forEach((input, index) => {
+        // Quand on entre un caractère, le mettre en majuscule et passer au champ suivant
+        input.addEventListener('input', function() {
+            // Convertir en majuscule
+            this.value = this.value.toUpperCase();
+            updateValidationCode();
+
+            if (this.value.length === 1 && index < codeInputs.length - 1) {
+                codeInputs[index + 1].focus();
+            }
+        });
+
+        // Quand on utilise la touche retour arrière
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                codeInputs[index - 1].focus();
+            }
+        });
+
+        // Aussi gérer le collage individuel sur chaque champ
+        input.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            // Gardons les lettres et les chiffres, pas seulement les chiffres
+            const cleanedText = pastedText.replace(/[^A-Za-z0-9]/g, '').substring(0, 6).toUpperCase();
+
+            if (cleanedText.length === 1) {
+                // Si un seul caractère est collé
+                this.value = cleanedText;
+                updateValidationCode();
+                if (index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+            } else if (cleanedText.length > 1) {
+                // Si plusieurs caractères sont collés, distribuer dans toutes les cases
+                for (let i = 0; i < codeInputs.length && i < cleanedText.length; i++) {
+                    codeInputs[i].value = cleanedText[i];
+                }
+                updateValidationCode();
+
+                // Focus sur la case après la dernière case remplie ou sur la dernière case
+                const focusIndex = Math.min(cleanedText.length, codeInputs.length - 1);
+                codeInputs[focusIndex].focus();
+            }
         });
     });
-
-    // Focus automatique sur le champ de code
-    document.getElementById('verification-code').focus();
-
-    // Formatage automatique du code pendant la saisie (ajoute des espaces tous les 2 chiffres)
-    document.getElementById('verification-code').addEventListener('input', function(e) {
-        // Supprimer les espaces existants
-        let value = e.target.value.replace(/\s/g, '');
-        // Limite à 6 chiffres
-        value = value.substring(0, 6);
-        // Ajouter un espace après chaque groupe de 2 chiffres
-        value = value.replace(/(\d{2})/g, '$1 ').trim();
-        e.target.value = value;
-    });
+});
 </script>
-@endpush
+@endsection

@@ -19,7 +19,7 @@
                             <input class="form-control" id="last_name" name="lastname" type="text" required placeholder="Nom" autocomplete="off" />
                             <div class="invalid-feedback">Veuillez entrer un nom.</div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label class="form-label" for="phone">Numéro de téléphone</label>
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
 
-                                
+
                             </div>
                         </div>
                         <div class="mb-3 col-md-12 mt-0">
@@ -75,8 +75,8 @@
 
                         <input type="hidden" name="password_auto_generate" value="1">
                     </div>
-                    <button class="btn btn-secondary" type="submit">Enregistrer</button>
-                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" type="submit">Enregistrer</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Annuler</button>
                 </form>
             </div>
         </div>

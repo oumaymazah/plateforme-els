@@ -18,7 +18,7 @@
 		<li class="breadcrumb-item">Apps</li>
 		<li class="breadcrumb-item active">Tasks</li>
 	<?php echo $__env->renderComponent(); ?>
-	
+
 	<div class="container-fluid">
 	    <div class="email-wrap bookmark-wrap">
 	        <div class="row">
@@ -549,7 +549,7 @@
 	                                                        </div>
 	                                                        <div class="form-group col-md-12 mb-0">
 	                                                            <label>Tag color</label>
-	                                                            <input class="form-control fill-color" type="color" value="#24695c" />
+	                                                            <input class="form-control fill-color" type="color" value="#2B6ED4" />
 	                                                        </div>
 	                                                    </div>
 	                                                    <button class="btn btn-secondary" type="button">Save</button>
@@ -568,7 +568,7 @@
 	    </div>
 	</div>
 
-	
+
 	<?php $__env->startPush('scripts'); ?>
 	<script src="<?php echo e(asset('assets/js/datepicker/date-picker/datepicker.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/datepicker/date-picker/datepicker.en.js')); ?>"></script>

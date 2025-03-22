@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/prism.css')}}">
 @endpush
     @section('content')
-    
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-6 box-col-12 des-xl-100 invoice-sec">
@@ -470,7 +470,7 @@
      &lt;div class="card-header pb-0"&gt;
        &lt;div class="header-top d-sm-flex justify-content-between align-items-center"&gt;
            &lt;h5&gt;Top Dealer&lt;/h5&gt;
-           &lt;div class="center-content"&gt; 
+           &lt;div class="center-content"&gt;
              &lt;p class="d-sm-flex align-items-center"&gt;&lt;span class="m-r-10"&gt;845 Dealer&lt;/span&gt;&lt;i class="toprightarrow-primary fa fa-arrow-up m-r-10"&gt;&lt;/i&gt;86% More Than Last Year&lt;/p&gt;
            &lt;/div&gt;
            &lt;div class="setting-list"&gt;
@@ -707,7 +707,7 @@
                             <div class="card-body align-items-center">
                                 <div class="round-progress knob-block text-center">
                                     <div class="progress-circle">
-                                        <input class="knob1" data-width="10" data-height="70" data-thickness=".3" data-angleoffset="0" data-linecap="round" data-fgcolor="#ba895d" data-bgcolor="#e0e9ea" value="60">
+                                        <input class="knob1" data-width="10" data-height="70" data-thickness=".3" data-angleoffset="0" data-linecap="round" data-fgcolor="#717171" data-bgcolor="#e0e9ea" value="60">
                                     </div>
                                     <h5>$9,84,235</h5>
                                     <p>Our Annual Income</p>
@@ -720,7 +720,7 @@
                             <div class="card-body">
                                 <div class="round-progress knob-block text-center">
                                     <div class="progress-circle">
-                                        <input class="knob1" data-width="50" data-height="70" data-thickness=".3" data-fgcolor="#24695c" data-linecap="round" data-angleoffset="0" value="60">
+                                        <input class="knob1" data-width="50" data-height="70" data-thickness=".3" data-fgcolor="#2B6ED4" data-linecap="round" data-angleoffset="0" value="60">
                                     </div>
                                     <h5>$4,55,462</h5>
                                     <p>Our Annual Income</p>
@@ -811,7 +811,7 @@
              &lt;/ul&gt;
            &lt;/div&gt;
            &lt;a class="btn btn-iconsolid" href="javascript:void(0)"&gt;&lt;i class="icon-bag"&gt;&lt;/i&gt;&lt;/a&gt;
-         &lt;/div&gt; 
+         &lt;/div&gt;
     &lt;/div&gt;                                                </code></pre>
                                 </div>
                             </div>
@@ -873,7 +873,7 @@
        &lt;div class="card-body"&gt;
           &lt;div id="chart-dash-2-line"&gt;
           &lt;/div&gt;
-       &lt;/div&gt; 
+       &lt;/div&gt;
     &lt;/div&gt;        </code></pre>
                                 </div>
                             </div>
@@ -1105,7 +1105,7 @@
                       &lt;i class=" toprightarrow-primary fa fa-arrow-up m-r-10"&gt;&lt;/i&gt;  $9657.55k
                     &lt;/span&gt; 86% more then last year
                 &lt;/p&gt;
-             &lt;/div&gt;                                             
+             &lt;/div&gt;
          &lt;div class="setting-list"&gt;
            &lt;ul class="list-unstyled setting-option"&gt;
              &lt;li&gt;
@@ -1123,7 +1123,7 @@
        &lt;div class="card-body p-0 chart-block"&gt;
           &lt;div id="chart-yearly-growth-dash-2"&gt;
           &lt;/div&gt;
-       &lt;/div&gt; 
+       &lt;/div&gt;
     &lt;/div&gt;        </code></pre>
                         </div>
                     </div>
@@ -1132,7 +1132,7 @@
         </div>
     </div>
 
-    @push('scripts')    
+    @push('scripts')
         <script src="{{asset('assets/js/chart/chartjs/chart.min.js')}}"></script>
         <script src="{{asset('assets/js/chart/chartist/chartist.js')}}"></script>
         <script src="{{asset('assets/js/chart/chartist/chartist-plugin-tooltip.js')}}"></script>

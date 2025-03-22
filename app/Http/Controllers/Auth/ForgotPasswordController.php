@@ -117,7 +117,8 @@ class ForgotPasswordController extends Controller
 
 
         $user->update([
-            'password' => bcrypt($request->password)
+            'password' => bcrypt($request->password),
+            'code_reset_password' => null
         ]);
 
 

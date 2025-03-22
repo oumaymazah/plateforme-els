@@ -24,7 +24,7 @@
               </div>
               <div class="card-body">
                 <div class="color-box">
-                  <button class="btn btn-primary btn-square digits">#ba895d</button>
+                  <button class="btn btn-primary btn-square digits">#717171</button>
                   <button class="btn btn-square digits btn-secondary">#148df6</button>
                   <button class="btn btn-square digits btn-success">#51bb25</button>
                   <button class="btn btn-square digits btn-info">#7a15f7</button>
@@ -208,8 +208,8 @@
         </div>
     </div>
 
-    <?php $__env->startPush('scripts'); ?>  
-        <script src="<?php echo e(asset('assets/js/tooltip-init.js')); ?>"></script>  
+    <?php $__env->startPush('scripts'); ?>
+        <script src="<?php echo e(asset('assets/js/tooltip-init.js')); ?>"></script>
     <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/ui-kits/state-color.blade.php ENDPATH**/ ?>

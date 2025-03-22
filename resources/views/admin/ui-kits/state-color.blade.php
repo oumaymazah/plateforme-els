@@ -23,7 +23,7 @@
               </div>
               <div class="card-body">
                 <div class="color-box">
-                  <button class="btn btn-primary btn-square digits">#ba895d</button>
+                  <button class="btn btn-primary btn-square digits">#717171</button>
                   <button class="btn btn-square digits btn-secondary">#148df6</button>
                   <button class="btn btn-square digits btn-success">#51bb25</button>
                   <button class="btn btn-square digits btn-info">#7a15f7</button>
@@ -207,7 +207,7 @@
         </div>
     </div>
 
-    @push('scripts')  
-        <script src="{{asset('assets/js/tooltip-init.js')}}"></script>  
+    @push('scripts')
+        <script src="{{asset('assets/js/tooltip-init.js')}}"></script>
     @endpush
 @endsection

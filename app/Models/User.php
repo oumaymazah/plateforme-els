@@ -28,6 +28,7 @@ class User extends Authenticatable
         'first_login',
         'validation_code',
         'code_reset_password',
+        
     ];
 
     /**

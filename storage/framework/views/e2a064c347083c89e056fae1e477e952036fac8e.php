@@ -1,5 +1,3 @@
- 
-
 <?php $__env->startPush('css'); ?>
     <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/verifyCode_password.css')); ?>">
 <?php $__env->stopPush(); ?>

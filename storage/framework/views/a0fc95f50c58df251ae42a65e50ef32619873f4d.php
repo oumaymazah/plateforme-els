@@ -68,7 +68,7 @@ unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">
-                            <!-- Ajout d'un style inline pour forcer la couleur du bouton -->
+                           
                             <button type="submit" class="btn btn-lg verify-btn" style="background-color: #2B6ED4 !important; border-color: #2B6ED4 !important; color: #ffffff !important;">Vérifier le code</button>
                             <a href="<?php echo e(route('login')); ?>" class="btn btn-square btn-outline-info">Retour à la connexion</a>
                         </div>

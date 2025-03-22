@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <?php $__env->startSection('title', 'Liste des Leçons'); ?>
 
 <?php $__env->startPush('css'); ?>

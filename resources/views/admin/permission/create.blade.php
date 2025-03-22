@@ -14,8 +14,8 @@
                             <input class="form-control" type="text" id="permissionName" name="name" required placeholder="Nom du permission" autocomplete="off">
                         </div>
                     </div>
-                    <button class="btn btn-secondary" type="submit">Enregistrer</button>
-                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary" type="submit">Enregistrer</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Annuler</button>
                 </form>
             </div>
         </div>

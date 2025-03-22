@@ -58,4 +58,5 @@
     </div>
 </div>
 
+
 <?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/user/index.blade.php ENDPATH**/ ?>

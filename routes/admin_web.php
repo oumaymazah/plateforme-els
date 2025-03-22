@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\EditController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ChapitreController;
@@ -13,9 +15,9 @@ use App\Http\Controllers\LessonController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ReponseController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\RoleMiddleware;
+
 
 
 
@@ -50,6 +52,19 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'changePassword
 Route::group(['middleware' => 'auth'], function () {
 	Route::prefix('admin')->group(function () {
 	});
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/parametre', [EditController::class, 'index'])->name('parametre');
+        Route::get('/edit', [EditController::class, 'edit'])->name('edit');
+        Route::put('/update', [EditController::class, 'update'])->name('update');
+        Route::get('/updateCompte', [EditController::class, 'updateCompte'])->name('updateCompte');
+        Route::get('/updateEmail', [EditController::class, 'updateEmail'])->name('updateEmail');
+        Route::post('/sendEmailVerificationCode', [EditController::class, 'sendEmailVerificationCode'])->name('sendEmailVerificationCode');
+        Route::get('/verifyEmail', [EditController::class, 'validateCode'])->name('validateCode');
+        Route::post('/verifyEmail', [EditController::class, 'verifyAndUpdateEmail'])->name('verifyEmail');
+        Route::get('/editPassword', [EditController::class, 'editPassword'])->name('editPassword');
+        Route::post('/updatePassword', [EditController::class, 'updatePassword'])->name('updatePassword');
+    });
+
 
 	Route::prefix('dashboard')->group(function () {
 		Route::view('dashboard-02', 'admin.dashboard.dashboard-02')->name('dashboard-02');
