@@ -1,9 +1,18 @@
 <header class="main-nav">
+    
     <div class="sidebar-user text-center">
-        <a class="setting-primary" href="<?php echo e(route('profile.parametre')); ?>"><i data-feather="settings"></i></a><img class="img-90 rounded-circle" src="<?php echo e(asset('assets/images/dashboard/1.png')); ?>" alt="" />
-        <div class="badge-bottom"><span class="badge badge-primary">New</span></div>
-        <a href="user-profile"> <h6 class="mt-3 f-14 f-w-600"><?php echo e(auth()->user()->name); ?></h6></a>
+        <a class="setting-primary" href="<?php echo e(route('profile.parametre')); ?>">
+            <i data-feather="settings"></i>
+        </a>
+        <div class="mb-4">
+            <div class="avatar-circle text-white mx-auto" style="background-color: #2B6ED4; width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold;">
+                <span><?php echo e(substr(auth()->user()->name, 0, 1)); ?><?php echo e(substr(auth()->user()->lastname, 0, 1)); ?></span>
+            </div>
+        </div>
 
+        <a href="<?php echo e(route('user-profile')); ?>">
+            <h6 class="mt-3 f-14 f-w-600"><?php echo e(auth()->user()->name); ?> </h6>
+        </a>
     </div>
     <nav>
         <div class="main-navbar">

@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title'); ?>State Color <?php echo e($title); ?>
 
 <?php $__env->stopSection(); ?>
@@ -212,4 +210,5 @@
         <script src="<?php echo e(asset('assets/js/tooltip-init.js')); ?>"></script>
     <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/ui-kits/state-color.blade.php ENDPATH**/ ?>

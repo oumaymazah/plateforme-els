@@ -9,11 +9,11 @@
     <div class="nav-right col pull-right right-menu p-0">
       <ul class="nav-menus">
         <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
-       
+
         <li>
             <div class="mode"><i class="fa fa-moon-o"></i></div>
         </li>
-       
+
         <li class="onhover-dropdown p-0">
           <a class="btn btn-primary-light" href="<?php echo e(route('logout')); ?>"
                                        onclick="event.preventDefault();
