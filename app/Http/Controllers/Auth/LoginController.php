@@ -104,10 +104,7 @@ class LoginController extends Controller
             return redirect()->route('password.change.form');
         }
 
-        // Rediriger en fonction du rôle de l'utilisateur
-        if ($user->hasRole('etudiant')) {
-            return redirect()->route('home'); // Rediriger les étudiants vers home
-        }
+        
 
         // Rediriger les autres utilisateurs vers le dashboard
         return redirect()->route('dashboard.index');

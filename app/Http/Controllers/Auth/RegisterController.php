@@ -41,6 +41,7 @@ class RegisterController extends Controller
      *
      * @return void
      */
+    //tkhali l'utilisateur eli mahouch connecté yhezou l'inscription et l'utilisateur connecté yhezou l paage par defaut
     public function __construct()
     {
         $this->middleware('guest');
@@ -58,6 +59,7 @@ class RegisterController extends Controller
             'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
             'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
             'password.min' => 'La longueur du mot de passe doit être d\'au moins 8 caractères.',
+            'privacy_policy.required' => 'Vous devez accepter la politique de confidentialité.',
         ];
 
         $request->validate([
@@ -66,6 +68,8 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'required|phone:TN',
             'password' => 'required|string|min:8',
+            'privacy_policy' => 'required',
+
         ], $messages);
 
         $validationCode = Str::random(6);
@@ -121,7 +125,7 @@ class RegisterController extends Controller
         $user = User::find($userId);
 
         if (!$user) {
-            return redirect()->route('login')
+            return redirect()->route('sign-up')
                 ->with('error', 'Utilisateur non trouvé. Veuillez vous connecter à nouveau.');
         }
 
@@ -142,7 +146,7 @@ class RegisterController extends Controller
 
         auth()->login($user);
 
-        return redirect()->route('home')
+        return redirect()->route('index')
             ->with('success', 'Votre compte a été activé avec succès.');
     }
     public function resendCode(Request $request)

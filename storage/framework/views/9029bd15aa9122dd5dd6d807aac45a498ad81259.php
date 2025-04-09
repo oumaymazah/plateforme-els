@@ -150,13 +150,23 @@ unset($__errorArgs, $__bag); ?>
 	                            </div>
 	                        </div>
 
-	                        <div class="form-group">
-	                            <div class="checkbox">
-	                                <input id="checkbox1" type="checkbox" name="privacy_policy" required />
-	                                <label class="text-muted" for="checkbox1">J'accepte la <span>Politique de confidentialité</span></label>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <input id="checkbox1" type="checkbox" name="privacy_policy" value="1" required />
+                                    <label class="text-muted" for="checkbox1">J'accepte la <span>Politique de confidentialité</span></label>
                                     <div class="invalid-feedback js-error">Veuillez accepter la Politique de confidentialité.</div>
-	                            </div>
-	                        </div>
+                                    <?php $__errorArgs = ['privacy_policy'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                        <div class="invalid-feedback laravel-error" style="display: block;"><?php echo e($message); ?></div>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                </div>
+                            </div>
 
 	                        <div class="form-group">
 	                            <button class="btn btn-primary btn-block" type="submit">Créer un compte</button>

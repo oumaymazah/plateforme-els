@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailVerificationMail;
@@ -62,37 +63,176 @@ class EditController extends Controller
         return view('admin.apps.profile.editEmail', compact('user'));
     }
     //entrer le nouveau email et envoyer le code de verification
+    // public function sendEmailVerificationCode(Request $request)
+    // {
+    //     $messages = [
+    //         'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
+
+    //     ];
+
+    //     $user = Auth::user();
+
+    //     // Validation des champs avec le mot de passe requis
+    //     $request->validate([
+    //         'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+
+    //     ], $messages);
+
+
+
+    //     $verificationCode = Str::random(6);
+    //     \Log::info('Code de vérification debut: ' . $verificationCode);
+
+
+
+    //     session(['email_verification_code' => $verificationCode, 'new_email' => $request->email]);
+
+    //     try {
+    //         \Log::info('Code de vérification: ' . $verificationCode);
+    //         Mail::to($request->email)->send(new EmailVerificationMail($user, $verificationCode));
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Une erreur est survenue lors de l\'envoi de l\'e-mail de validation.'], 422);
+    //     }
+
+    //     return response()->json(['message' => 'Un code de validation a été envoyé à votre nouvelle adresse email.'], 200);
+    // }
+// Vérification de la disponibilité de l'email
+public function checkEmailAvailability(Request $request)
+{
+    $messages = [
+        'email.required' => 'Une adresse e-mail valide est requise pour mettre à jour votre compte.',
+    ];
+    $request->validate([
+        'email' => 'required|string|email|max:255',
+    ],$messages);
+
+    $user = Auth::user();
+
+    // Vérifier si l'email est différent de l'email actuel
+    if ($request->email === $user->email) {
+        return response()->json(['error' => 'Veuillez entrer une adresse email différente de votre adresse actuelle.'], 422);
+    }
+
+    // Vérifier si l'email est unique
+    $existingUser = User::where('email', $request->email)
+        ->where('id', '!=', $user->id)
+        ->first();
+
+    if ($existingUser) {
+        return response()->json(['error' => 'Cet email est déjà utilisé par un autre utilisateur.'], 422);
+    }
+
+    return response()->json(['success' => true], 200);
+}
+
+// // Vérification du mot de passe avant l'envoi du code
+//     public function verifyPassword(Request $request) {
+//         $request->validate([
+//             'password' => 'required|string',
+//             'email' => 'required|string|email|max:255',
+//         ]);
+
+//         $user = Auth::user();
+
+//         // Protection contre les attaques par force brute
+//         $key = 'password_attempts_' . $user->id;
+//         $failedAttempts = Cache::get($key, 0);
+
+//         if ($failedAttempts  >= 3) {
+//             return response()->json(['error' => 'Nombre maximum de tentatives atteint. veuillez patienter 5 minutes avant de réessayer.'], 429);
+//         }
+
+//         // Vérifier le mot de passe
+//         if (!Hash::check($request->password, $user->password)) {
+//             // Incrémenter le compteur d'échecs et le stocker pour 5 minutes
+//             Cache::put($key, $failedAttempts + 1, now()->addMinutes(5));
+//             return response()->json(['error' => 'Le mot de passe est incorrect.'], 422);
+//         }
+
+//         // Si le mot de passe est correct, réinitialiser le compteur
+//         Cache::forget($key);
+
+//         // Si le mot de passe est correct, on stocke l'email pour la vérification
+//         session(['new_email' => $request->email]);
+
+//         return response()->json(['success' => true], 200);
+//     }
+
+
+
+    public function verifyPassword(Request $request) {
+        $request->validate([
+            'password' => 'required|string',
+            'email' => 'required|string|email|max:255',
+        ]);
+
+        $user = Auth::user();
+
+        // Protection contre les attaques par force brute
+        $key = 'password_attempts_' . $user->id;
+        $failedAttempts = Cache::get($key, 0);
+
+        if ($failedAttempts >= 3) {
+            // Bloquer l'utilisateur en changeant son statut
+            $user->status = 'inactive';
+            $user->save();
+
+            // Déconnecter l'utilisateur
+            Auth::logout();
+
+            return response()->json([
+                'error' => 'Compte bloqué. Veuillez contacter l\'administrateur.',
+                'redirect' => route('blocked.account')
+            ], 403);
+        }
+
+        // Vérifier le mot de passe
+        if (!Hash::check($request->password, $user->password)) {
+            // Incrémenter le compteur d'échecs et le stocker pour 5 minutes
+            Cache::put($key, $failedAttempts + 1, now()->addMinutes(5));
+            return response()->json([
+                'error' => 'Le mot de passe est incorrect. Tentative ' . ($failedAttempts + 1) . '/3',
+                'attempts' => $failedAttempts + 1
+            ], 422);
+        }
+
+        // Si le mot de passe est correct, réinitialiser le compteur
+        Cache::forget($key);
+
+        // Si le mot de passe est correct, on stocke l'email pour la vérification
+        session(['new_email' => $request->email]);
+
+        return response()->json(['success' => true], 200);
+    }
+    public function pageDeBlockage()
+    {
+        return view('auth.blocked');
+    }
+
+    //entrer le nouveau email et envoyer le code de verification
     public function sendEmailVerificationCode(Request $request)
     {
-        \Log::info('Email reçu: ' );
-        $messages = [
-            'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
-        ];
         $user = Auth::user();
-        $request->validate([
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-        ], $messages);
+        $email = session('new_email');
 
-
+        if (!$email) {
+            return response()->json(['error' => 'Une erreur est survenue. Veuillez réessayer.'], 422);
+        }
 
         $verificationCode = Str::random(6);
-        \Log::info('Code de vérification debut: ' . $verificationCode);
+        \Log::info('Code de vérification: ' . $verificationCode);
 
-
-
-        session(['email_verification_code' => $verificationCode, 'new_email' => $request->email]);
+        session(['email_verification_code' => $verificationCode]);
 
         try {
-            \Log::info('Code de vérification: ' . $verificationCode);
-            Mail::to($request->email)->send(new EmailVerificationMail($user, $verificationCode));
+            Mail::to($email)->send(new EmailVerificationMail($user, $verificationCode));
         } catch (\Exception $e) {
+            \Log::error('Erreur envoi email: ' . $e->getMessage());
             return response()->json(['error' => 'Une erreur est survenue lors de l\'envoi de l\'e-mail de validation.'], 422);
         }
 
-        return response()->json(['message' => 'Un code de validation a été envoyé à votre nouvelle adresse email.'], 200);
+        return response()->json(['success' => true], 200);
     }
-
-
 
     //affichier la page de validation de code
     public function validateCode(){

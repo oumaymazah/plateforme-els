@@ -13,21 +13,67 @@ use Spatie\Permission\Models\Role;
 use App\Mail\UserCreatedMail;
 class UserController extends Controller
 {
-    public function index()
-    {
+    // public function index()
+    // {
 
+    //     $user = auth()->user();
+    //     if ($user->hasRole('admin')) {
+    //         $users = User::whereDoesntHave('roles', function ($query) {
+    //             $query->whereIn('name', ['super-admin', 'admin']);
+    //         })->get();
+    //     } elseif ($user->hasRole('super-admin')) {
+    //         $users = User::whereDoesntHave('roles', function ($query) {
+    //             $query->where('name', 'super-admin');
+    //         })->get();
+    //     }
+
+    //     return view('admin.user.index', compact('users'));
+    // }
+
+    public function index(Request $request)
+    {
         $user = auth()->user();
+        $query = User::query();
+
+        // 1. D'abord, appliquer les restrictions basées sur le rôle de l'utilisateur connecté
         if ($user->hasRole('admin')) {
-            $users = User::whereDoesntHave('roles', function ($query) {
-                $query->whereIn('name', ['super-admin', 'admin']);
-            })->get();
+            // Admin ne peut pas voir les super-admin et autres admin
+            $query->whereDoesntHave('roles', function($q) {
+                $q->whereIn('name', ['super-admin', 'admin']);
+            });
         } elseif ($user->hasRole('super-admin')) {
-            $users = User::whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'super-admin');
-            })->get();
+            // Super-admin ne peut pas voir les autres super-admin
+            $query->whereDoesntHave('roles', function($q) {
+                $q->where('name', 'super-admin');
+            });
         }
 
-        return view('admin.user.index', compact('users'));
+        // 2. Ensuite, appliquer les filtres demandés par l'utilisateur
+        // Filtre par rôle
+        if ($request->filled('role') && $request->role != '') {
+            $query->whereHas('roles', function($q) use ($request) {
+                $q->where('name', $request->role);
+            });
+        }
+
+        // Filtre par statut
+        if ($request->filled('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        // Ajouter des logs pour débogage
+        \Log::info('Filter parameters:', [
+            'role' => $request->input('role'),
+            'status' => $request->input('status')
+        ]);
+
+        $users = $query->get();
+
+        // Log du nombre d'utilisateurs trouvés
+        \Log::info('Users found:', ['count' => $users->count()]);
+
+        $allRoles = Role::all();
+        return view('admin.user.index', compact('users', 'allRoles'));
     }
 
     public function create()
@@ -96,7 +142,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Utilisateur créé avec succès.',
-            'password' => $password,
+
         ]);
 }
 
@@ -123,14 +169,45 @@ class UserController extends Controller
         return response()->json(['message' => "Ce rôle n'existe pas pour cet utilisateur.",'danger' => true]);
     }
 
+    // public function revokePermission(User $user, Permission $permission)
+    // {
+    //     if ($user->hasPermissionTo($permission)) {
+    //         $user->revokePermissionTo($permission);
+    //         return response()->json(['message' => 'Permission supprimée avec succès.','success' => true]);
+    //     }
+    //     return response()->json(['message' => "Cette permission n'existe pas pour cet utilisateur.",'danger' => true], 404);
+    // }
+
     public function revokePermission(User $user, Permission $permission)
     {
-        if ($user->hasPermissionTo($permission)) {
-            $user->revokePermissionTo($permission);
-            return response()->json(['message' => 'Permission supprimée avec succès.','success' => true]);
+        try {
+            // Vérifier si l'utilisateur a la permission (directement ou via rôle)
+            if ($user->hasPermissionTo($permission)) {
+                // Révoquer la permission
+                $user->revokePermissionTo($permission);
+
+                return response()->json([
+                    'message' => 'Permission révoquée avec succès.',
+                    'success' => true
+                ]);
+            }
+
+            return response()->json([
+                'message' => "Cette permission n'existe pas pour cet utilisateur.",
+                'danger' => true
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Erreur lors de la révocation: " . $e->getMessage(),
+                'danger' => true
+            ], 500);
         }
-        return response()->json(['message' => "Cette permission n'existe pas pour cet utilisateur.",'danger' => true], 404);
     }
+
+
+
+
     public function toggleStatus(User $user)
     {
         $user->status = $user->status === 'active' ? 'inactive' : 'active';

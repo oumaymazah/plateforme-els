@@ -18,9 +18,7 @@
             </div>
 
             <div class="form-group mb-3 d-flex gap-2">
-                <button class="btn btn-outline-secondary back-btn" data-back-tab="account">
-                    <i class="fa fa-arrow-left"></i> Retour
-                </button>
+                
                 <button class="btn btn-primary" type="submit">Vérifier et mettre à jour</button>
 
             </div>

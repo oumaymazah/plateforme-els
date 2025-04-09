@@ -34,20 +34,19 @@ Route::get('validation', [RegisterController::class, 'showValidationForm'])->nam
 Route::post('validation', [RegisterController::class, 'validateAccount'])->name('validation.code');
 Route::get('resend-code', [RegisterController::class, 'resendCode'])->name('resend.code');
 
-// Routes pour la réinitialisation du mot de passe
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('forgot.password');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode'])->name('forgot.password.send');
 
-// Route pour afficher le formulaire de vérification du code
 Route::get('/verify-code', [ForgotPasswordController::class, 'showVerifyForm'])->name('reset.password.form');
-// Route pour vérifier le code de réinitialisation
+
 Route::post('/verify-code', [ForgotPasswordController::class, 'verifyCode'])->name('reset.password.verify');
 
-// Route pour afficher le formulaire de réinitialisation du mot de passe
+
 Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset.form');
 
-// Route pour mettre à jour le mot de passe
+
 Route::post('/reset-password', [ForgotPasswordController::class, 'changePassword'])->name('password.reset.update');
+Route::get('/blocked-account', [EditController::class, 'pageDeBlockage'])->name('blocked.account');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::prefix('admin')->group(function () {
@@ -58,6 +57,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/update', [EditController::class, 'update'])->name('update');
         Route::get('/updateCompte', [EditController::class, 'updateCompte'])->name('updateCompte');
         Route::get('/updateEmail', [EditController::class, 'updateEmail'])->name('updateEmail');
+        Route::post('/check-email', [EditController::class, 'checkEmailAvailability'])->name('checkEmail');
+        // Ajoutez cette route avec vos autres routes de profil
+        Route::post('/verify-password', [EditController::class, 'verifyPassword'])->name('verifyPassword');
         Route::post('/sendEmailVerificationCode', [EditController::class, 'sendEmailVerificationCode'])->name('sendEmailVerificationCode');
         Route::get('/verifyEmail', [EditController::class, 'validateCode'])->name('validateCode');
         Route::post('/verifyEmail', [EditController::class, 'verifyAndUpdateEmail'])->name('verifyEmail');

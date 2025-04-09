@@ -42,14 +42,6 @@ class ChangePasswordController extends Controller
 
         $user = Auth::user();
 
-
-        if ($user->status === 'inactive') {
-            Auth::logout();
-            return redirect()->route('login')->with('error', "Vous n'avez pas accès à cette plateforme.");
-        }
-
-
-
         $request->validate([
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -60,7 +52,7 @@ class ChangePasswordController extends Controller
             $user->first_login = false; // Marquer que ce n'est plus la première connexion
             $user->save();
 
-            Log::info('Mot de passe modifié avec succès pour l\'utilisateur: ' . $user->id);
+            
 
 
             return redirect()->route('dashboard.index')

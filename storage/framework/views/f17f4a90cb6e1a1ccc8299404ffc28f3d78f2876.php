@@ -2,7 +2,6 @@
 
 <?php $__env->startPush('css'); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/editProfileCss/parametreCompte.css')); ?>">
 <?php $__env->stopPush(); ?>
 
@@ -42,7 +41,6 @@
                                     <?php echo e($user->email); ?>
 
                                 </p>
-
                             </div>
 
                             <div class="list-group">
@@ -62,16 +60,12 @@
 
                 <div class="col-xl-8">
                     <div class="card">
-                        <div class="card-header pb-0">
-                            <h4 class="card-title mb-0" id="tab-title">
-                                <i class="fas fa-pen me-2"></i>Modifier le Profil
-                            </h4>
-                        </div>
+                        
                         <div class="card-body">
                             <div id="alert-container"></div>
                             <div class="loader" id="content-loader"></div>
                             <div id="tab-content">
-
+                                <!-- Le contenu sera chargé dynamiquement ici -->
                             </div>
                         </div>
                     </div>
@@ -83,18 +77,21 @@
 
 <?php $__env->startPush('scripts'); ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-
     const PROFILE_URLS = {
         profile: "<?php echo e(route('profile.edit')); ?>",
         account: "<?php echo e(route('profile.updateCompte')); ?>",
         email: "<?php echo e(route('profile.updateEmail')); ?>",
-        password: "<?php echo e(route('profile.editPassword')); ?>"
-        
+        password: "<?php echo e(route('profile.editPassword')); ?>",
+        checkEmail: "<?php echo e(route('profile.checkEmail')); ?>",
+        verifyPassword: "<?php echo e(route('profile.verifyPassword')); ?>",
+        sendCode: "<?php echo e(route('profile.sendEmailVerificationCode')); ?>",
+        validateCode: "<?php echo e(route('profile.validateCode')); ?>",
+        verifyEmail: "<?php echo e(route('profile.verifyEmail')); ?>"
     };
 </script>
 <script src="<?php echo e(asset('assets/ajax/profile/editProfile.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/js/form-validation/form_validation2.js')); ?>"></script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/apps/profile/parametreCompte.blade.php ENDPATH**/ ?>

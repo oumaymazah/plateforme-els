@@ -81,13 +81,16 @@
 	                            </div>
 	                        </div>
 
-	                        <div class="form-group">
-	                            <div class="checkbox">
-	                                <input id="checkbox1" type="checkbox" name="privacy_policy" required />
-	                                <label class="text-muted" for="checkbox1">J'accepte la <span>Politique de confidentialité</span></label>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <input id="checkbox1" type="checkbox" name="privacy_policy" value="1" required />
+                                    <label class="text-muted" for="checkbox1">J'accepte la <span>Politique de confidentialité</span></label>
                                     <div class="invalid-feedback js-error">Veuillez accepter la Politique de confidentialité.</div>
-	                            </div>
-	                        </div>
+                                    @error('privacy_policy')
+                                        <div class="invalid-feedback laravel-error" style="display: block;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
 	                        <div class="form-group">
 	                            <button class="btn btn-primary btn-block" type="submit">Créer un compte</button>
