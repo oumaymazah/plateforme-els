@@ -62,41 +62,7 @@ class EditController extends Controller
         $user = Auth::user();
         return view('admin.apps.profile.editEmail', compact('user'));
     }
-    //entrer le nouveau email et envoyer le code de verification
-    // public function sendEmailVerificationCode(Request $request)
-    // {
-    //     $messages = [
-    //         'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
 
-    //     ];
-
-    //     $user = Auth::user();
-
-    //     // Validation des champs avec le mot de passe requis
-    //     $request->validate([
-    //         'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-
-    //     ], $messages);
-
-
-
-    //     $verificationCode = Str::random(6);
-    //     \Log::info('Code de vérification debut: ' . $verificationCode);
-
-
-
-    //     session(['email_verification_code' => $verificationCode, 'new_email' => $request->email]);
-
-    //     try {
-    //         \Log::info('Code de vérification: ' . $verificationCode);
-    //         Mail::to($request->email)->send(new EmailVerificationMail($user, $verificationCode));
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Une erreur est survenue lors de l\'envoi de l\'e-mail de validation.'], 422);
-    //     }
-
-    //     return response()->json(['message' => 'Un code de validation a été envoyé à votre nouvelle adresse email.'], 200);
-    // }
-// Vérification de la disponibilité de l'email
 public function checkEmailAvailability(Request $request)
 {
     $messages = [
@@ -125,39 +91,6 @@ public function checkEmailAvailability(Request $request)
     return response()->json(['success' => true], 200);
 }
 
-// // Vérification du mot de passe avant l'envoi du code
-//     public function verifyPassword(Request $request) {
-//         $request->validate([
-//             'password' => 'required|string',
-//             'email' => 'required|string|email|max:255',
-//         ]);
-
-//         $user = Auth::user();
-
-//         // Protection contre les attaques par force brute
-//         $key = 'password_attempts_' . $user->id;
-//         $failedAttempts = Cache::get($key, 0);
-
-//         if ($failedAttempts  >= 3) {
-//             return response()->json(['error' => 'Nombre maximum de tentatives atteint. veuillez patienter 5 minutes avant de réessayer.'], 429);
-//         }
-
-//         // Vérifier le mot de passe
-//         if (!Hash::check($request->password, $user->password)) {
-//             // Incrémenter le compteur d'échecs et le stocker pour 5 minutes
-//             Cache::put($key, $failedAttempts + 1, now()->addMinutes(5));
-//             return response()->json(['error' => 'Le mot de passe est incorrect.'], 422);
-//         }
-
-//         // Si le mot de passe est correct, réinitialiser le compteur
-//         Cache::forget($key);
-
-//         // Si le mot de passe est correct, on stocke l'email pour la vérification
-//         session(['new_email' => $request->email]);
-
-//         return response()->json(['success' => true], 200);
-//     }
-
 
 
     public function verifyPassword(Request $request) {
@@ -171,6 +104,13 @@ public function checkEmailAvailability(Request $request)
         // Protection contre les attaques par force brute
         $key = 'password_attempts_' . $user->id;
         $failedAttempts = Cache::get($key, 0);
+
+        // Si l'utilisateur a été débloqué récemment et qu'il était auparavant bloqué,
+        // réinitialiser le compteur de tentatives
+        if ($user->status === 'active' && $failedAttempts >= 3) {
+            Cache::forget($key);
+            $failedAttempts = 0;
+        }
 
         if ($failedAttempts >= 3) {
             // Bloquer l'utilisateur en changeant son statut
@@ -188,8 +128,8 @@ public function checkEmailAvailability(Request $request)
 
         // Vérifier le mot de passe
         if (!Hash::check($request->password, $user->password)) {
-            // Incrémenter le compteur d'échecs et le stocker pour 5 minutes
-            Cache::put($key, $failedAttempts + 1, now()->addMinutes(5));
+            // Incrémenter le compteur d'échecs et le stocker pour 10 minutes
+            Cache::put($key, $failedAttempts + 1, now()->addMinutes(10));
             return response()->json([
                 'error' => 'Le mot de passe est incorrect. Tentative ' . ($failedAttempts + 1) . '/3',
                 'attempts' => $failedAttempts + 1

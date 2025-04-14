@@ -40,14 +40,14 @@ class RoleController extends Controller
         }
 
         $role=Role::create(['name' => $request->name]);
-        return response()->json(['success' => 'Role ajouté avec succès', 'role' => $role]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role ajouté avec succès',
+        ]);
     }
 
-    // public function edit(Role $role)
-    // {
-    //     $permissions = Permission::all();
-    //     return view('admin.role.edit', compact('role', 'permissions'));
-    // }
+ 
     public function edit(Role $role)
     {
         // Récupérer l'utilisateur connecté
@@ -128,7 +128,9 @@ class RoleController extends Controller
             }
         }
 
-        $response = ['success' => 'Rôles et permissions modifiés avec succès'];
+        $response = [
+            'success' => true,
+            'message'=> 'Rôle  modifié avec succès'];
 
         if (!empty($permissionErrors)) {
             $response['danger'] = $permissionErrors; // Ajouter les erreurs si elles existent

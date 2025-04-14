@@ -3,26 +3,45 @@
 
 
 
- <div class="container mt-4" id="roles_Permission">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5>Gestion des rôles pour <?php echo e($user->name); ?></h5>
-            <button class="btn btn-secondary back-btn" data-back-tab="users">
-                <i class="fas fa-arrow-left"></i> Retour
-            </button>
+
+<div class="container mt-4" id="roles_Permission">
+    <div class="card shadow">
+        <div class="card-header  bg-primary text-white d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-light me-3 back-btn" data-back-tab="users">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h5 class="mb-0">Plus d'informations sur <?php echo e($user->name); ?></h5>
+            </div>
         </div>
         <div class="card-body">
             <!-- Informations utilisateur -->
             <div class="user-info mb-4">
-                <div class="row">
-                    <div class="col-md-4">
-                        <p><strong>Nom :</strong> <?php echo e($user->name); ?></p>
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="mb-0"><i class="fas fa-user me-2"></i>Informations de l'utilisateur</h6>
                     </div>
-                    <div class="col-md-4">
-                        <p><strong>Prénom :</strong> <?php echo e($user->lastname); ?></p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Email :</strong> <?php echo e($user->email); ?></p>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="info-item">
+                                    <span class="info-label">Nom</span>
+                                    <span class="info-value"><?php echo e($user->name); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-item">
+                                    <span class="info-label">Prénom</span>
+                                    <span class="info-value"><?php echo e($user->lastname); ?></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-item">
+                                    <span class="info-label">Email</span>
+                                    <span class="info-value"><?php echo e($user->email); ?></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31,7 +50,7 @@
                 <!-- Rôles attribués -->
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-sm h-100">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-secondary text-white">
                             <h6 class="mb-0"><i class="fas fa-user-tag me-2"></i>Rôles attribués</h6>
                         </div>
                         <div class="card-body p-0">
@@ -39,15 +58,14 @@
                                 <ul class="list-group list-group-flush">
                                     <?php $__currentLoopData = $user->roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span><?php echo e($role->name); ?></span>
-                                        <a href="#" class="btn btn-sm btn-danger remove-role" title="Supprimer ce rôle" data-url="<?php echo e(route('admin.users.roles.remove', [$user->id, $role->id])); ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+                                        <span class="role-name"><?php echo e($role->name); ?></span>
+
                                     </li>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             <?php else: ?>
-                                <div class="text-center p-3">
+                                <div class="text-center p-4">
+                                    <i class="fas fa-info-circle text-muted mb-2 fa-2x"></i>
                                     <p class="text-muted mb-0">Aucun rôle assigné</p>
                                 </div>
                             <?php endif; ?>
@@ -58,22 +76,17 @@
                 <!-- Toutes les permissions -->
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-sm h-100">
-                        <div class="card-header bg-info text-white">
+                        <div class="card-header bg-secondary text-white">
                             <h6 class="mb-0"><i class="fas fa-key me-2"></i>Toutes les permissions</h6>
                         </div>
                         <div class="card-body p-0">
-
                             <?php if($user->permissions->isNotEmpty() || $user->roles->isNotEmpty()): ?>
                                 <ul class="list-group list-group-flush">
                                     <?php $__currentLoopData = $user->permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user_permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
+                                        <div class="permission-item">
                                             <span><?php echo e($user_permission->name); ?></span>
-
                                         </div>
-                                        <a href="#" class="btn btn-sm btn-danger revoke-permission" title="Révoquer cette permission" data-url="<?php echo e(route('admin.users.permissions.revoke', [$user->id, $user_permission->id])); ?>" data-user-id="<?php echo e($user->id); ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
                                     </li>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
@@ -81,21 +94,17 @@
                                         <?php $__currentLoopData = $role->permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <?php if(!$user->permissions->contains($permission)): ?>
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <div >
-                                                        <span><?php echo e($permission->name); ?></span>
-
-                                                    </div>
-                                                    <a href="#" class="btn btn-sm btn-danger revoke-permission" title="Révoquer cette permission"
-                                                        data-url="<?php echo e(route('admin.users.permissions.revoke', [$user->id, $permission->id])); ?>" >
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
+                                                <div class="permission-item">
+                                                    <span><?php echo e($permission->name); ?></span>
+                                                </div>
                                             </li>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             <?php else: ?>
-                                <div class="text-center p-3">
+                                <div class="text-center p-4">
+                                    <i class="fas fa-info-circle text-muted mb-2 fa-2x"></i>
                                     <p class="text-muted mb-0">Aucune permission</p>
                                 </div>
                             <?php endif; ?>
@@ -106,4 +115,100 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* Styles pour améliorer l'apparence */
+    #roles_Permission .card {
+        border-radius: 8px;
+        border: none;
+    }
+
+    #roles_Permission .card-header {
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        padding: 15px 20px;
+    }
+
+    #roles_Permission .back-btn {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        font-weight: 500;
+        color: #4d5483;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    #roles_Permission .back-btn:hover {
+        background-color: #f8f9fa;
+        color: #3a3f63;
+    }
+
+    /* Style pour les informations utilisateur */
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 5px;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 3px;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #212529;
+    }
+
+    /* Style pour les listes */
+    .list-group-item {
+        padding: 12px 20px;
+        border-left: none;
+        border-right: none;
+        transition: background-color 0.2s;
+    }
+
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .role-name {
+        font-weight: 500;
+    }
+
+    .permission-item {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Style pour le bouton supprimer */
+    .btn-outline-danger {
+        border-width: 1px;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Style pour les headers des cartes */
+    .card-header.bg-primary {
+        background: linear-gradient(45deg, #4e73df, #224abe) !important;
+    }
+
+    .card-header.bg-info {
+        background: linear-gradient(45deg, #36b9cc, #258391) !important;
+    }
+
+    .card-header.bg-secondary {
+        background: #a9aab1 !important;
+    }
+
+
+    .card-header.bg-indigo {
+        background: linear-gradient(45deg, #6777ef, #4d5483) !important;
+    }
+</style>
 <?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/user/roles.blade.php ENDPATH**/ ?>

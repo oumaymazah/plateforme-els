@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/select2.css')); ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/sweetalert2.css')); ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/datatables.css')); ?>">
+
 <style>
     .badge-light { background-color: #f8f9fa; color: #212529; }
     .select2-container--default .select2-selection--multiple .select2-selection__choice {
@@ -38,6 +39,7 @@
         <div class="row">
             <div class="col-xl-3">
                 <div class="email-sidebar">
+                    <a class="btn btn-primary email-aside-toggle" href="javascript:void(0)">contact filter </a>
                     <div class="email-left-aside">
                         <div class="card">
                             <div class="card-body">
@@ -69,13 +71,15 @@
                                                <i class="me-2 fas fa-user-tag" aria-hidden="true"></i> Rôles
                                             </a>
                                         </li>
-                                        <li>
-                                            <a id="load-permission" href="javascript:void(0)"
-                                               data-permission-url="<?php echo e(route('admin.permissions.index')); ?>"
-                                               aria-label="Afficher la liste des permissions">
-                                               <i class="me-2 fas fa-key" aria-hidden="true"></i> Permissions
-                                            </a>
-                                        </li>
+                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('gérer des permissions')): ?>
+                                            <li>
+                                                <a id="load-permission" href="javascript:void(0)"
+                                                data-permission-url="<?php echo e(route('admin.permissions.index')); ?>"
+                                                aria-label="Afficher la liste des permissions">
+                                                <i class="me-2 fas fa-key" aria-hidden="true"></i> Permissions
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
@@ -98,34 +102,30 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+<!-- Modal amélioré -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Nouvel Utilisateur</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Form loaded dynamically -->
-                <div class="text-center py-3">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Chargement...</span>
-                    </div>
-                    <p class="mt-2">Chargement du formulaire...</p>
-                </div>
+        <div class="modal-content border-0 shadow">
+            <!-- Pas d'en-tête fixe, il sera chargé dynamiquement avec le formulaire -->
+
+            <div class="modal-body position-relative p-0">
+
             </div>
         </div>
     </div>
 </div>
 
 <?php $__env->startPush('scripts'); ?>
-
+<script src="<?php echo e(asset('assets/js/select2/select2.full.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/js/select2/select2-custom.js')); ?>"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="<?php echo e(asset('assets/js/sweet-alert/sweetalert.min.js')); ?>"></script>
 <script src="<?php echo e(asset('assets/js/select2/select2.full.min.js')); ?>"></script>
 <script src="<?php echo e(asset('assets/js/datatables/jquery.dataTables.min.js')); ?>"></script>
 <script src="<?php echo e(asset('assets/ajax/admin-management.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/js/form-validation/form_validation3.js')); ?>"></script>
 <?php $__env->stopPush(); ?>
 
 <?php $__env->stopSection(); ?>

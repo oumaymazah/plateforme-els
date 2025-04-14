@@ -1,462 +1,3 @@
-// class AdminManager {
-//     constructor() {
-//       this.init();
-//     }
-
-//     init() {
-//       this.bindEvents();
-//       this.loadUsers(); // Load users by default
-//     }
-
-//     bindEvents() {
-//       // Navigation
-//       $(document)
-//         .on('click', '#load-users', () => this.loadUsers())
-//         .on('click', '#load-roles', () => this.loadRoles())
-//         .on('click', '#load-permission', () => this.loadPermissions())
-//         .on('click', '#loadCreateUserForm', () => this.loadCreateUserForm())
-//         .on('click', '#loadCreateRoleForm', () => this.loadCreateRoleForm())
-//         .on('click', '#loadCreatePermissionForm', () => this.loadCreatePermissionForm());
-
-//       // Forms
-//       $(document)
-//         .on('submit', '#create-user-form', (e) => this.handleUserForm(e))
-//         .on('submit', '#edit-role-form', (e) => this.handleRoleForm(e))
-//         .on('submit', '#create-role-form', (e) => this.handleRoleForm(e))
-//         .on('submit', '#create-permission-form', (e) => this.handlePermissionForm(e))
-//         .on('submit', '#edit-permission-form', (e) => this.handlePermissionForm(e));
-
-//       // Actions
-//       $(document)
-//         .on('click', '.delete-user', (e) => this.deleteItem(e, 'users'))
-//         .on('click', '.delete-role', (e) => this.deleteItem(e, 'roles'))
-//         .on('click', '.delete-permission', (e) => this.deleteItem(e, 'permissions'))
-//         .on('change', '.toggle-status-switch', (e) => this.toggleUserStatus(e))
-//         .on('click', '.toggle-status-menu', (e) => this.toggleUserStatusMenu(e))
-//         .on('click', '.view-user-roles', (e) => this.viewUserRoles(e))
-//         .on('click', '.remove-role', (e) => this.removeRoleFromUser(e))
-//         .on('click', '.revoke-permission', (e) => this.revokePermissionFromUser(e))
-//         .on('change', '#role-filter, #status-filter', () => this.applyFilters())
-//         .on('click', '.edit-role', (e) => this.loadEditRoleForm(e))
-//         .on('click', '.edit-permission', (e) => this.loadEditPermissionForm(e));
-//     }
-
-//     // View loading methods
-//     loadUsers() {
-//       this.showLoader();
-//       $.ajax({
-//         url: $('#load-users').data('user-url'),
-//         type: 'GET',
-//         success: (response) => {
-//           $('#blog-container').html(response);
-//           this.initDataTable('#users-table');
-//           this.initSelect2();
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     loadRoles() {
-//       this.showLoader();
-//       $.ajax({
-//         url: $('#load-roles').data('roles-url'),
-//         type: 'GET',
-//         success: (response) => {
-//           $('#blog-container').html(response);
-//           this.initDataTable('#roles-table');
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     loadPermissions() {
-//       this.showLoader();
-//       $.ajax({
-//         url: $('#load-permission').data('permission-url'),
-//         type: 'GET',
-//         success: (response) => {
-//           $('#blog-container').html(response);
-//           this.initDataTable('#permissions-table');
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     // Form loading methods
-//     loadCreateUserForm() {
-//       this.showLoader();
-//       $.ajax({
-//         url: $('#loadCreateUserForm').data('create-url'),
-//         type: 'GET',
-//         success: (response) => {
-//           $('#exampleModal .modal-body').html(response);
-//           this.initSelect2();
-//           $('#exampleModalLabel').text('Créer un utilisateur');
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     loadCreateRoleForm() {
-//       this.showLoader();
-//       $.ajax({
-//         url: $('#loadCreateRoleForm').data('create-url'),
-//         type: 'GET',
-//         success: (response) => {
-//           $('#exampleModal .modal-body').html(response);
-//           $('#exampleModalLabel').text('Créer un rôle');
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     loadCreatePermissionForm() {
-//       this.showLoader();
-//       $.ajax({
-//         url: $('#loadCreatePermissionForm').data('create-url'),
-//         type: 'GET',
-//         success: (response) => {
-//           $('#exampleModal .modal-body').html(response);
-//           $('#exampleModalLabel').text('Créer une permission');
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     loadEditRoleForm(e) {
-//       e.preventDefault();
-//       const url = $(e.currentTarget).data('url');
-//       this.showLoader();
-//       $.ajax({
-//         url: url,
-//         type: 'GET',
-//         success: (response) => {
-//           $('#blog-container').html(response);
-//           this.initSelect2();
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     loadEditPermissionForm(e) {
-//       e.preventDefault();
-//       const url = $(e.currentTarget).data('url');
-//       this.showLoader();
-//       $.ajax({
-//         url: url,
-//         type: 'GET',
-//         success: (response) => {
-//           $('#blog-container').html(response);
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     // Form handlers
-//     handleUserForm(e) {
-//       e.preventDefault();
-//       const form = $(e.target);
-//       this.submitForm(form, () => {
-//         $('#exampleModal').modal('hide');
-//         this.loadUsers();
-//       });
-//     }
-
-//     handleRoleForm(e) {
-//       e.preventDefault();
-//       const form = $(e.target);
-//       this.submitForm(form, () => {
-//         $('#exampleModal').modal('hide');
-//         this.loadRoles();
-//       });
-//     }
-
-//     handlePermissionForm(e) {
-//       e.preventDefault();
-//       const form = $(e.target);
-//       this.submitForm(form, () => {
-//         $('#exampleModal').modal('hide');
-//         this.loadPermissions();
-//       });
-//     }
-
-//     submitForm(form, successCallback) {
-//       this.showLoader();
-//       $.ajax({
-//         url: form.attr('action'),
-//         type: form.attr('method'),
-//         data: form.serialize(),
-//         success: (response) => {
-//           if (response.success) {
-//             this.showAlert('success', response.message);
-//             if (typeof successCallback === 'function') {
-//               successCallback();
-//             }
-//           } else if (response.errors) {
-//             this.displayFormErrors(form, response.errors);
-//           }
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     // Action handlers
-//     deleteItem(e, type) {
-//       e.preventDefault();
-//       const url = $(e.currentTarget).data('url');
-//       this.confirmDelete(() => {
-//         this.showLoader();
-//         $.ajax({
-//           url: url,
-//           type: 'DELETE',
-//           headers: {
-//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Ajout de CSRF token
-//           },
-//           success: (response) => {
-//             this.showAlert('success', response.success);
-//             this[`load${type.charAt(0).toUpperCase() + type.slice(1)}`]();
-//           },
-//           error: (xhr) => this.handleError(xhr)
-//         });
-//       });
-//     }
-
-//     // Toggle status methods - Version consolidée
-//     toggleUserStatus(e) {
-//       const switchElement = $(e.currentTarget);
-//       const url = switchElement.data('url');
-//       const isChecked = switchElement.is(':checked');
-//       const status = isChecked ? 'active' : 'inactive';
-
-//       this.showLoader();
-//       $.ajax({
-//         url: url,
-//         type: 'PATCH',
-//         data: { status: status },
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Ajout de CSRF token
-//         },
-//         success: (response) => {
-//           this.showAlert('success', response.message);
-//           switchElement.next('label').text(response.status === 'active' ? 'Actif' : 'Inactif');
-//           this.loadUsers();
-//         },
-//         error: (xhr) => {
-//           switchElement.prop('checked', !isChecked);
-//           this.handleError(xhr);
-//         }
-//       });
-//     }
-
-//     toggleUserStatusMenu(e) {
-//       e.preventDefault();
-//       const link = $(e.currentTarget);
-//       const url = link.data('url');
-//       const currentStatus = link.data('status');
-//       const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-
-//       this.showLoader();
-//       $.ajax({
-//         url: url,
-//         type: 'PATCH',
-//         data: { status: newStatus },
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Ajout de CSRF token
-//         },
-//         success: (response) => {
-//           this.showAlert('success', response.message);
-//           this.loadUsers();
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     viewUserRoles(e) {
-//       e.preventDefault();
-//       const url = $(e.currentTarget).data('url');
-//       this.showLoader();
-//       $.ajax({
-//         url: url,
-//         type: 'GET',
-//         success: (response) => {
-//           $('#blog-container').html(response);
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     removeRoleFromUser(e) {
-//       e.preventDefault();
-//       const url = $(e.currentTarget).data('url');
-//       this.showLoader();
-//       $.ajax({
-//         url: url,
-//         type: 'DELETE',
-//         headers: {
-//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Ajout de CSRF token
-//         },
-//         success: (response) => {
-//           this.showAlert('success', response.message);
-//           this.loadUsers();
-//         },
-//         error: (xhr) => this.handleError(xhr)
-//       });
-//     }
-
-//     // revokePermissionFromUser(e) {
-//     //   e.preventDefault();
-//     //   const url = $(e.currentTarget).data('url');
-//     //   this.showLoader();
-//     //   $.ajax({
-//     //     url: url,
-//     //     type: 'DELETE',
-//     //     headers: {
-//     //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Ajout de CSRF token
-//     //     },
-//     //     success: (response) => {
-//     //       this.showAlert('success', response.message);
-//     //       this.loadUsers();
-//     //     },
-//     //     error: (xhr) => this.handleError(xhr)
-//     //   });
-//     // }
-
-//     revokePermissionFromUser(e) {
-//         e.preventDefault();
-//         const url = $(e.currentTarget).data('url');
-//         const listItem = $(e.currentTarget).closest('li'); // Stocke l'élément à supprimer
-
-//         this.confirmDelete(() => {
-//             this.showLoader();
-//             $.ajax({
-//                 url: url,
-//                 type: 'DELETE',
-//                 headers: {
-//                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//                 },
-//                 success: (response) => {
-//                     if (response.success) {
-//                         // Supprime visuellement l'élément immédiatement
-//                         listItem.remove();
-//                         this.showAlert('success', response.message);
-
-//                         // Recharge seulement si plus d'éléments
-//                         if ($('#roles_Permission .list-group-item').length === 0) {
-//                             this.viewUserRoles(e); // Recharge la vue complète
-//                         }
-//                     } else {
-//                         this.showAlert('warning', response.message);
-//                     }
-//                 },
-//                 error: (xhr) => this.handleError(xhr)
-//             });
-//         });
-//     }
-
-//     applyFilters() {
-//         const role = $('#role-filter').val();
-//         const status = $('#status-filter').val();
-
-//         console.log('Applying filters:', { role, status });
-
-//         this.showLoader();
-//         $.ajax({
-//           url: $('#load-users').data('user-url'),
-//           type: 'GET',
-//           data: {
-//             role: role,
-//             status: status
-//           },
-//           success: (response) => {
-//             $('#blog-container').html(response);
-//             this.initDataTable('#users-table');
-//             this.initSelect2();
-
-//             // Restaurer les valeurs des filtres après le rechargement
-//             if (role) $('#role-filter').val(role);
-//             if (status) $('#status-filter').val(status);
-//           },
-//           error: (xhr) => this.handleError(xhr)
-//         });
-//     }
-
-//     // Utility methods
-//     confirmDelete(callback) {
-//       Swal.fire({
-//         title: 'Êtes-vous sûr?',
-//         text: "Cette action est irréversible!",
-//         icon: 'warning',
-//         showCancelButton: true,
-//         confirmButtonColor: '#3085d6',
-//         cancelButtonColor: '#d33',
-//         confirmButtonText: 'Oui, supprimer!'
-//       }).then((result) => {
-//         if (result.isConfirmed) {
-//           callback();
-//         }
-//       });
-//     }
-
-//     showLoader() {
-//       $('#blog-container').html('<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="sr-only">Chargement...</span></div></div>');
-//     }
-
-//     showAlert(type, message) {
-//       const alert = $(`
-//         <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-//           ${message}
-//           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-//         </div>
-//       `);
-//       $('#alert-container').html(alert);
-//       setTimeout(() => alert.alert('close'), 5000);
-//     }
-
-//     handleError(xhr) {
-//       let message = 'Une erreur est survenue';
-//       if (xhr.responseJSON && xhr.responseJSON.message) {
-//         message = xhr.responseJSON.message;
-//       }
-//       this.showAlert('danger', message);
-//     }
-
-//     displayFormErrors(form, errors) {
-//       form.find('.is-invalid').removeClass('is-invalid');
-//       form.find('.invalid-feedback').remove();
-
-//       $.each(errors, (field, messages) => {
-//         const input = form.find(`[name="${field}"]`);
-//         input.addClass('is-invalid');
-//         input.after(`<div class="invalid-feedback">${messages.join('<br>')}</div>`);
-//       });
-//     }
-
-//     initDataTable(selector) {
-//       if ($.fn.DataTable.isDataTable(selector)) {
-//         $(selector).DataTable().destroy();
-//       }
-//       $(selector).DataTable({
-//         responsive: true,
-//         language: {
-//           url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/French.json'
-//         },
-//         pageLength: 10
-//       });
-//     }
-
-//     initSelect2() {
-//       $('.select2').select2({
-//         dropdownParent: $('#exampleModal'),
-//         width: '100%'
-//       });
-//     }
-//   }
-
-//   // Initialize when document is ready
-//   $(document).ready(() => new AdminManager());
-
-
-
 class AdminManager {
     constructor() {
       this.init();
@@ -498,7 +39,47 @@ class AdminManager {
         .on('click', '.revoke-permission', (e) => this.revokePermissionFromUser(e))  // Handler pour révoquer une permission
         .on('change', '#role-filter, #status-filter', () => this.applyFilters())
         .on('click', '.edit-role', (e) => this.loadEditRoleForm(e))
-        .on('click', '.edit-permission', (e) => this.loadEditPermissionForm(e));
+        .on('click', '.edit-permission', (e) => this.loadEditPermissionForm(e))
+        .on('click', '#reset-filters', () => this.resetFilters())
+        .on('change', '#role-filter-permission', () => this.applyFiltersPermission()) // Ajout du bouton de réinitialisation
+        .on('click', '#reset-filters-permissions', () => this.resetFiltersPermission());
+
+      // Gestionnaire pour le bouton d'annulation
+      $(document).on('click', '.cancel-user-creation', () => {
+
+        $('#exampleModal').modal('hide');
+      });
+
+      // NOUVELLE SOLUTION: Gestionnaire global pour la fermeture de modal
+      $('#exampleModal').on('hidden.bs.modal', (e) => {
+        console.log("Modal fermée, redirection en cours...");
+
+        // Utiliser l'attribut data pour savoir où rediriger
+        const returnView = $('#exampleModal').data('return-view');
+        console.log("Retour à la vue:", returnView);
+
+        if (returnView === 'users') {
+          setTimeout(() => this.loadUsers(), 100);
+        } else if (returnView === 'roles') {
+          setTimeout(() => this.loadRoles(), 100);
+        } else if (returnView === 'permissions') {
+          setTimeout(() => this.loadPermissions(), 100);
+        } else {
+          // Fallback: détecter en fonction du titre ou du contenu
+          const modalTitle = $('#exampleModalLabel').text().toLowerCase();
+
+          if (modalTitle.includes('utilisateur') || modalTitle.includes('user')) {
+            setTimeout(() => this.loadUsers(), 100);
+          } else if (modalTitle.includes('rôle') || modalTitle.includes('role')) {
+            setTimeout(() => this.loadRoles(), 100);
+          } else if (modalTitle.includes('permission')) {
+            setTimeout(() => this.loadPermissions(), 100);
+          }
+        }
+
+        // Nettoyer pour éviter des redirections multiples
+        $('#exampleModal').removeData('return-view');
+      });
 
       // Ajouter du débogage pour vérifier que les événements sont liés
       console.log('AdminManager: Events bound successfully');
@@ -519,9 +100,10 @@ class AdminManager {
         }
     }
 
+
     // View loading methods
     loadUsers() {
-      this.showLoader();
+
       console.log("Loading users view");
 
       $.ajax({
@@ -531,184 +113,383 @@ class AdminManager {
           $('#blog-container').html(response);
           this.initDataTable('#users-table');
           this.initSelect2();
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    loadRoles() {
-      this.showLoader();
-      $.ajax({
-        url: $('#load-roles').data('roles-url'),
-        type: 'GET',
-        success: (response) => {
-          $('#blog-container').html(response);
-          this.initDataTable('#roles-table');
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    loadPermissions() {
-      this.showLoader();
-      $.ajax({
-        url: $('#load-permission').data('permission-url'),
-        type: 'GET',
-        success: (response) => {
-          $('#blog-container').html(response);
-          this.initDataTable('#permissions-table');
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    // Form loading methods
-    loadCreateUserForm() {
-      this.showLoader();
-      $.ajax({
-        url: $('#loadCreateUserForm').data('create-url'),
-        type: 'GET',
-        success: (response) => {
-          $('#exampleModal .modal-body').html(response);
-          this.initSelect2();
-          $('#exampleModalLabel').text('Créer un utilisateur');
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    loadCreateRoleForm() {
-      this.showLoader();
-      $.ajax({
-        url: $('#loadCreateRoleForm').data('create-url'),
-        type: 'GET',
-        success: (response) => {
-          $('#exampleModal .modal-body').html(response);
-          $('#exampleModalLabel').text('Créer un rôle');
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    loadCreatePermissionForm() {
-      this.showLoader();
-      $.ajax({
-        url: $('#loadCreatePermissionForm').data('create-url'),
-        type: 'GET',
-        success: (response) => {
-          $('#exampleModal .modal-body').html(response);
-          $('#exampleModalLabel').text('Créer une permission');
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    loadEditRoleForm(e) {
-      e.preventDefault();
-      const url = $(e.currentTarget).data('url');
-      this.showLoader();
-      $.ajax({
-        url: url,
-        type: 'GET',
-        success: (response) => {
-          $('#blog-container').html(response);
-          this.initSelect2();
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    loadEditPermissionForm(e) {
-      e.preventDefault();
-      const url = $(e.currentTarget).data('url');
-      this.showLoader();
-      $.ajax({
-        url: url,
-        type: 'GET',
-        success: (response) => {
-          $('#blog-container').html(response);
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
-
-    // Form handlers
-    handleUserForm(e) {
-      e.preventDefault();
-      const form = $(e.target);
-      this.submitForm(form, () => {
-        $('#exampleModal').modal('hide');
-        this.loadUsers();
-      });
-    }
-
-    handleRoleForm(e) {
-      e.preventDefault();
-      const form = $(e.target);
-      this.submitForm(form, () => {
-        $('#exampleModal').modal('hide');
-        this.loadRoles();
-      });
-    }
-
-    handlePermissionForm(e) {
-      e.preventDefault();
-      const form = $(e.target);
-      this.submitForm(form, () => {
-        $('#exampleModal').modal('hide');
-        this.loadPermissions();
-      });
-    }
-
-    submitForm(form, successCallback) {
-      this.showLoader();
-      $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        success: (response) => {
-          if (response.success) {
-            this.showAlert('success', response.message);
-            if (typeof successCallback === 'function') {
-              successCallback();
-            }
-          } else if (response.errors) {
-            this.displayFormErrors(form, response.errors);
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation after loading users");
+            window.initFormValidation();
           }
         },
         error: (xhr) => this.handleError(xhr)
       });
     }
 
-    // Action handlers
-    deleteItem(e, type) {
-      e.preventDefault();
-      const url = $(e.currentTarget).data('url');
-      this.confirmDelete(() => {
-        this.showLoader();
-        $.ajax({
-          url: url,
-          type: 'DELETE',
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-          success: (response) => {
-            this.showAlert('success', response.success || response.message || 'Élément supprimé avec succès');
-            this[`load${type.charAt(0).toUpperCase() + type.slice(1)}`]();
-          },
-          error: (xhr) => this.handleError(xhr)
-        });
+    loadRoles() {
+
+      $.ajax({
+        url: $('#load-roles').data('roles-url'),
+        type: 'GET',
+        success: (response) => {
+          $('#blog-container').html(response);
+          this.initDataTable('#roles-table');
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation after loading roles");
+            window.initFormValidation();
+          }
+        },
+        error: (xhr) => this.handleError(xhr)
       });
     }
 
-    // Toggle status methods - Version consolidée
+    loadPermissions() {
+
+      $.ajax({
+        url: $('#load-permission').data('permission-url'),
+        type: 'GET',
+        success: (response) => {
+          $('#blog-container').html(response);
+          this.initDataTable('#permissions-table');
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation after loading permissions");
+            window.initFormValidation();
+          }
+        },
+        error: (xhr) => this.handleError(xhr)
+      });
+    }
+
+    // Form loading methods with data-return-view attribute
+    loadCreateUserForm() {
+        $('#exampleModal .modal-body').empty();
+        if (!$('#exampleModal').hasClass('show')) {
+            $('#exampleModal').modal('show');
+        }
+      $.ajax({
+        url: $('#loadCreateUserForm').data('create-url'),
+        type: 'GET',
+        success: (response) => {
+          $('#exampleModal .modal-body').html(response);
+          $('#exampleModalLabel').text('Créer un utilisateur');
+          // AJOUT: attribut data pour savoir où rediriger après fermeture
+          $('#exampleModal').data('return-view', 'users');
+          this.initSelect2();
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation for create user form");
+            window.initFormValidation();
+          }
+        },
+        error: (xhr) => this.handleError(xhr)
+      });
+    }
+
+    loadCreateRoleForm() {
+        console.log("loadCreateRoleForm called");
+
+        // S'assurer que le modal est affiché
+        // $('#exampleModal').modal('show');
+        $('#exampleModal .modal-body').empty();
+        if (!$('#exampleModal').hasClass('show')) {
+            $('#exampleModal').modal('show');
+        }
+        // Récupérer l'URL du bouton
+        const url = $('#loadCreateRoleForm').data('create-url');
+        console.log("URL for create role form:", url);
+
+        // Faire la requête AJAX
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: (response) => {
+            console.log("Response received for create role form");
+            $('#exampleModal .modal-body').html(response);
+            $('#exampleModalLabel').text('Créer un rôle');
+            // AJOUT: attribut data pour savoir où rediriger après fermeture
+            $('#exampleModal').data('return-view', 'roles');
+
+            // Initialiser la validation après avoir chargé le formulaire
+            if (window.initFormValidation) {
+              console.log("Initializing validation for role form");
+              setTimeout(() => window.initFormValidation(), 100);
+            }
+          },
+          error: (xhr) => this.handleError(xhr)
+          }
+        );
+    }
+
+    loadCreatePermissionForm() {
+        $('#exampleModal .modal-body').empty();
+        if (!$('#exampleModal').hasClass('show')) {
+            $('#exampleModal').modal('show');
+          }
+      $.ajax({
+        url: $('#loadCreatePermissionForm').data('create-url'),
+        type: 'GET',
+        success: (response) => {
+          $('#exampleModal .modal-body').html(response);
+          $('#exampleModalLabel').text('Créer une permission');
+          // AJOUT: attribut data pour savoir où rediriger après fermeture
+          $('#exampleModal').data('return-view', 'permissions');
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation for create permission form");
+            window.initFormValidation();
+          }
+        },
+        error: (xhr) => this.handleError(xhr)
+      });
+    }
+
+    loadEditRoleForm(e) {
+        $('#exampleModal .modal-body').empty();
+        if (!$('#exampleModal').hasClass('show')) {
+            $('#exampleModal').modal('show');
+          }
+        const url = $(e.currentTarget).data('edit-url');
+        $.ajax({
+          url:url,
+          type: 'GET',
+          success: (response) => {
+            $('#exampleModal .modal-body').html(response);
+            $('#exampleModal').data('return-view', 'roles');
+            this.initSelect2();
+            // Initialiser la validation du formulaire après le chargement
+            if (window.initFormValidation) {
+              console.log("Initializing form validation for edit role form");
+              window.initFormValidation();
+            }
+          },
+          error: (xhr) => this.handleError(xhr)
+        });
+      }
+    loadEditPermissionForm(e){
+        $('#exampleModal .modal-body').empty();
+        if (!$('#exampleModal').hasClass('show')) {
+            $('#exampleModal').modal('show');
+          }
+        const url = $(e.currentTarget).data('edit-permission-url');
+        $.ajax({
+          url:url,
+          type: 'GET',
+          success: (response) => {
+            $('#exampleModal .modal-body').html(response);
+            $('#exampleModal').data('return-view', 'permissions');
+            this.initSelect2();
+            // Initialiser la validation du formulaire après le chargement
+            if (window.initFormValidation) {
+              console.log("Initializing form validation for edit role form");
+              window.initFormValidation();
+            }
+          },
+          error: (xhr) => this.handleError(xhr)
+        });
+    }
+
+
+
+    // Form handlers
+    handleUserForm(e) {
+        e.preventDefault();
+        const form = $(e.target);
+
+        // Initialiser la validation du formulaire avant traitement
+        if (window.initFormValidation) {
+          console.log("Initializing form validation during user form submission");
+          window.initFormValidation();
+        }
+
+        // NE PAS fermer le modal immédiatement
+        // Soumettre le formulaire en arrière-plan
+        this.submitForm(form, () => {
+
+          // Cette callback sera exécutée en cas de succès
+          $('#exampleModal').modal('hide');
+          setTimeout(() => {
+            this.loadUsers();
+          }, 300);
+        });
+    }
+
+    handleRoleForm(e) {
+      e.preventDefault();
+      const form = $(e.target);
+
+      // Initialiser la validation du formulaire avant traitement
+      if (window.initFormValidation) {
+        console.log("Initializing form validation during role form submission");
+        window.initFormValidation();
+      }
+
+      this.submitForm(form, () => {
+
+        // Seulement fermer en cas de succès
+        $('#exampleModal').modal('hide');
+        setTimeout(() => {
+          this.loadRoles();
+        }, 300);
+      });
+    }
+
+    handlePermissionForm(e) {
+      e.preventDefault();
+      const form = $(e.target);
+
+      // Initialiser la validation du formulaire avant traitement
+      if (window.initFormValidation) {
+        console.log("Initializing form validation during permission form submission");
+        window.initFormValidation();
+      }
+
+      this.submitForm(form, () => {
+
+        // Seulement fermer en cas de succès
+        $('#exampleModal').modal('hide');
+        setTimeout(() => {
+          this.loadPermissions();
+        }, 300);
+      });
+    }
+
+    // Désactiver le bouton pendant la soumission
+    disableSubmitButton(form, loadingText = 'Traitement en cours...') {
+        const submitBtn = form.find('button[type="submit"]');
+        submitBtn.prop('disabled', true);
+        submitBtn.data('original-text', submitBtn.html());
+        submitBtn.html(`<span class="spinner-border spinner-border-sm me-2" role="status"></span>${loadingText}`);
+    }
+
+    // Réactiver le bouton en cas d'erreur
+    enableSubmitButton(form) {
+        const submitBtn = form.find('button[type="submit"]');
+        if (submitBtn.data('original-text')) {
+            submitBtn.html(submitBtn.data('original-text'));
+        }
+        submitBtn.prop('disabled', false);
+    }
+
+    submitForm(form, successCallback) {
+        // Supprimer les anciennes erreurs
+        form.find('.is-invalid').removeClass('is-invalid');
+        form.find('.invalid-feedback').remove();
+
+        // Désactiver le bouton et afficher l'indicateur de chargement
+        this.disableSubmitButton(form);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: form.serialize(),
+            success: (response) => {
+                if (response.success) {
+                    // En cas de succès, exécuter immédiatement le callback
+                    // qui fermera le modal
+                    if (typeof successCallback === 'function') {
+                        successCallback();
+                    }
+                    // Afficher le message de succès APRÈS la fermeture du modal
+                    setTimeout(() => {
+                        this.showAlert('success', response.message);
+                    }, 300);
+                } else if (response.errors) {
+                    this.enableSubmitButton(form);
+                    this.displayFormErrors(form, response.errors);
+                    // Réinitialiser la validation après affichage des erreurs
+                    if (window.initFormValidation) window.initFormValidation();
+                }
+            },
+            error: (xhr) => {
+                this.enableSubmitButton(form);
+                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                    this.displayFormErrors(form, xhr.responseJSON.errors);
+                    // Réinitialiser la validation après affichage des erreurs
+                    if (window.initFormValidation) window.initFormValidation();
+                } else {
+                    this.handleError(xhr);
+                    if (xhr.status !== 422) {
+                        $('#exampleModal').modal('hide');
+                        setTimeout(() => {
+                            this.loadUsers();
+                        }, 300);
+                    }
+                }
+            }
+        });
+    }
+
+
+    deleteItem(e, type) {
+        e.preventDefault();
+        const url = $(e.currentTarget).data('url');
+        const row = $(e.currentTarget).closest('tr');
+        const tableId = type === 'users' ? '#users-table' :
+                        type === 'roles' ? '#roles-table' : '#permissions-table';
+
+        this.confirmDelete(() => {
+          // Ajouter un indicateur de chargement à la ligne
+          row.find('td').css('opacity', '0.5');
+          row.append('<td class="delete-loading position-absolute w-100 h-100 bg-light bg-opacity-50 d-flex justify-content-center align-items-center" style="left:0; top:0;"><div class="spinner-border spinner-border-sm text-primary" role="status"></div></td>');
+
+          const that = this; // Stocker une référence à this
+
+          $.ajax({
+            url: url,
+            type: 'DELETE',
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+              // Stocker le message
+              const message = response.success || response.message || 'Élément supprimé avec succès';
+
+              // Supprimer la ligne du tableau avec une animation
+              row.fadeOut(300, function() {
+                // Manipuler DataTable ou supprimer la ligne
+                if ($.fn.DataTable.isDataTable(tableId)) {
+                  const dataTable = $(tableId).DataTable();
+                  dataTable.row(row).remove().draw(false);
+                } else {
+                  row.remove();
+                }
+
+                // Afficher l'alerte en utilisant une approche directe
+                const alertHtml = `
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                `;
+                $('#alert-container').html(alertHtml);
+
+                // Supprimer automatiquement l'alerte après 5 secondes
+                setTimeout(function() {
+                  $('.alert').alert('close');
+                }, 5000);
+              });
+            },
+            error: function(xhr) {
+              // Supprimer l'indicateur de chargement et restaurer l'opacité
+              row.find('.delete-loading').remove();
+              row.find('td').css('opacity', '1');
+              that.handleError(xhr);
+            }
+          });
+        });
+      }
+    // Méthode modifiée pour éviter le rechargement complet
     toggleUserStatus(e) {
       const switchElement = $(e.currentTarget);
       const url = switchElement.data('url');
       const isChecked = switchElement.is(':checked');
       const status = isChecked ? 'active' : 'inactive';
+      const userId = switchElement.attr('id').replace('status-', '');
 
-      this.showLoader();
+      // Petit loader local pour indiquer que l'action est en cours
+      const parentTd = switchElement.closest('td');
+      const originalContent = parentTd.html();
+      parentTd.append('<span class="ms-2 status-loading"><i class="fas fa-spinner fa-spin"></i></span>');
+
       $.ajax({
         url: url,
         type: 'PATCH',
@@ -717,37 +498,34 @@ class AdminManager {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: (response) => {
+          // Retirer le loader local
+          parentTd.find('.status-loading').remove();
+
+          // Mettre à jour le statut dans l'interface
+          switchElement.prop('checked', response.status === 'active');
+
+          // Afficher le message de succès
           this.showAlert('success', response.message);
-          switchElement.next('label').text(response.status === 'active' ? 'Actif' : 'Inactif');
-          this.loadUsers();
+
+          // Mettre à jour d'autres éléments liés au statut si nécessaire
+          const statusCell = switchElement.closest('tr').find('td:contains("Statut")');
+          if (statusCell.length) {
+            statusCell.text(response.status === 'active' ? 'Actif' : 'Inactif');
+          }
+
+          // Si vous avez un menu dropdown pour changer le statut, mettez-le à jour aussi
+          const dropdownItem = $(`#dropdownMenuButton-${userId}`).closest('.dropdown').find('.toggle-status-menu');
+          if (dropdownItem.length) {
+            dropdownItem.data('status', response.status);
+            dropdownItem.html(`<i class="fas fa-toggle-${response.status === 'active' ? 'on' : 'off'} me-2"></i> ${response.status === 'active' ? 'Désactiver' : 'Activer'}`);
+          }
         },
         error: (xhr) => {
+          // En cas d'erreur, restaurer l'état initial du switch
+          parentTd.find('.status-loading').remove();
           switchElement.prop('checked', !isChecked);
           this.handleError(xhr);
         }
-      });
-    }
-
-    toggleUserStatusMenu(e) {
-      e.preventDefault();
-      const link = $(e.currentTarget);
-      const url = link.data('url');
-      const currentStatus = link.data('status');
-      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-
-      this.showLoader();
-      $.ajax({
-        url: url,
-        type: 'PATCH',
-        data: { status: newStatus },
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: (response) => {
-          this.showAlert('success', response.message);
-          this.loadUsers();
-        },
-        error: (xhr) => this.handleError(xhr)
       });
     }
 
@@ -762,118 +540,89 @@ class AdminManager {
         type: 'GET',
         success: (response) => {
           $('#blog-container').html(response);
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation after loading user roles");
+            window.initFormValidation();
+          }
         },
         error: (xhr) => this.handleError(xhr)
       });
     }
 
-    // Méthode corrigée pour supprimer un rôle avec confirmation et rechargement de page
-    removeRoleFromUser(e) {
-      e.preventDefault();
-      const link = $(e.currentTarget);
-      const url = link.data('url');
+    applyFilters() {
+      const role = $('#role-filter').val();
+      const status = $('#status-filter').val();
 
-      console.log("Removing role with URL:", url);
+      console.log('Applying filters:', { role, status });
 
-      this.confirmDelete(() => {
-        this.showLoader();
-        $.ajax({
-          url: url,
-          type: 'DELETE',
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-          success: (response) => {
-            console.log("Role removal response:", response);
-            this.showAlert('success', response.message || 'Rôle supprimé avec succès');
-            // Utiliser un timeout pour s'assurer que l'alerte est visible avant le rechargement
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
-          },
-          error: (xhr) => {
-            console.error("Error in role removal:", xhr);
-            this.handleError(xhr);
-            // En cas d'erreur, recharger également la page après un court délai
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+    //   this.showLoader();
+      $.ajax({
+        url: $('#load-users').data('user-url'),
+        type: 'GET',
+        data: {
+          role: role,
+          status: status
+        },
+        success: (response) => {
+          $('#blog-container').html(response);
+          this.initDataTable('#users-table');
+          this.initSelect2();
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation after applying filters");
+            window.initFormValidation();
           }
-        });
+
+          // Restaurer les valeurs des filtres après le rechargement
+          $('#role-filter').val(role);
+          $('#status-filter').val(status);
+        },
+        error: (xhr) => this.handleError(xhr)
       });
     }
+    applyFiltersPermission(){
+        const role = $('#role-filter-permission').val();
 
-   // Méthode corrigée pour révoquer une permission avec confirmation et rechargement de page
-   revokePermissionFromUser(e) {
-        e.preventDefault();
-        const link = $(e.currentTarget);
-        const url = link.data('url');
-         // Assurez-vous d'ajouter cet attribut dans votre HTML
+    //   this.showLoader();
+      $.ajax({
+        url: $('#load-permission').data('permission-url'),
+        type: 'GET',
+        data: {
+          role: role,
 
-        console.log("Revoking permission with URL:", url);
+        },
+        success: (response) => {
+          $('#blog-container').html(response);
+          this.initDataTable('#permissions-table');
+          this.initSelect2();
+          // Initialiser la validation du formulaire après le chargement
+          if (window.initFormValidation) {
+            console.log("Initializing form validation after applying filters");
+            window.initFormValidation();
+          }
 
-        this.confirmDelete(() => {
-            this.showLoader();
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: (response) => {
-                    console.log("Permission revocation response:", response);
-                    if (response.success) {
-                        this.showAlert('success', response.message );
-                    } else if (response.warning) {
-                        this.showAlert('warning', response.message);
-                    } else {
-                        this.showAlert('danger', response.message || 'Une erreur est survenue');
-                    }
-                    // Utiliser un timeout pour s'assurer que l'alerte est visible avant le rechargement
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
+          // Restaurer les valeurs des filtres après le rechargement
+          $('#role-filter-permission').val(role);
+
+        },
+        error: (xhr) => this.handleError(xhr)
+      });
 
 
-                },
-                error: (xhr) => {
-                    console.error("Error in permission revocation:", xhr);
-                    this.handleError(xhr);
-                    // En cas d'erreur, recharger également la page après un court délai
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 2000);
-                }
-            });
-        });
     }
+    // Méthode pour réinitialiser les filtres
+    resetFiltersPermission() {
+        $('#role-filter-permission').val('');
+        this.loadPermissions();
+      }
 
 
-    applyFilters() {
-        const role = $('#role-filter').val();
-        const status = $('#status-filter').val();
-
-        console.log('Applying filters:', { role, status });
-
-        this.showLoader();
-        $.ajax({
-          url: $('#load-users').data('user-url'),
-          type: 'GET',
-          data: {
-            role: role,
-            status: status
-          },
-          success: (response) => {
-            $('#blog-container').html(response);
-            this.initDataTable('#users-table');
-            this.initSelect2();
-
-            // Restaurer les valeurs des filtres après le rechargement
-            if (role) $('#role-filter').val(role);
-            if (status) $('#status-filter').val(status);
-          },
-          error: (xhr) => this.handleError(xhr)
-        });
+    // Méthode pour réinitialiser les filtres
+    resetFilters() {
+      $('#role-filter').val('');
+      $('#status-filter').val('');
+      this.loadUsers();
     }
 
     // Utility methods
@@ -898,6 +647,11 @@ class AdminManager {
       $('#blog-container').html('<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="sr-only">Chargement...</span></div></div>');
     }
 
+    hideLoader() {
+      // Retirer le loader global si nécessaire
+      $('.spinner-border').parent().remove();
+    }
+
     showAlert(type, message) {
       const alert = $(`
         <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -919,14 +673,46 @@ class AdminManager {
     }
 
     displayFormErrors(form, errors) {
-      form.find('.is-invalid').removeClass('is-invalid');
-      form.find('.invalid-feedback').remove();
+        // Supprimer les anciennes erreurs
+        form.find('.is-invalid').removeClass('is-invalid');
+        form.find('.invalid-feedback').remove();
 
-      $.each(errors, (field, messages) => {
-        const input = form.find(`[name="${field}"]`);
-        input.addClass('is-invalid');
-        input.after(`<div class="invalid-feedback">${messages.join('<br>')}</div>`);
-      });
+        // Supprimer les anciens écouteurs d'événements pour éviter les doublons
+        form.find('input, select, textarea').off('input.formError change.formError');
+
+        // Afficher les erreurs pour chaque champ
+        $.each(errors, (field, messages) => {
+            const input = form.find(`[name="${field}"]`);
+            if (input.length) {
+                input.addClass('is-invalid');
+                const feedbackDiv = $(`<div class="invalid-feedback">${Array.isArray(messages) ? messages.join('<br>') : messages}</div>`);
+                input.after(feedbackDiv);
+
+                // Ajouter des écouteurs d'événements pour les champs avec erreurs
+                const eventType = input.is('select') ? 'change.formError' : 'input.formError';
+                input.on(eventType, function() {
+                    // Vérifier si le champ n'est plus vide
+                    if ($(this).val().trim() !== '') {
+                        // Supprimer l'état d'erreur
+                        $(this).removeClass('is-invalid');
+                        feedbackDiv.hide();
+                    } else {
+                        // Réappliquer l'état d'erreur si le champ est toujours vide
+                        $(this).addClass('is-invalid');
+                        feedbackDiv.show();
+                    }
+                });
+            } else {
+                // Si le champ n'est pas trouvé, ajouter une alerte générale
+                this.showAlert('danger', `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`);
+            }
+        });
+
+        // Faire défiler jusqu'à la première erreur
+        const firstError = form.find('.is-invalid').first();
+        if (firstError.length) {
+            firstError.focus();
+        }
     }
 
     initDataTable(selector) {
@@ -947,11 +733,34 @@ class AdminManager {
         dropdownParent: $('#exampleModal'),
         width: '100%'
       });
+       // Ajoutez ce code pour cibler spécifiquement les multi-select
+        $('.js-example-basic-multiple').select2({
+            dropdownParent: $('#exampleModal'),
+            width: '100%',
+            multiple: true,
+            placeholder: "Sélectionnez des permissions"
+        });
     }
 }
 
 // Initialize when document is ready
 $(document).ready(function() {
     console.log("Document ready - initializing AdminManager");
+    // Vérifier si la fonction de validation est disponible globalement
+    console.log("Form validation function available:", typeof window.initFormValidation !== 'undefined');
     new AdminManager();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+

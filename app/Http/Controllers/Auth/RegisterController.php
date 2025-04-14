@@ -53,8 +53,21 @@ class RegisterController extends Controller
         return view('admin.authentication.sign-up');
     }
 
+    
     public function register(Request $request)
     {
+        // Formater d'abord le numéro de téléphone
+        $countryCode = '+216';
+        $localNumber = $request->input('phone');
+        $fullPhoneNumber = $countryCode . ' ' . $localNumber;
+        $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
+
+        // Vérifier manuellement si ce numéro formaté existe déjà
+        $existingUser = User::where('phone', $formattedPhoneNumber)->first();
+        if ($existingUser) {
+            return back()->withErrors(['phone' => 'Ce numéro de téléphone est déjà associé à un compte existant.'])->withInput();
+        }
+
         $messages = [
             'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
             'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
@@ -66,40 +79,34 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|phone:TN',
+            'phone' => 'required|phone:TN', // Sans le unique car on le vérifie manuellement
             'password' => 'required|string|min:8',
             'privacy_policy' => 'required',
-
         ], $messages);
 
         $validationCode = Str::random(6);
-        $countryCode = '+216';
-        $localNumber = $request->input('phone');
-        $fullPhoneNumber = $countryCode . ' ' . $localNumber;
-
-        $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
-
-        $user = User::create([
-            'name' => $request->name,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
-            'phone' => $formattedPhoneNumber,
-            'password' => Hash::make($request->password),
-            'validation_code' => $validationCode,
-            'status' => 'inactive',
-            'first_login' => false,
-        ]);
-
-        $request->session()->put('user_id', $user->id);
-        $user->assignRole('etudiant');
 
         try {
-            Mail::to($user->email)->send(new AccountValidationMail($user, $validationCode));
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'envoi de l\'e-mail de validation.');
-        }
+            $user = User::create([
+                'name' => $request->name,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'phone' => $formattedPhoneNumber, // Utiliser le numéro formaté
+                'password' => Hash::make($request->password),
+                'validation_code' => $validationCode,
+                'status' => 'inactive',
+                'first_login' => false,
+            ]);
 
-        return redirect()->route('validation.form')->with('success', 'Un code de validation a été envoyé à votre email.');
+            $request->session()->put('user_id', $user->id);
+            $user->assignRole('etudiant');
+
+            Mail::to($user->email)->send(new AccountValidationMail($user, $validationCode));
+
+            return redirect()->route('validation.form')->with('success', 'Un code de validation a été envoyé à votre email.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Une erreur est survenue: ' . $e->getMessage());
+        }
     }
     public function showValidationForm()
     {
@@ -145,7 +152,9 @@ class RegisterController extends Controller
 
 
         auth()->login($user);
-
+        if ($user->first_login) {
+            return redirect()->route('password.change.form');
+        }
         return redirect()->route('index')
             ->with('success', 'Votre compte a été activé avec succès.');
     }

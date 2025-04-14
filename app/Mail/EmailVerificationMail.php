@@ -37,7 +37,7 @@ class EmailVerificationMail extends Mailable
             ->view('emails.email-verification')
             ->with([
                 'code' => $this->verificationCode,
-                'name' => $this->user->name,
+                'lastname' => $this->user->lastname,
             ]);
     }
 }

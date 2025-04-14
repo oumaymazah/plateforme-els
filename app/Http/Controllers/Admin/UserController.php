@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -11,6 +12,7 @@ use Propaganistas\LaravelPhone\PhoneNumber;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Mail\UserCreatedMail;
+use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     // public function index()
@@ -35,47 +37,39 @@ class UserController extends Controller
         $user = auth()->user();
         $query = User::query();
 
-        // 1. D'abord, appliquer les restrictions basées sur le rôle de l'utilisateur connecté
+        // Récupération des rôles disponibles selon les permissions
         if ($user->hasRole('admin')) {
-            // Admin ne peut pas voir les super-admin et autres admin
+            $allRoles = Role::whereNotIn('name', ['super-admin', 'admin'])->get();
             $query->whereDoesntHave('roles', function($q) {
                 $q->whereIn('name', ['super-admin', 'admin']);
             });
         } elseif ($user->hasRole('super-admin')) {
-            // Super-admin ne peut pas voir les autres super-admin
+            $allRoles = Role::where('name', '!=', 'super-admin')->get();
             $query->whereDoesntHave('roles', function($q) {
                 $q->where('name', 'super-admin');
             });
+        } else {
+            $allRoles = Role::all();
         }
 
-        // 2. Ensuite, appliquer les filtres demandés par l'utilisateur
-        // Filtre par rôle
+        // Filtre par rôle si spécifié
         if ($request->filled('role') && $request->role != '') {
             $query->whereHas('roles', function($q) use ($request) {
                 $q->where('name', $request->role);
             });
         }
 
-        // Filtre par statut
+        // Filtre par statut si spécifié
         if ($request->filled('status') && $request->status != '') {
             $query->where('status', $request->status);
         }
 
-        // Ajouter des logs pour débogage
-        \Log::info('Filter parameters:', [
-            'role' => $request->input('role'),
-            'status' => $request->input('status')
-        ]);
-
         $users = $query->get();
+        $selectedRole = $request->role;
+        $selectedStatus = $request->status;
 
-        // Log du nombre d'utilisateurs trouvés
-        \Log::info('Users found:', ['count' => $users->count()]);
-
-        $allRoles = Role::all();
-        return view('admin.user.index', compact('users', 'allRoles'));
+        return view('admin.user.index', compact('users', 'allRoles', 'selectedRole', 'selectedStatus'));
     }
-
     public function create()
     {
         $roles = Role::query();
@@ -89,62 +83,92 @@ class UserController extends Controller
         return view('admin.user.create',compact('roles'));
     }
 
+
+
+
+
     public function store(Request $request)
 {
+    // Formater d'abord le numéro de téléphone
+    $countryCode = '+216';
+    $localNumber = $request->input('phone');
+    $fullPhoneNumber = $countryCode . ' ' . $localNumber;
+    $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
 
+    // Préparer les messages d'erreurs personnalisés
+    $messages = [
+        'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
+        'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
+        'phone.unique' => 'Ce numéro de téléphone est déjà associé à un compte existant.',
+    ];
 
-        $messages = [
-            'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
-            'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
-        ];
-
-        $request->validate([
+    $validator = Validator::make(
+        array_merge($request->all(), ['phone' => $formattedPhoneNumber]),
+        [
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'phone' => 'required|phone:TN',
+            'phone' => 'required|phone:TN|unique:users,phone',
             'email' => 'required|email|unique:users,email',
             'roles' => 'required'
-        ], $messages);
+        ],
+        $messages
+    );
 
-        $password = Str::random(8);
-        $countryCode = '+216';
-        $localNumber = $request->input('phone');
-        $fullPhoneNumber = $countryCode . ' ' . $localNumber;
+    // Si la validation échoue, retourner les erreurs
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'errors' => $validator->errors()
+        ], 422);
+    }
 
-        $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
+    $validationCode = Str::random(6);
+    $password = Str::random(8);
 
+    // Commencer une transaction DB
+    DB::beginTransaction();
 
+    try {
+        // Créer l'utilisateur
         $user = User::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
             'phone' => $formattedPhoneNumber,
             'email' => $request->email,
             'password' => bcrypt($password),
-            'status' => 'active',
+            'status' => 'inactive',
             'first_login' => true,
+            'validation_code' => $validationCode,
         ]);
-
 
         $user->assignRole($request->roles);
 
+        // Essayer d'envoyer l'e-mail
+        Mail::to($user->email)->send(new UserCreatedMail($user, $password, $validationCode));
 
-        try {
-            Mail::to($user->email)->send(new UserCreatedMail($user, $password));
-
-        } catch (\Exception $e) {
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de l\'envoi de l\'e-mail.',
-            ], 500);
-        }
+        // Si tout va bien jusqu'ici, on valide la transaction
+        DB::commit();
 
         return response()->json([
             'success' => true,
             'message' => 'Utilisateur créé avec succès.',
-
         ]);
+
+    } catch (\Exception $e) {
+        // En cas d'erreur, annuler toutes les modifications
+        DB::rollBack();
+
+        return response()->json([
+            'success' => false,
+            'message' =>  'Erreur lors de la création de l\'utilisateur en raison d\'un problème de connexion',
+        ], 500);
+    }
 }
+
+
+
+
+
 
 
 
@@ -159,52 +183,6 @@ class UserController extends Controller
 
         return view('admin.user.roles', compact('user'));
     }
-
-    public function removeRole(User $user, Role $role)
-    {
-        if ($user->hasRole($role)) {
-            $user->removeRole($role);
-            return response()->json(['message' => 'Role supprimé avec succès.','success' => true]);
-        }
-        return response()->json(['message' => "Ce rôle n'existe pas pour cet utilisateur.",'danger' => true]);
-    }
-
-    // public function revokePermission(User $user, Permission $permission)
-    // {
-    //     if ($user->hasPermissionTo($permission)) {
-    //         $user->revokePermissionTo($permission);
-    //         return response()->json(['message' => 'Permission supprimée avec succès.','success' => true]);
-    //     }
-    //     return response()->json(['message' => "Cette permission n'existe pas pour cet utilisateur.",'danger' => true], 404);
-    // }
-
-    public function revokePermission(User $user, Permission $permission)
-    {
-        try {
-            // Vérifier si l'utilisateur a la permission (directement ou via rôle)
-            if ($user->hasPermissionTo($permission)) {
-                // Révoquer la permission
-                $user->revokePermissionTo($permission);
-
-                return response()->json([
-                    'message' => 'Permission révoquée avec succès.',
-                    'success' => true
-                ]);
-            }
-
-            return response()->json([
-                'message' => "Cette permission n'existe pas pour cet utilisateur.",
-                'danger' => true
-            ], 404);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => "Erreur lors de la révocation: " . $e->getMessage(),
-                'danger' => true
-            ], 500);
-        }
-    }
-
 
 
 

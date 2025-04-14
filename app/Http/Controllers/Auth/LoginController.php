@@ -80,6 +80,12 @@ class LoginController extends Controller
                 return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'envoi de l\'e-mail de validation.');
             }
         }
+        // Vérification spécifique pour les autres autilisateur avec un code de validation
+        if ( $user->validation_code !== null) {
+            $request->session()->put('user_id', $user->id);
+            return redirect()->route('validation.form')->with('info', 'Votre compte n\'est pas encore activé. Veuillez saisir le code de validation reçu par email.');
+
+        }
 
         // Si l'utilisateur est valide, tenter de le connecter
         if ($this->attemptLogin($request)) {
@@ -100,11 +106,11 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // Rediriger l'utilisateur vers la page de modification de mot de passe si c'est sa première connexion
-        if ($user->first_login) {
+        if ($user->first_login && $user->validation_code === null) {
             return redirect()->route('password.change.form');
         }
 
-        
+
 
         // Rediriger les autres utilisateurs vers le dashboard
         return redirect()->route('dashboard.index');

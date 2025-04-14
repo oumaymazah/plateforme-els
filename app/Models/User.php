@@ -29,6 +29,7 @@ class User extends Authenticatable
         'validation_code',
         'code_reset_password',
         
+
     ];
 
     /**

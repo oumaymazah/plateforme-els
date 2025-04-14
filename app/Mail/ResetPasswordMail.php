@@ -34,7 +34,7 @@ class ResetPasswordMail extends Mailable
         return $this->subject('Réinitialisation de votre mot de passe')
                     ->view('emails.reset-password')
                     ->with([
-                        'name' => $this->user->name,
+                        'lastname' => $this->user->lastname,
                         'code' => $this->code,
                     ]);
     }
