@@ -1,16 +1,3 @@
- 
-
-
-
-
-
-
-
-
-
-
-
-
 
 <div class="card">
     <div class="card-header bg-primary text-white py-3">
@@ -248,7 +235,7 @@
         color: #6c757d;
         margin-bottom: 5px;
     }
-   
+
 
 </style>
 <?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/user/index.blade.php ENDPATH**/ ?>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -15,22 +16,7 @@ use App\Mail\UserCreatedMail;
 use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
-    // public function index()
-    // {
 
-    //     $user = auth()->user();
-    //     if ($user->hasRole('admin')) {
-    //         $users = User::whereDoesntHave('roles', function ($query) {
-    //             $query->whereIn('name', ['super-admin', 'admin']);
-    //         })->get();
-    //     } elseif ($user->hasRole('super-admin')) {
-    //         $users = User::whereDoesntHave('roles', function ($query) {
-    //             $query->where('name', 'super-admin');
-    //         })->get();
-    //     }
-
-    //     return view('admin.user.index', compact('users'));
-    // }
 
     public function index(Request $request)
     {
@@ -186,15 +172,38 @@ class UserController extends Controller
 
 
 
+    // public function toggleStatus(User $user)
+    // {
+    //     $user->status = $user->status === 'active' ? 'inactive' : 'active';
+    //     $user->save();
+    //     return response()->json([
+    //         'message' => 'Statut modifié avec succès.',
+    //         'success' => true,
+    //         'status' => $user->status
+    //     ]);
+    // }
+
     public function toggleStatus(User $user)
     {
+        $oldStatus = $user->status;
         $user->status = $user->status === 'active' ? 'inactive' : 'active';
         $user->save();
+
+        // Si l'utilisateur passe de 'inactive' à 'active', réinitialiser le compteur de tentatives
+        if ($oldStatus === 'inactive' && $user->status === 'active') {
+            $sessionKey = 'password_attempts_' . $user->id;
+            $sessionTimerKey = 'password_attempts_timer_' . $user->id;
+
+            session([$sessionKey => 0]);
+            session([$sessionTimerKey => null]);
+        }
+
         return response()->json([
             'message' => 'Statut modifié avec succès.',
             'success' => true,
             'status' => $user->status
         ]);
     }
+
 
 }

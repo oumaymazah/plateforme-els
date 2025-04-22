@@ -1,9 +1,4 @@
 
-
-
-
-
-
 <div class="container mt-4" id="roles_Permission">
     <div class="card shadow">
         <div class="card-header  bg-primary text-white d-flex justify-content-between align-items-center">
@@ -15,7 +10,7 @@
             </div>
         </div>
         <div class="card-body">
-            <!-- Informations utilisateur -->
+           
             <div class="user-info mb-4">
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-secondary text-white">

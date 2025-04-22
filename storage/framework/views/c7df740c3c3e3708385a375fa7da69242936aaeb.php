@@ -1,10 +1,5 @@
 
 
-
-
-
-
-
 <div class="card">
 
     <div class="card-header bg-primary text-white py-3">
@@ -112,7 +107,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton-<?php echo e($role->id); ?>">
                                         <li>
-                                            
+
                                             <a class="dropdown-item edit-role" href="#"
                                                data-edit-url="<?php echo e(route('admin.roles.edit', $role)); ?>" id="loadEditRoleForm">
                                                 <i class="fas fa-edit me-2"></i> Modifier

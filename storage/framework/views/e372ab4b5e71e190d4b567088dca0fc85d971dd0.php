@@ -12,7 +12,7 @@
         .footer { padding: 20px; text-align: center; font-size: 12px; color: #777; background-color: #ecf0f1; }
         .button { display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 4px; margin: 15px 0; }
         .credentials { background-color: #e8f4fc; padding: 15px; border-left: 4px solid #3498db; margin: 20px 0; }
-        .code { font-size: 24px; letter-spacing: 3px; color: #0a0606; font-weight: bold;  margin: 20px 0; }
+        .code { font-size: 24px; letter-spacing: 3px; color: #0a0606; font-weight: bold; text-align: center; margin: 20px 0; }
     </style>
 </head>
 <body>

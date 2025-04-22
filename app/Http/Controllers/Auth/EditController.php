@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailVerificationMail;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -93,6 +94,7 @@ public function checkEmailAvailability(Request $request)
 
 
 
+
     public function verifyPassword(Request $request) {
         $request->validate([
             'password' => 'required|string',
@@ -101,47 +103,96 @@ public function checkEmailAvailability(Request $request)
 
         $user = Auth::user();
 
-        // Protection contre les attaques par force brute
-        $key = 'password_attempts_' . $user->id;
-        $failedAttempts = Cache::get($key, 0);
+        if (!$user) {
+            return response()->json([
+                'error' => 'Veuillez vous connecter pour effectuer cette action.',
+                'redirect' => route('login')
+            ], 401);
+        }
 
-        // Si l'utilisateur a été débloqué récemment et qu'il était auparavant bloqué,
-        // réinitialiser le compteur de tentatives
+        // Protection contre les attaques par force brute
+        $sessionKey = 'password_attempts_' . $user->id;
+        $sessionTimerKey = 'password_attempts_timer_' . $user->id;
+
+        // Récupérer le nombre de tentatives de la session
+        $failedAttempts = session($sessionKey, 0);
+        $attemptTime = session($sessionTimerKey, null);
+
+        // Si l'utilisateur est actif mais a encore un compteur élevé, cela signifie
+        // qu'il a été réactivé par l'administrateur, donc réinitialiser le compteur
         if ($user->status === 'active' && $failedAttempts >= 3) {
-            Cache::forget($key);
+            session([$sessionKey => 0]);
+            session([$sessionTimerKey => null]);
             $failedAttempts = 0;
         }
 
-        if ($failedAttempts >= 3) {
-            // Bloquer l'utilisateur en changeant son statut
-            $user->status = 'inactive';
-            $user->save();
+        // Vérifier si le délai de 30 minutes est passé pour réinitialiser le compteur
+        if ($attemptTime && now()->diffInMinutes(Carbon::parse($attemptTime)) >= 30) {
+            // Réinitialiser le compteur après 30 minutes
+            session([$sessionKey => 0]);
+            session([$sessionTimerKey => null]);
+            $failedAttempts = 0;
+        }
 
-            // Déconnecter l'utilisateur
+        // Vérifier d'abord si le compte est déjà bloqué
+        if ($user->status === 'inactive') {
             Auth::logout();
-
             return response()->json([
                 'error' => 'Compte bloqué. Veuillez contacter l\'administrateur.',
                 'redirect' => route('blocked.account')
             ], 403);
         }
 
+        // Vérifier le nombre de tentatives
+        if ($failedAttempts >= 3) {
+            // Bloquer l'utilisateur en changeant son statut
+            $user->status = 'inactive';
+            $user->save();
+
+            // Conserver le nombre d'échecs dans la session
+            session([$sessionKey => $failedAttempts]);
+
+            // Déconnecter l'utilisateur
+            Auth::logout();
+            return response()->json([
+                'error' => 'Compte bloqué suite à plusieurs tentatives échouées. Veuillez contacter l\'administrateur.',
+                'redirect' => route('blocked.account')
+            ], 403);
+        }
+
         // Vérifier le mot de passe
         if (!Hash::check($request->password, $user->password)) {
-            // Incrémenter le compteur d'échecs et le stocker pour 10 minutes
-            Cache::put($key, $failedAttempts + 1, now()->addMinutes(10));
+            // Incrémenter le compteur d'échecs
+            $newFailedAttempts = $failedAttempts + 1;
+            session([$sessionKey => $newFailedAttempts]);
+
+            // Enregistrer l'heure de la tentative
+            session([$sessionTimerKey => now()]);
+
+            // Bloquer immédiatement si cette tentative fait atteindre le seuil
+            if ($newFailedAttempts >= 3) {
+                $user->status = 'inactive';
+                $user->save();
+                Auth::logout();
+
+                return response()->json([
+                    'error' => 'Compte bloqué suite à plusieurs tentatives échouées. Veuillez contacter l\'administrateur.',
+                    'redirect' => route('blocked.account')
+                ], 403);
+            }
+
             return response()->json([
-                'error' => 'Le mot de passe est incorrect. Tentative ' . ($failedAttempts + 1) . '/3',
-                'attempts' => $failedAttempts + 1
+                'error' => 'Le mot de passe est incorrect. Tentative ' . $newFailedAttempts . '/3',
+                'attempts' => $newFailedAttempts
             ], 422);
         }
 
         // Si le mot de passe est correct, réinitialiser le compteur
-        Cache::forget($key);
+        session([$sessionKey => 0]);
+        session([$sessionTimerKey => null]);
 
         // Si le mot de passe est correct, on stocke l'email pour la vérification
         session(['new_email' => $request->email]);
-
         return response()->json(['success' => true], 200);
     }
     public function pageDeBlockage()

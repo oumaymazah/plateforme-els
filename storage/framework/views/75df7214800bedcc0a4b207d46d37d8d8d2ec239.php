@@ -17,6 +17,19 @@
     #alert-container {
         z-index: 1100;
     }
+    .swal-custom-popup {
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.swal-confirm-button-no-border,
+.swal-cancel-button-no-border {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 10px 24px !important;
+}
 </style>
 <?php $__env->stopPush(); ?>
 

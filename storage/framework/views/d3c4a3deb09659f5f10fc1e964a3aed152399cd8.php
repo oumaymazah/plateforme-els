@@ -1,5 +1,4 @@
 
-
 <form id="create-permission-form" action="<?php echo e(route('admin.permissions.store')); ?>" method="POST" class="needs-validation" novalidate>
     <?php echo csrf_field(); ?>
     <div class="card shadow border-0 rounded-lg">

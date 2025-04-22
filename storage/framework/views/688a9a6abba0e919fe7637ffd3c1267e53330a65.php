@@ -1,12 +1,8 @@
 
-
-
-
-
 <form id="create-role-form" action="<?php echo e(route('admin.roles.store')); ?>" method="POST" class="needs-validation" novalidate>
     <?php echo csrf_field(); ?>
     <div class="card shadow border-0 rounded-lg">
-        <!-- Header avec un design moderne -->
+
         <div class="card-header bg-primary text-white py-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -19,7 +15,7 @@
             </div>
         </div>
 
-        <!-- Corps du formulaire -->
+
         <div class="card-body p-4">
             <div class="mb-4">
                 <label for="name" class="form-label fw-bold">
@@ -43,7 +39,7 @@
 
         </div>
 
-        <!-- Footer avec boutons améliorés -->
+       
         <div class="card-footer bg-light py-3">
             <div class="d-flex justify-content-end gap-3">
                 <button type="submit" class="btn btn-primary px-4 py-2 fw-bold">

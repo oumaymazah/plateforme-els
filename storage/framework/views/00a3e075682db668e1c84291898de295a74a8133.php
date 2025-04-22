@@ -1,19 +1,17 @@
 
-
-
 <div class="card">
     <div class="modal-header bg-primary text-white py-3">
         <div>
             <h5 class="modal-title mb-1">
                 <i class="fas fa-user-plus me-2"></i>Création d'un nouvel utilisateur
             </h5>
-            
+
         </div>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
     </div>
 
     <div class="row g-4">
-        <!-- Bloc pour l'image -->
+
         <div class="col-md-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
@@ -23,7 +21,7 @@
             </div>
         </div>
 
-        <!-- Bloc pour le formulaire -->
+
         <div class="col-md-8">
             <form id="create-user-form" class="needs-validation" action="<?php echo e(route('admin.users.store')); ?>" method="POST" novalidate>
                 <?php echo csrf_field(); ?>
@@ -95,6 +93,8 @@ unset($__errorArgs, $__bag); ?> border-start-0" name="email" required placeholde
                             </div>
                         </div>
 
+                        
+
                         <div class="mb-3">
                             <label class="form-label fw-bold">
                                 <i class="fas fa-phone me-2 text-secondary"></i>Téléphone
@@ -103,7 +103,7 @@ unset($__errorArgs, $__bag); ?> border-start-0" name="email" required placeholde
                                 <span class="input-group-text bg-light d-flex justify-content-center" style="width: 45px;">
                                     <i class="fas fa-mobile-alt text-muted"></i>
                                 </span>
-                                <input type="text" class="form-control <?php $__errorArgs = ['phone'];
+                                <input type="tel" inputmode="tel" pattern="[0-9\s\+]{8,15}" oninput="this.value = this.value.replace(/[^0-9\s+]/g, '')" class="form-control <?php $__errorArgs = ['phone'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -164,4 +164,5 @@ unset($__errorArgs, $__bag); ?> form-select border-start-0" id="role_id" name="r
         </div>
     </div>
 </div>
+
 <?php /**PATH D:\apprendre laravel\platformeEls\resources\views/admin/user/create.blade.php ENDPATH**/ ?>

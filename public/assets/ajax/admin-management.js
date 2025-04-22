@@ -419,6 +419,64 @@ class AdminManager {
     }
 
 
+    // deleteItem(e, type) {
+    //     e.preventDefault();
+    //     const url = $(e.currentTarget).data('url');
+    //     const row = $(e.currentTarget).closest('tr');
+    //     const tableId = type === 'users' ? '#users-table' :
+    //                     type === 'roles' ? '#roles-table' : '#permissions-table';
+
+    //     this.confirmDelete(() => {
+    //       // Ajouter un indicateur de chargement à la ligne
+    //       row.find('td').css('opacity', '0.5');
+    //       row.append('<td class="delete-loading position-absolute w-100 h-100 bg-light bg-opacity-50 d-flex justify-content-center align-items-center" style="left:0; top:0;"><div class="spinner-border spinner-border-sm text-primary" role="status"></div></td>');
+
+    //       const that = this; // Stocker une référence à this
+
+    //       $.ajax({
+    //         url: url,
+    //         type: 'DELETE',
+    //         headers: {
+    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         success: function(response) {
+    //           // Stocker le message
+    //           const message = response.success || response.message || 'Élément supprimé avec succès';
+
+    //           // Supprimer la ligne du tableau avec une animation
+    //           row.fadeOut(300, function() {
+    //             // Manipuler DataTable ou supprimer la ligne
+    //             if ($.fn.DataTable.isDataTable(tableId)) {
+    //               const dataTable = $(tableId).DataTable();
+    //               dataTable.row(row).remove().draw(false);
+    //             } else {
+    //               row.remove();
+    //             }
+
+    //             // Afficher l'alerte en utilisant une approche directe
+    //             const alertHtml = `
+    //               <div class="alert alert-success alert-dismissible fade show" role="alert">
+    //                 ${message}
+    //                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    //               </div>
+    //             `;
+    //             $('#alert-container').html(alertHtml);
+
+    //             // Supprimer automatiquement l'alerte après 5 secondes
+    //             setTimeout(function() {
+    //               $('.alert').alert('close');
+    //             }, 5000);
+    //           });
+    //         },
+    //         error: function(xhr) {
+    //           // Supprimer l'indicateur de chargement et restaurer l'opacité
+    //           row.find('.delete-loading').remove();
+    //           row.find('td').css('opacity', '1');
+    //           that.handleError(xhr);
+    //         }
+    //       });
+    //     });
+    //   }
     deleteItem(e, type) {
         e.preventDefault();
         const url = $(e.currentTarget).data('url');
@@ -625,23 +683,49 @@ class AdminManager {
       this.loadUsers();
     }
 
-    // Utility methods
+    // // Utility methods
+    // confirmDelete(callback) {
+    //   Swal.fire({
+    //     title: 'Êtes-vous sûr?',
+    //     text: "Cette action est irréversible!",
+    //     icon: 'warning',
+    //     showCancelButton: true,
+    //     confirmButtonColor: '#3085d6',
+    //     cancelButtonColor: '#d33',
+    //     confirmButtonText: 'Oui, supprimer!',
+    //     cancelButtonText: 'Non, annuler'
+    //   }).then((result) => {
+    //     if (result.isConfirmed) {
+    //       callback();
+    //     }
+    //   });
+    // }
+
     confirmDelete(callback) {
-      Swal.fire({
-        title: 'Êtes-vous sûr?',
-        text: "Cette action est irréversible!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Oui, supprimer!',
-        cancelButtonText: 'Non, annuler'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          callback();
-        }
-      });
-    }
+        Swal.fire({
+          title: 'Êtes-vous sûr?',
+          text: "Cette action est irréversible!",
+          icon: 'warning',
+          iconColor: '#f8bb86',      // Couleur de l'icône d'avertissement
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#9e9e9e',  // Couleur grise pour le bouton d'annulation
+          confirmButtonText: 'Oui, supprimer!',
+          cancelButtonText: 'Non, annuler',
+          buttonsStyling: true,
+          customClass: {
+            confirmButton: 'swal-confirm-button-no-border',
+            cancelButton: 'swal-cancel-button-no-border',
+            popup: 'swal-custom-popup'
+          },
+          background: '#ffffff',
+          backdrop: 'rgba(0,0,0,0.4)'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            callback();
+          }
+        });
+      }
 
     showLoader() {
       $('#blog-container').html('<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="sr-only">Chargement...</span></div></div>');
@@ -652,16 +736,337 @@ class AdminManager {
       $('.spinner-border').parent().remove();
     }
 
+
+    // showAlert(type, message) {
+    //     // Configuration similaire au ToastNotification
+    //     const colors = {
+    //       success: {
+    //         background: '#FFFFFF',
+    //         text: '#2B6ED4',
+    //         timeline: '#2B6ED4'
+    //       },
+    //       danger: { // équivalent à error dans le toast
+    //         background: '#FFFFFF',
+    //         text: '#F44336',
+    //         timeline: '#F44336'
+    //       },
+    //       warning: {
+    //         background: '#FFFFFF',
+    //         text: '#FF9800',
+    //         timeline: '#FF9800'
+    //       },
+    //       info: {
+    //         background: '#FFFFFF',
+    //         text: '#2196F3',
+    //         timeline: '#2196F3'
+    //       }
+    //     };
+
+    //     // Mappez "danger" à "error" si nécessaire pour l'icône
+    //     const iconType = type === 'danger' ? 'error' : type;
+
+    //     // Créer le conteneur du toast s'il n'existe pas
+    //     if (!document.querySelector('.toast-container')) {
+    //       const container = document.createElement('div');
+    //       container.className = 'toast-container';
+    //       container.style.position = 'fixed';
+    //       container.style.zIndex = '9999';
+    //       container.style.top = '20px';
+    //       container.style.right = '20px';
+    //       document.body.appendChild(container);
+    //     }
+
+    //     // Créer le toast
+    //     const toast = document.createElement('div');
+    //     toast.className = `custom-toast toast-${iconType}`;
+    //     toast.style.opacity = '0';
+    //     toast.style.transition = 'all 0.3s ease-in-out';
+    //     toast.style.marginBottom = '10px';
+    //     toast.style.borderRadius = '4px';
+    //     toast.style.padding = '15px 20px';
+    //     toast.style.display = 'flex';
+    //     toast.style.flexDirection = 'column';
+    //     toast.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+    //     toast.style.width = '300px';
+    //     toast.style.boxSizing = 'border-box';
+    //     toast.style.position = 'relative';
+    //     toast.style.overflow = 'hidden';
+
+    //     // Appliquer les couleurs selon le type
+    //     if (colors[type]) {
+    //       toast.style.backgroundColor = colors[type].background;
+    //       toast.style.color = colors[type].text;
+    //     }
+
+    //     // Conteneur principal pour le contenu du toast
+    //     const contentContainer = document.createElement('div');
+    //     contentContainer.style.display = 'flex';
+    //     contentContainer.style.alignItems = 'center';
+    //     contentContainer.style.width = '100%';
+
+    //     // Icône selon le type
+    //     const icon = document.createElement('span');
+    //     icon.style.marginRight = '10px';
+    //     icon.style.fontSize = '18px';
+    //     icon.style.color = colors[type] ? colors[type].text : '';
+
+    //     // Définir l'icône selon le type
+    //     if (iconType === 'success') icon.innerHTML = '<i class="fa fa-check-circle"></i>';
+    //     else if (iconType === 'error') icon.innerHTML = '<i class="fa fa-times-circle"></i>';
+    //     else if (iconType === 'warning') icon.innerHTML = '<i class="fa fa-exclamation-triangle"></i>';
+    //     else if (iconType === 'info') icon.innerHTML = '<i class="fa fa-info-circle"></i>';
+
+    //     // Contenu du message
+    //     const content = document.createElement('div');
+    //     content.style.flex = '1';
+    //     content.style.wordBreak = 'break-word';
+    //     content.innerHTML = message;
+
+    //     // Button de fermeture
+    //     const closeBtn = document.createElement('span');
+    //     closeBtn.innerHTML = '×';
+    //     closeBtn.style.marginLeft = '10px';
+    //     closeBtn.style.cursor = 'pointer';
+    //     closeBtn.style.fontSize = '22px';
+    //     closeBtn.style.fontWeight = 'bold';
+    //     closeBtn.style.opacity = '0.7';
+    //     closeBtn.style.color = colors[type] ? colors[type].text : '';
+    //     closeBtn.onmouseover = () => { closeBtn.style.opacity = '1'; };
+    //     closeBtn.onmouseout = () => { closeBtn.style.opacity = '0.7'; };
+    //     closeBtn.onclick = () => { this.closeToast(toast); };
+
+    //     // Assembler les éléments
+    //     contentContainer.appendChild(icon);
+    //     contentContainer.appendChild(content);
+    //     contentContainer.appendChild(closeBtn);
+    //     toast.appendChild(contentContainer);
+
+    //     // Ajouter la timeline
+    //     const timeline = document.createElement('div');
+    //     timeline.className = 'toast-timeline';
+    //     timeline.style.position = 'absolute';
+    //     timeline.style.bottom = '0';
+    //     timeline.style.left = '0';
+    //     timeline.style.height = '3px';
+    //     timeline.style.width = '100%';
+    //     timeline.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+
+    //     const progress = document.createElement('div');
+    //     progress.style.height = '100%';
+    //     progress.style.width = '0%';
+    //     progress.style.backgroundColor = colors[type] ? colors[type].timeline : '';
+    //     progress.style.transition = 'width 5000ms linear'; // 5000ms = 5 secondes
+
+    //     timeline.appendChild(progress);
+    //     toast.appendChild(timeline);
+
+    //     // Ajouter le toast au container
+    //     document.querySelector('.toast-container').appendChild(toast);
+
+    //     // Animation d'entrée
+    //     setTimeout(() => {
+    //       toast.style.opacity = '1';
+    //       progress.style.width = '100%';
+    //     }, 50);
+
+    //     // Fermeture automatique après 5 secondes
+    //     setTimeout(() => {
+    //       this.closeToast(toast);
+    //     }, 5000);
+
+    //     return toast;
+    //   }
+
+    //   // Ajouter cette nouvelle méthode pour fermer le toast
+    //   closeToast(toast) {
+    //     toast.style.opacity = '0';
+    //     toast.style.transform = 'translateX(20px)';
+    //     setTimeout(() => {
+    //       if (toast.parentNode) {
+    //         toast.parentNode.removeChild(toast);
+    //       }
+    //     }, 300);
+    //     }
+
+
     showAlert(type, message) {
-      const alert = $(`
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-          ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      `);
-      $('#alert-container').html(alert);
-      setTimeout(() => alert.alert('close'), 5000);
-    }
+        // Configuration des couleurs
+        const colors = {
+          success: {
+            background: '#FFFFFF',
+            text: '#2B6ED4',
+            timeline: '#2B6ED4'
+          },
+          danger: {
+            background: '#FFFFFF',
+            text: '#F44336',
+            timeline: '#F44336'
+          },
+          warning: {
+            background: '#FFFFFF',
+            text: '#FF9800',
+            timeline: '#FF9800'
+          },
+          info: {
+            background: '#FFFFFF',
+            text: '#2196F3',
+            timeline: '#2196F3'
+          }
+        };
+
+        // Ajustement du type pour l'icône
+        const iconType = type === 'danger' ? 'error' : type;
+
+        // Fonction de fermeture séparée
+        function closeToast(toastElement) {
+          toastElement.style.opacity = '0';
+          toastElement.style.transform = 'translateX(20px)';
+          setTimeout(() => {
+            if (toastElement.parentNode) {
+              toastElement.parentNode.removeChild(toastElement);
+            }
+          }, 300);
+        }
+
+        // Créer le conteneur du toast s'il n'existe pas
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+          container = document.createElement('div');
+          container.className = 'toast-container';
+          container.style.position = 'fixed';
+          container.style.zIndex = '99999'; // Z-index très élevé
+          container.style.top = '20px';
+          container.style.right = '20px';
+          container.style.pointerEvents = 'none'; // Le conteneur ne capte pas les événements
+          document.body.appendChild(container);
+        }
+
+        // Créer le toast
+        const toast = document.createElement('div');
+        toast.className = `custom-toast toast-${iconType}`;
+        toast.style.opacity = '0';
+        toast.style.transition = 'all 0.3s ease-in-out';
+        toast.style.marginBottom = '10px';
+        toast.style.borderRadius = '4px';
+        toast.style.padding = '15px 20px';
+        toast.style.display = 'flex';
+        toast.style.flexDirection = 'column';
+        toast.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        toast.style.width = '300px';
+        toast.style.boxSizing = 'border-box';
+        toast.style.position = 'relative';
+        toast.style.overflow = 'hidden';
+        toast.style.pointerEvents = 'auto'; // Le toast capte les événements
+
+        // Appliquer les couleurs selon le type
+        if (colors[type]) {
+          toast.style.backgroundColor = colors[type].background;
+          toast.style.color = colors[type].text;
+        }
+
+        // Conteneur principal pour le contenu du toast
+        const contentContainer = document.createElement('div');
+        contentContainer.style.display = 'flex';
+        contentContainer.style.alignItems = 'center';
+        contentContainer.style.width = '100%';
+
+        // Icône selon le type
+        const icon = document.createElement('span');
+        icon.style.marginRight = '10px';
+        icon.style.fontSize = '18px';
+        icon.style.color = colors[type] ? colors[type].text : '';
+
+        // Définir l'icône selon le type
+        if (iconType === 'success') icon.innerHTML = '<i class="fa fa-check-circle"></i>';
+        else if (iconType === 'error') icon.innerHTML = '<i class="fa fa-times-circle"></i>';
+        else if (iconType === 'warning') icon.innerHTML = '<i class="fa fa-exclamation-triangle"></i>';
+        else if (iconType === 'info') icon.innerHTML = '<i class="fa fa-info-circle"></i>';
+
+        // Contenu du message
+        const content = document.createElement('div');
+        content.style.flex = '1';
+        content.style.wordBreak = 'break-word';
+        content.innerHTML = message;
+
+        // Bouton de fermeture
+        const closeBtn = document.createElement('span');
+        closeBtn.innerHTML = '×';
+        closeBtn.style.marginLeft = '10px';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.fontSize = '22px';
+        closeBtn.style.fontWeight = 'bold';
+        closeBtn.style.opacity = '0.7';
+        closeBtn.style.color = colors[type] ? colors[type].text : '';
+        closeBtn.style.position = 'relative'; // Position relative pour l'isoler
+        closeBtn.style.zIndex = '999'; // Z-index plus élevé pour s'assurer qu'il est au-dessus
+        closeBtn.style.width = '30px'; // Largeur définie pour une meilleure zone de clic
+        closeBtn.style.height = '30px'; // Hauteur définie pour une meilleure zone de clic
+        closeBtn.style.textAlign = 'center'; // Centrer le X
+        closeBtn.style.lineHeight = '25px'; // Alignement vertical du X
+
+        closeBtn.addEventListener('mouseover', function() {
+          this.style.opacity = '1';
+        });
+
+        closeBtn.addEventListener('mouseout', function() {
+          this.style.opacity = '0.7';
+        });
+
+        // Gestionnaire d'événement isolé avec capture d'événements
+        const clickHandler = function(event) {
+          event.stopPropagation();
+          event.preventDefault();
+          event.stopImmediatePropagation(); // Arrête également les autres gestionnaires
+          closeToast(toast);
+          return false; // Empêche la propagation
+        };
+
+        // Ajouter plusieurs écouteurs pour s'assurer que l'événement est capturé
+        closeBtn.addEventListener('click', clickHandler, true);
+        closeBtn.addEventListener('mousedown', clickHandler, true);
+        closeBtn.addEventListener('mouseup', clickHandler, true);
+
+        // Assembler les éléments
+        contentContainer.appendChild(icon);
+        contentContainer.appendChild(content);
+        contentContainer.appendChild(closeBtn);
+        toast.appendChild(contentContainer);
+
+        // Ajouter la timeline
+        const timeline = document.createElement('div');
+        timeline.className = 'toast-timeline';
+        timeline.style.position = 'absolute';
+        timeline.style.bottom = '0';
+        timeline.style.left = '0';
+        timeline.style.height = '3px';
+        timeline.style.width = '100%';
+        timeline.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+
+        const progress = document.createElement('div');
+        progress.style.height = '100%';
+        progress.style.width = '0%';
+        progress.style.backgroundColor = colors[type] ? colors[type].timeline : '';
+        progress.style.transition = 'width 5000ms linear'; // 5000ms = 5 secondes
+
+        timeline.appendChild(progress);
+        toast.appendChild(timeline);
+
+        // Ajouter le toast au container
+        container.appendChild(toast);
+
+        // Animation d'entrée
+        setTimeout(() => {
+          toast.style.opacity = '1';
+          progress.style.width = '100%';
+        }, 50);
+
+        // Fermeture automatique après 5 secondes
+        setTimeout(() => {
+          closeToast(toast);
+        }, 5000);
+
+        return toast;
+      }
 
     handleError(xhr) {
       let message = 'Une erreur est survenue';
