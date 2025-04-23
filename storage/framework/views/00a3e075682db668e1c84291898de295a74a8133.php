@@ -93,8 +93,7 @@ unset($__errorArgs, $__bag); ?> border-start-0" name="email" required placeholde
                             </div>
                         </div>
 
-                        
-
+            
                         <div class="mb-3">
                             <label class="form-label fw-bold">
                                 <i class="fas fa-phone me-2 text-secondary"></i>Téléphone

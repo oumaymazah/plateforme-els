@@ -41,7 +41,7 @@
           <!-- Container-fluid Ends-->
         </div>
         <!-- footer start-->
-        <footer class="footer">
+        {{-- <footer class="footer">
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-6 footer-copyright">
@@ -52,7 +52,20 @@
               </div>
             </div>
           </div>
-        </footer>
+        </footer> --}}
+
+        <footer class="footer">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6 footer-copyright">
+                  <p class="mb-0">Copyright {{date('Y')}}-{{date('Y', strtotime('+1 year'))}} © ELS Centre de Formation en Ligne. Tous droits réservés.</p>
+                </div>
+                <div class="col-md-6">
+                  <p class="pull-right mb-0">Conçu avec passion <i class="fa fa-graduation-cap"></i> pour votre réussite professionnelle</p>
+                </div>
+              </div>
+            </div>
+          </footer>
       </div>
     </div>
     <!-- latest jquery-->

@@ -1,5 +1,5 @@
 <header class="main-nav">
-    
+
     <div class="sidebar-user text-center">
         <a class="setting-primary" href="{{ route('profile.parametre') }}">
             <i data-feather="settings"></i>
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <a href="{{ route('user-profile') }}">
+        <a style="color: #2B6ED4">
             <h6 class="mt-3 f-14 f-w-600">{{auth()->user()->name}} </h6>
         </a>
     </div>
@@ -295,27 +295,7 @@
                           </ul>
 
 
-                           {{-- quiz --}}
-                           <a class="nav-link menu-title {{ prefixActive('/quiz') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Quizzes </span></a>
-                           <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/quiz') }};">
-                               <li><a href="{{ route('quizzes') }}" class="{{routeActive('quizzes')}}">Quizzes List</a></li>
-                               <li><a href="{{ route('quizcreate') }}" class="{{routeActive('quizcreate')}}">Create new </a></li>
-                           </ul>
 
-                           {{-- question --}}
-                           <a class="nav-link menu-title {{ prefixActive('/question') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Questions </span></a>
-                           <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/question') }};">
-                               <li><a href="{{ route('questions') }}" class="{{routeActive('questions')}}">Questions List</a></li>
-                               <li><a href="{{ route('questioncreate') }}" class="{{routeActive('questioncreate')}}">Create new </a></li>
-                           </ul>
-
-
-                            {{-- reponse de question --}}
-                            <a class="nav-link menu-title {{ prefixActive('/reponse') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Reponses </span></a>
-                            <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/reponse') }};">
-                                <li><a href="{{ route('reponses') }}" class="{{routeActive('reponses')}}">Reponses List</a></li>
-                                <li><a href="{{ route('reponsecreate') }}" class="{{routeActive('reponsecreate')}}">Create new </a></li>
-                            </ul>
                              {{-- Feedbacks --}}
 
                              {{-- <a class="nav-link menu-title {{ prefixActive('/feedback') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Reponse </span></a>

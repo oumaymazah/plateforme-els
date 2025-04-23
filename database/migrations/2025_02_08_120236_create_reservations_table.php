@@ -15,13 +15,15 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('formation_id');
+            $table->unsignedBigInteger('cart_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
-            $table->foreign('formation_id')->references('id')->on('formations')->onDelete('cascade');;
+            $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');;
 
-            $table->date('date_reservation');
-            $table->time('heure');
+            $table->date('reservation_date');
+            $table->time('reservation_time');
+            $table->boolean('status')->default(false); // 0 = non payé, 1 = payé
+            $table->timestamp('payment_date')->nullable(); // La date de paiement, nullable car au début elle est vide      
             $table->timestamps();        
         });
     }

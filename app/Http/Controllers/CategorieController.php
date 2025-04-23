@@ -3,73 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Categorie;
-use App\Models\Formation;
+use App\Models\Category;
+use App\Models\Training;
 use Illuminate\Http\Request;
 
 class CategorieController extends Controller
 {
-    // Afficher la liste des catégories
     public function index()
     {
-        $categories = Categorie::all();
+        $categories = Category::all();
         return view('admin.apps.categorie.categories', compact('categories'));
     }
 
-    // Afficher le formulaire de création
     public function create()
     {
         return view('admin.apps.categorie.categoriecreate');
     }
 
-    // Enregistrer une nouvelle catégorie
     public function store(Request $request)
     {
         $request->validate([
-            'titre' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
         ]);
 
-        Categorie::create($request->all());
+        Category::create($request->all());
+        return redirect()->route('formations');
 
-        return redirect()->route('categories')->with('success', 'Catégorie ajoutée avec succès.');
+
+        // return redirect()->route('categories')->with('success', 'Catégorie ajoutée avec succès.');
     }
 
-    // Afficher une catégorie spécifique
     public function show($id)
     {
-        $categorie = Categorie::findOrFail($id);
+        $categorie = Category::findOrFail($id);
         return view('admin.apps.categorie.categorieshow', compact('categorie'));
     }
 
-    // Afficher le formulaire d'édition
     public function edit($id)
     {
-        $categorie = Categorie::findOrFail($id);
-        $formations = Formation::all(); // Ajouter la récupération des formations
+        $categorie = Category::findOrFail($id);
+        $formations = Training::all(); // Ajouter la récupération des formations
 
 
         return view('admin.apps.categorie.categorieedit', compact('categorie','formations'));
     }
 
-    // Mettre à jour une catégorie
     public function update(Request $request, $id)
     {
         $request->validate([
-            'titre' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
         ]);
 
-        $categorie = Categorie::findOrFail($id);
+        $categorie = Category::findOrFail($id);
         $categorie->update($request->all());
 
         return redirect()->route('categories')->with('success', 'Catégorie mise à jour avec succès.');
     }
 
-    // Supprimer une catégorie
+   
+
     public function destroy($id)
     {
-        $categorie = Categorie::findOrFail($id);
-        $categorie->delete();
-
-        return redirect()->route('categories')->with('delete', 'Catégorie supprimée avec succès.');
+        try {
+            // Trouver la catégorie par son ID ou lever une exception si elle n'existe pas
+            $categorie = Category::findOrFail($id);
+            
+            // Récupérer le nom de la catégorie
+            $categorieName = $categorie->title;  
+    
+            // Supprimer la catégorie
+            $categorie->delete();
+    
+            // Retourner un message de succès
+            return response()->json(['successMessage' => "La catégorie '{$categorieName}' a été supprimée avec succès!"]);
+        } catch (\Exception $e) {
+            // En cas d'erreur, retourner un message d'erreur
+            return response()->json(['errorMessage' => 'Une erreur est survenue.']);
+        }
     }
+    
+
+
 }

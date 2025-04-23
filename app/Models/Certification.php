@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Formation;
+use App\Models\Training;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,9 +13,9 @@ class Certification extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        'formation_id',
-        'date_obtention',
-        'statut',
+        'training_id',
+        'obtained_date',
+        'status',
     ];
 
     // Relation avec l'étudiant
@@ -24,9 +25,9 @@ class Certification extends Model
     }
 
     // Relation avec la formation
-    public function formation()
+    public function training()
     {
-        return $this->belongsTo(Formation::class);
+        return $this->belongsTo(Training::class);
     }
 
 }

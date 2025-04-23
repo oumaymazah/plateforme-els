@@ -10,19 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 class Feedback extends Model
 {
     use HasFactory;
-    
+    protected $table = 'feedbacks';
     protected $fillable = [
         'user_id',
-        'nombre_rate',
-        'formation_id',
+        'rating_count',
+        'training_id',
     ];
 
 
     //(Chaque Feedback appartient à une Formation)
 
-    public function formation()
+    public function training()
     {
-        return $this->belongsTo(Formation::class);
+        return $this->belongsTo(Training::class);
     }
 
     // (Chaque Feedback appartient à un Utilisateur)

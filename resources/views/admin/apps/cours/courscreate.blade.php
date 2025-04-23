@@ -1,314 +1,172 @@
-{{--
  @extends('layouts.admin.master')
 
 @section('title') Ajouter un Cours @endsection
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/dropzone.css') }}">
+    <link href="{{ asset('assets/css/MonCss/custom-style.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <style>
-        /* Styles pour les messages d'alerte et boutons */
-        #success-message, #delete-message, #create-message {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-        .alert-info {
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            color: #0c5460;
-        }
-        .custom-btn {
-            background-color: #2b786a;
-            color: white;
-            border-color: #2b786a;
-        }
-        .custom-btn:hover {
-            background-color: #1f5c4d;
-            border-color: #1f5c4d;
-            color: white;
-        }
-    </style>
+    <link href="{{ asset('assets/css/MonCss/SweatAlert2.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/MonCss/custom-calendar.css') }}">
+
 @endpush
 
 @section('content')
-    @component('components.breadcrumb')
-        @slot('breadcrumb_title')
-            <h3>Ajouter un Cours</h3>
-        @endslot
-        <li class="breadcrumb-item">Cours</li>
-        <li class="breadcrumb-item active">Ajouter</li>
-    @endcomponent
-
+@php
+    $selectedFormationId = request()->query('training_id', old('training_id'));
+@endphp
+ 
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
+                    <div class="card-header pb-0">
+                        <h5>Nouveau cours</h5>
+                        <span>Complétez les informations pour créer un nouveau cours</span>
+                    </div>
+
                     <div class="card-body">
-                        <!-- Affichage des erreurs côté serveur -->
                         @if ($errors->any())
                             <div class="alert alert-danger">
-                                <ul>
+                                <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
                         @endif
+                        
+                        <!-- Alerte d'information sur le calcul automatique de la durée -->
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle me-2"></i>
+                            <strong>Note:</strong> La durée du cours sera calculée automatiquement en fonction des chapitres que vous ajouterez ultérieurement.
+                        </div>
 
-                        <!-- Formulaire d'ajout de cours avec validation Bootstrap -->
                         <div class="form theme-form">
                             <form action="{{ route('coursstore') }}" method="POST" class="needs-validation" novalidate>
                                 @csrf
 
                                 <!-- Titre -->
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="titre">Titre</label>
-                                            <input id="titre" class="form-control" type="text" name="titre" placeholder="Titre" value="{{ old('titre') }}" required>
-                                            <div class="invalid-feedback">Veuillez entrer un titre valide.</div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Titre <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa fa-tag"></i></span>
+                                            <input class="form-control" type="text" id="title" name="title" placeholder="Titre" value="{{ old('title') }}" required />
                                         </div>
+                                        <div class="invalid-feedback">Veuillez entrer un titre valide.</div>
                                     </div>
                                 </div>
 
                                 <!-- Description -->
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Description <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group" style="flex-wrap: nowrap;">
+                                            <div class="input-group-text d-flex align-items-stretch" style="height: auto;">
+                                                <i class="fa fa-align-left align-self-center"></i>
+                                            </div>
+                                            <textarea class="form-control" id="description" name="description" placeholder="Description" required>{{ old('description') }}</textarea>
+                                        </div>
+                                        <div class="invalid-feedback">Veuillez entrer une description valide.</div>
+                                    </div>
+                                </div>
+
+                                <!-- Dates de début et de fin -->
+                                {{-- <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Date de début <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            <input class="form-control" type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" required />
+                                        </div>
+                                        <div class="invalid-feedback">Veuillez sélectionner une date de début valide.</div>
+                                    </div>
+                                </div> --}}
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Périodes <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="row">
+                                            <!-- Date de début -->
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                    <input class="form-control datepicker" type="text" id="start_date" name="start_date" placeholder="" value="{{ old('start_date') }}" readonly required />
+                                                </div>
+                                                <small class="text-muted">Date début</small>
+                                                <div class="invalid-feedback">Veuillez sélectionner une date de début valide.</div>
+                                            </div>
+                                            <!-- Date de fin -->
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                    <input class="form-control datepicker" type="text" id="end_date" name="end_date" placeholder="" value="{{ old('end_date') }}" readonly required />
+                                                </div>
+                                                <small class="text-muted">Date fin</small>
+                                                <div class="invalid-feedback">Veuillez sélectionner une date de fin valide.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Formation <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="input-group-text"><i class="fa fa-book"></i></span>
+                                            </div>
+                                            <div class="col">
+                                                @php
+                                                    $fromUrl = session('from_url') ?? request()->has('from_url');
+                                                @endphp
+                                                
+                                                @if($selectedFormationId && ($fromUrl || request()->has('training_id')))
+                                                    @php
+                                                        $selectedFormation = $formations->firstWhere('id', $selectedFormationId);
+                                                    @endphp
+                                                        <!-- Mode URL : Affichage verrouillé -->
+
+                                                    <input type="text" class="form-control bg-light selected-course-bg" value="{{ $selectedFormation ? $selectedFormation->title : '' }}" readonly />
+                                                    <input type="hidden" name="training_id" value="{{ $selectedFormationId }}">
+                                                    <input type="hidden" name="from_url" value="true">
+                                                @elseif($selectedFormationId)
+                                                    <!-- Mode normal : Sélection libre -->
+
+                                                    <select class="form-select select2-formation" name="training_id" required>
+                                                        <option value="" disabled>Choisir une formation</option>
+                                                        @foreach($formations as $formation)
+                                                            <option value="{{ $formation->id }}" {{ $selectedFormationId == $formation->id ? 'selected' : '' }} class="{{ $selectedFormationId == $formation->id ? 'selected-course-bg' : '' }}">
+                                                                {{ $formation->title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <select class="form-select select2-formation" name="training_id" required>
+                                                        <option value="" disabled selected>Choisir une formation</option>
+                                                        @foreach($formations as $formation)
+                                                            <option value="{{ $formation->id }}">
+                                                                {{ $formation->title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="invalid-feedback">Veuillez sélectionner une formation valide.</div>
+                                    </div>
+                                </div>
+                               
+                                <!-- Boutons de soumission -->
                                 <div class="row">
                                     <div class="col">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="description">Description</label>
-                                            <textarea id="description" class="form-control" rows="4" name="description" placeholder="Description" required>{{ old('description') }}</textarea>
-                                            <div class="invalid-feedback">Veuillez entrer une description valide.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Dates -->
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="date_debut">Date de début</label>
-                                            <input id="date_debut" class="form-control" type="date" name="date_debut" value="{{ old('date_debut') }}" required>
-                                            <div class="invalid-feedback">Veuillez sélectionner une date de début valide.</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="date_fin">Date de fin</label>
-                                            <input id="date_fin" class="form-control" type="date" name="date_fin" value="{{ old('date_fin') }}" required>
-                                            <div class="invalid-feedback">Veuillez sélectionner une date de fin valide.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Sélection des professeurs et formations -->
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="user_id">Professeurs</label>
-                                            <select id="user_id" class="form-select select2-professeur" name="user_id" required>
-                                                <option value="" disabled selected>Sélectionnez un professeur</option>
-                                                @foreach($users as $user)
-                                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                                        {{ $user->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <div class="invalid-feedback">Veuillez sélectionner un professeur valide.</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="formation_id">Formation</label>
-                                            <select id="formation_id" class="form-select select2-formation" name="formation_id" required>
-                                                <option value="" disabled selected>Sélectionner une formation</option>
-                                                @foreach($formations as $formation)
-                                                    <option value="{{ $formation->id }}" {{ old('formation_id') == $formation->id ? 'selected' : '' }}>
-                                                        {{ $formation->titre }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <div class="invalid-feedback">Veuillez sélectionner une formation valide.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Boutons -->
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="text-end">
-                                            <button class="btn btn-secondary me-3" type="submit">Ajouter</button>
-                                            <button class="btn btn-danger" type="button" onclick="window.location.href='{{ route('cours') }}'">Annuler</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-@push('scripts')
-    <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
-    <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <script src="{{ asset('assets/js/select2-init/single-select.js') }}"></script>
-
-    <!-- Inclusion du script de validation global pour tous les formulaires -->
-    <script src="{{ asset('assets/js/form-validation/form-validation.js') }}"></script>
-
-
-    @endpush
-
-@endsection --}}
-
-
-
-@extends('layouts.admin.master')
-
-@section('title') Ajouter un Cours @endsection
-
-@push('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/dropzone.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <style>
-        /* Styles pour les messages d'alerte et boutons */
-        #success-message, #delete-message, #create-message {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-        .alert-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
-        .alert-info {
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            color: #0c5460;
-        }
-        .custom-btn {
-            background-color: #2b786a;
-            color: white;
-            border-color: #2b786a;
-        }
-        .custom-btn:hover {
-            background-color: #1f5c4d;
-            border-color: #1f5c4d;
-            color: white;
-        }
-    </style>
-@endpush
-
-@section('content')
-    @component('components.breadcrumb')
-        @slot('breadcrumb_title')
-            <h3>Ajouter un Cours</h3>
-        @endslot
-        <li class="breadcrumb-item">Cours</li>
-        <li class="breadcrumb-item active">Ajouter</li>
-    @endcomponent
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <!-- Affichage des erreurs côté serveur -->
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <div class="form theme-form">
-                            <form action="{{ route('coursstore') }}" method="POST" class="needs-validation" novalidate>
-                                @csrf
-
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="titre">Titre</label>
-                                            <input id="titre" class="form-control" type="text" name="titre" placeholder="Titre" value="{{ old('titre') }}" required>
-                                            <div class="invalid-feedback">Veuillez entrer un titre valide.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="description">Description</label>
-                                            <textarea id="description" class="form-control" rows="4" name="description" placeholder="Description" required>{{ old('description') }}</textarea>
-                                            <div class="invalid-feedback">Veuillez entrer une description valide .</div>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="date_debut">Date de début</label>
-                                            <input id="date_debut" class="form-control" type="date" name="date_debut" value="{{ old('date_debut') }}" required>
-                                            <div class="invalid-feedback">Veuillez sélectionner une date de début valide.</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="date_fin">Date de fin</label>
-                                            <input id="date_fin" class="form-control" type="date" name="date_fin" value="{{ old('date_fin') }}" required>
-                                            <div class="invalid-feedback">Veuillez sélectionner une date de fin valide.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="formation_id">Formation</label>
-                                            <select id="formation_id" class="form-select select2-formation" name="formation_id" required>
-                                                <option value="" disabled selected>Sélectionner une formation</option>
-                                                @foreach($formations as $formation)
-                                                    <option value="{{ $formation->id }}" {{ old('formation_id') == $formation->id ? 'selected' : '' }}>
-                                                        {{ $formation->titre }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <div class="invalid-feedback">Veuillez sélectionner une formation valide.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="text-end">
-                                            <button class="btn btn-secondary me-3" type="submit">Ajouter</button>
-                                            <button class="btn btn-danger" type="button" onclick="window.location.href='{{ route('cours') }}'">Annuler</button>
+                                        <div class="text-end mt-4">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fa fa-save"></i> Ajouter
+                                            </button>
+                                            <button class="btn btn-danger" type="button" onclick="window.location.href='{{ route('cours') }}'">
+                                                <i class="fa fa-times"></i> Annuler
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -325,17 +183,93 @@
     <script src="{{ asset('assets/js/dropzone/dropzone.js') }}"></script>
     <script src="{{ asset('assets/js/dropzone/dropzone-script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <script src="{{ asset('assets/js/select2-init/single-select.js') }}"></script>
-    <script src="{{ asset('assets/js/form-validation/form-validation.js') }}"></script>
-
-    <script>
-        document.getElementById('categoryForm').addEventListener('submit', function(event) {
-            var form = this;
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
+    <script src="{{ asset('assets/js/MonJs/select2-init/single-select.js') }}"></script>
+    <script src="{{ asset('assets/js/MonJs/form-validation/form-validation.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/MonJs/description/description.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/cwjxs6s7k08kvxb3t6udodzrwpomhxtehiozsu4fem2igekf/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.fr.min.js"></script>
+    <script src="{{ asset('assets/js/MonJs/calendar/custom-calendar.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    // Obtenir les paramètres d'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const trainingIdFromUrl = urlParams.get('training_id');
+    const fromUrl = urlParams.get('from_url');
+    
+    // Gestion de la notification après l'ajout du cours
+    let coursId = "{{ session('cours_id') }}";
+    let fromUrlSession = "{{ session('from_url') }}";
+    
+    if (coursId) {
+        Swal.fire({
+            title: "Cours ajouté avec succès !",
+            text: "Voulez-vous ajouter un chapitre à ce cours ? (La durée du cours sera calculée automatiquement)",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: "Oui, ajouter un chapitre",
+            cancelButtonText: "Non, revenir à la liste",
+            showCloseButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            customClass: {
+                confirmButton: 'custom-confirm-btn'
             }
-            form.classList.add('was-validated');
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si le cours vient d'une URL spécifique, conserver le paramètre from_url
+                if (fromUrlSession === '1' || fromUrl === 'true') {
+                    window.location.href = "{{ route('chapitrecreate') }}?cours_id=" + coursId + "&from_url=true";
+                } else {
+                    window.location.href = "{{ route('chapitrecreate') }}?cours_id=" + coursId;
+                }
+            } else if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+                // Si le cours vient d'une URL spécifique, conserver le paramètre from_url
+                if (fromUrlSession === '1' || fromUrl === 'true') {
+                    window.location.href = "{{ route('cours') }}?from_url=true";
+                } else {
+                    window.location.href = "{{ route('cours') }}";
+                }
+            }
         });
-        </script>
-@endpush
+    }
+
+    // Appliquer le fond bleu à l'option sélectionnée dans le dropdown de Select2
+    const coursSelect = document.querySelector('.select2-formation');
+    if (coursSelect) {
+        // Appliquer le fond bleu à l'option sélectionnée au chargement de la page
+        const selectedOption = coursSelect.options[coursSelect.selectedIndex];
+        if (selectedOption && selectedOption.value) {
+            selectedOption.classList.add('selected-course-bg');
+        }
+
+        // Appliquer le fond bleu à l'option sélectionnée lorsqu'elle change
+        coursSelect.addEventListener('change', function() {
+            // Supprimer la classe de l'ancienne option sélectionnée
+            const previousSelectedOption = coursSelect.querySelector('.selected-course-bg');
+            if (previousSelectedOption) {
+                previousSelectedOption.classList.remove('selected-course-bg');
+            }
+
+            // Ajouter la classe à la nouvelle option sélectionnée
+            const newSelectedOption = coursSelect.options[coursSelect.selectedIndex];
+            if (newSelectedOption && newSelectedOption.value) {
+                newSelectedOption.classList.add('selected-course-bg');
+            }
+        });
+    }
+});
+   
+</script>
+@endpush 
+
+
+
+
+
+
+
+
+

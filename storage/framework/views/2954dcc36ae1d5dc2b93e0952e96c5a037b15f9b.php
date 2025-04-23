@@ -1,5 +1,5 @@
 <header class="main-nav">
-    
+
     <div class="sidebar-user text-center">
         <a class="setting-primary" href="<?php echo e(route('profile.parametre')); ?>">
             <i data-feather="settings"></i>
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <a href="<?php echo e(route('user-profile')); ?>">
+        <a style="color: #2B6ED4">
             <h6 class="mt-3 f-14 f-w-600"><?php echo e(auth()->user()->name); ?> </h6>
         </a>
     </div>
@@ -295,27 +295,7 @@
                           </ul>
 
 
-                           
-                           <a class="nav-link menu-title <?php echo e(prefixActive('/quiz')); ?>" href="javascript:void(0)"><i data-feather="box"></i><span>Quizzes </span></a>
-                           <ul class="nav-submenu menu-content" style="display: <?php echo e(prefixBlock('/quiz')); ?>;">
-                               <li><a href="<?php echo e(route('quizzes')); ?>" class="<?php echo e(routeActive('quizzes')); ?>">Quizzes List</a></li>
-                               <li><a href="<?php echo e(route('quizcreate')); ?>" class="<?php echo e(routeActive('quizcreate')); ?>">Create new </a></li>
-                           </ul>
 
-                           
-                           <a class="nav-link menu-title <?php echo e(prefixActive('/question')); ?>" href="javascript:void(0)"><i data-feather="box"></i><span>Questions </span></a>
-                           <ul class="nav-submenu menu-content" style="display: <?php echo e(prefixBlock('/question')); ?>;">
-                               <li><a href="<?php echo e(route('questions')); ?>" class="<?php echo e(routeActive('questions')); ?>">Questions List</a></li>
-                               <li><a href="<?php echo e(route('questioncreate')); ?>" class="<?php echo e(routeActive('questioncreate')); ?>">Create new </a></li>
-                           </ul>
-
-
-                            
-                            <a class="nav-link menu-title <?php echo e(prefixActive('/reponse')); ?>" href="javascript:void(0)"><i data-feather="box"></i><span>Reponses </span></a>
-                            <ul class="nav-submenu menu-content" style="display: <?php echo e(prefixBlock('/reponse')); ?>;">
-                                <li><a href="<?php echo e(route('reponses')); ?>" class="<?php echo e(routeActive('reponses')); ?>">Reponses List</a></li>
-                                <li><a href="<?php echo e(route('reponsecreate')); ?>" class="<?php echo e(routeActive('reponsecreate')); ?>">Create new </a></li>
-                            </ul>
                              
 
                              

@@ -2,75 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Chapitre;
-use App\Models\Cours;
+
+use App\Http\Controllers\Controller;
+
+use App\Models\Chapter;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class ChapitreController extends Controller
 {
     public function index()
     {
-        // Récupérer tous les chapitres
-        $chapitres = Chapitre::with('cours')->get();
+        $chapitres = Chapter::with('Course')->get();
         return view('admin.apps.chapitre.chapitres', compact('chapitres'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        // Récupérer les cours pour les afficher dans un select
-        $cours = Cours::all();
-        return view('admin.apps.chapitre.chapitrecreate', compact('cours'));
+        $cours_id = $request->query('cours_id');
+        $cours = Course::all();
+        return view('admin.apps.chapitre.chapitrecreate', compact('cours', 'cours_id'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'required|string',
-            'cours_id' => 'required|exists:cours,id',
-            'duree' => 'required|date_format:H:i',
-        ]);
 
-        // Création du chapitre
-        Chapitre::create($request->all());
+public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'course_id' => 'required|exists:Courses,id',
+    ]);
 
-        return redirect()->route('chapitres')->with('success', 'Chapitre ajouté avec succès.');
-    }
+    // Créer le chapitre
+    $chapitre = Chapter::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'course_id' => $request->course_id,
+    ]);
 
+    // Flasher l'id du chapitre ET du cours dans la session
+    session()->flash('chapitre_id', $chapitre->id);
+    session()->flash('cours_id', $request->course_id);
+    
+    // Stocker également l'information sur la source du cours (URL ou manuel)
+    session()->flash('cours_source', $request->input('cours_source', 'manual'));
+    
+    // Rediriger vers la même page
+    return redirect()->route('chapitrecreate')->withInput();
+}
+   
     public function edit($id)
     {
-        $chapitre = Chapitre::findOrFail($id);
-        $cours = Cours::all();
+        $chapitre = Chapter::findOrFail($id);
+        $cours = Course::all();
         return view('admin.apps.chapitre.chapitreedit', compact('chapitre', 'cours'));
     }
 
     public function show($id)
-{
-    // Récupérer le chapitre avec son id, incluant les informations de cours associées
-    $chapitre = Chapitre::with('cours')->findOrFail($id);
-
-    // Retourner la vue avec les données du chapitre
-    return view('admin.apps.chapitre.chapitreshow', compact('chapitre'));
-}
+    {
+        $chapitre = Chapter::with(['Course', 'lessons'])->findOrFail($id);
+        // Ajout des leçons pour pouvoir afficher la durée calculée
+        return view('admin.apps.chapitre.chapitreshow', compact('chapitre'));
+    }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'titre' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'cours_id' => 'required|exists:cours,id',
-            'duree' => 'required|date_format:H:i',
+            'course_id' => 'required|exists:courses,id',
         ]);
 
-        $chapitre = Chapitre::findOrFail($id);
-        $chapitre->update($request->all());
+        // Suppression du champ duration de la validation car il sera calculé automatiquement
+        $chapitre = Chapter::findOrFail($id);
+        
+        // Mise à jour des champs validés - la durée sera automatiquement calculée 
+        // dans le boot method du modèle lors de la sauvegarde
+        $chapitre->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'course_id' => $request->course_id,
+        ]);
 
         return redirect()->route('chapitres')->with('success', 'Chapitre mis à jour avec succès.');
     }
 
     public function destroy($id)
     {
-        $chapitre = Chapitre::findOrFail($id);
+        $chapitre = Chapter::findOrFail($id);
         $chapitre->delete();
 
         return redirect()->route('chapitres')->with('delete', 'Chapitre supprimé avec succès.');
