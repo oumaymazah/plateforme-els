@@ -40,8 +40,7 @@
           <?php echo $__env->yieldContent('content'); ?>
           <!-- Container-fluid Ends-->
         </div>
-        <!-- footer start-->
-        
+       
 
         <footer class="footer">
             <div class="container-fluid">

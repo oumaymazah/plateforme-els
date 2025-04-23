@@ -165,99 +165,14 @@
                             <li><a href="{{ route('chart-peity') }}" class="{{routeActive('chart-peity')}}">Peity Chart</a></li>
                         </ul>
                     </li>
-                    <li class="sidebar-main-title">
-                        <div>
-                            <h6>Forms</h6>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/form-controls') }}" href="javascript:void(0)"><i data-feather="sliders"></i><span>Form Controls </span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/form-controls') }};">
-                            <li><a href="{{ route('form-validation') }}" class="{{routeActive('form-validation')}}">Form Validation</a></li>
-                            <li><a href="{{ route('base-input') }}" class="{{routeActive('base-input')}}">Base Inputs</a></li>
-                            <li><a href="{{ route('radio-checkbox-control') }}" class="{{routeActive('radio-checkbox-control')}}">Checkbox & Radio</a></li>
-                            <li><a href="{{ route('input-group') }}" class="{{routeActive('input-group')}}">Input Groups</a></li>
-                            <li><a href="{{ route('megaoptions') }}" class="{{routeActive('megaoptions')}}">Mega Options </a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/form-widgets') }}" href="javascript:void(0)"><i data-feather="package"></i><span>Form Widgets</span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/form-widgets') }};">
-                            <li><a href="{{ route('datepicker') }}" class="{{routeActive('datepicker')}}">Datepicker</a></li>
-                            <li><a href="{{ route('time-picker') }}" class="{{routeActive('time-picker')}}">Timepicker</a></li>
-                            <li><a href="{{ route('datetimepicker') }}" class="{{routeActive('datetimepicker')}}">Datetimepicker</a></li>
-                            <li><a href="{{ route('daterangepicker') }}" class="{{routeActive('daterangepicker')}}">Daterangepicker</a></li>
-                            <li><a href="{{ route('touchspin') }}" class="{{routeActive('touchspin')}}">Touchspin</a></li>
-                            <li><a href="{{ route('select2') }}" class="{{routeActive('select2')}}">Select2</a></li>
-                            <li><a href="{{ route('switch') }}" class="{{routeActive('switch')}}">Switch</a></li>
-                            <li><a href="{{ route('typeahead') }}" class="{{routeActive('typeahead')}}">Typeahead</a></li>
-                            <li><a href="{{ route('clipboard') }}" class="{{routeActive('clipboard')}}">Clipboard </a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/form-layout') }}" href="javascript:void(0)"><i data-feather="layout"></i><span>Form layout</span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/form-layout') }};">
-                            <li><a href="{{ route('default-form') }}" class="{{routeActive('default-form')}}">Default Forms</a></li>
-                            <li><a href="{{ route('form-wizard') }}" class="{{routeActive('form-wizard')}}">Form Wizard 1</a></li>
-                            <li><a href="{{ route('form-wizard-two') }}" class="{{routeActive('form-wizard-two')}}">Form Wizard 2</a></li>
-                            <li><a href="{{ route('form-wizard-three') }}" class="{{routeActive('form-wizard-three')}}">Form Wizard 3</a></li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-main-title">
-                        <div>
-                            <h6>Table</h6>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/bootstrap-tables') }}" href="javascript:void(0)"><i data-feather="server"></i><span>Bootstrap Tables </span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/bootstrap-tables') }};">
-                            <li><a href="{{ route('bootstrap-basic-table') }}" class="{{routeActive('bootstrap-basic-table')}}">Basic Tables</a></li>
-                            <li><a href="{{ route('bootstrap-sizing-table') }}" class="{{routeActive('bootstrap-sizing-table')}}">Sizing Tables</a></li>
-                            <li><a href="{{ route('bootstrap-border-table') }}" class="{{routeActive('bootstrap-border-table')}}">Border Tables</a></li>
-                            <li><a href="{{ route('bootstrap-styling-table') }}" class="{{routeActive('bootstrap-styling-table')}}">Styling Tables</a></li>
-                            <li><a href="{{ route('table-components') }}" class="{{routeActive('table-components')}}">Table components</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/data-tables') }}" href="javascript:void(0)"><i data-feather="database"></i><span>Data Tables </span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/data-tables') }};">
-                            <li><a href="{{ route('datatable-basic-init') }}" class="{{routeActive('datatable-basic-init')}}">Basic Init</a></li>
-                            <li><a href="{{ route('datatable-advance') }}" class="{{routeActive('datatable-advance')}}">Advance Init</a></li>
-                            <li><a href="{{ route('datatable-styling') }}" class="{{routeActive('datatable-styling')}}">Styling</a></li>
-                            <li><a href="{{ route('datatable-AJAX') }}" class="{{routeActive('datatable-AJAX')}}">AJAX</a></li>
-                            <li><a href="{{ route('datatable-server-side') }}" class="{{routeActive('datatable-server-side')}}">Server Side</a></li>
-                            <li><a href="{{ route('datatable-plugin') }}" class="{{routeActive('datatable-plugin')}}">Plug-in</a></li>
-                            <li><a href="{{ route('datatable-API') }}" class="{{routeActive('datatable-API')}}">API</a></li>
-                            <li><a href="{{ route('datatable-data-source') }}" class="{{routeActive('datatable-data-source')}}">Data Sources</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/ex-data-tables') }}" href="javascript:void(0)"><i data-feather="hard-drive"></i><span>Ex. Data Tables </span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/ex-data-tables') }};">
-                            <li><a href="{{ route('datatable-ext-autofill') }}" class="{{routeActive('datatable-ext-autofill')}}">Auto Fill</a></li>
-                            <li><a href="{{ route('datatable-ext-basic-button') }}" class="{{routeActive('datatable-ext-basic-button')}}">Basic Button</a></li>
-                            <li><a href="{{ route('datatable-ext-col-reorder') }}" class="{{routeActive('datatable-ext-col-reorder')}}">Column Reorder</a></li>
-                            <li><a href="{{ route('datatable-ext-fixed-header') }}" class="{{routeActive('datatable-ext-fixed-header')}}">Fixed Header</a></li>
-                            <li><a href="{{ route('datatable-ext-key-table') }}" class="{{routeActive('datatable-ext-key-table')}}">Key Table</a></li>
-                            <li><a href="{{ route('datatable-ext-responsive') }}" class="{{routeActive('datatable-ext-responsive')}}">Responsive</a></li>
-                            <li><a href="{{ route('datatable-ext-row-reorder') }}" class="{{routeActive('datatable-ext-row-reorder')}}">Row Reorder</a></li>
-                            <li><a href="{{ route('datatable-ext-scroller') }}" class="{{routeActive('datatable-ext-scroller')}}">Scroller </a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title link-nav {{routeActive('jsgrid-table')}}" href="{{ route('jsgrid-table') }}"><i data-feather="file-text"></i><span>Js Grid Table</span></a>
-                    </li>
+
                     <li class="sidebar-main-title">
                         <div>
                             <h6>Applications</h6>
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/project') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Project </span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/project') }};">
-                            <li><a href="{{ route('projects') }}" class="{{routeActive('projects')}}">Project List</a></li>
-                            <li><a href="{{ route('projectcreate') }}" class="{{routeActive('projectcreate')}}">Create new </a></li>
-                        </ul>
+                        
                          {{-- zedtouu  ta formation --}}
                          <a class="nav-link menu-title {{ prefixActive('/formation') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Formations </span></a>
                          <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/formation') }};">
@@ -296,36 +211,8 @@
 
 
 
-                             {{-- Feedbacks --}}
 
-                             {{-- <a class="nav-link menu-title {{ prefixActive('/feedback') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Reponse </span></a>
-                            <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/feedback') }};">
-                                <li><a href="{{ route('feedbacks') }}" class="{{routeActive('feedbacks')}}">feedbacks List</a></li>
-                                <li><a href="{{ route('feedbackcreate') }}" class="{{routeActive('feedbackcreate')}}">Create new </a></li>
-                            </ul> --}}
 
-                            <a class="nav-link menu-title {{ prefixActive('/feedbacks') }}" href="javascript:void(0)">
-                                <i data-feather="box"></i><span>Feedbacks</span>
-                            </a>
-                            <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/feedbacks') }};">
-                                <li><a href="{{ route('feedbacks') }}" class="{{ routeActive('feedbacks') }}">Feedbacks List</a></li>
-                                <li><a href="{{ route('feedbackcreate') }}" class="{{ routeActive('feedbackcreate') }}">Create New</a></li>
-                            </ul>
-                             {{-- <a class="nav-link menu-title {{ prefixActive('/feedbacks') }}" href="javascript:void(0)">
-                                 <i data-feather="message-square"></i><span>Feedbacks</span>
-                             </a>
-                             <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/feedbacks') }};">
-                                 <li>
-                                     <a href="{{ route('feedbacks.feedbacks') }}" class="{{ routeActive('feedbacks') }}">
-                                         Feedback List
-                                     </a>
-                                 </li>
-                                 <li>
-                                     <a href="{{ route('feedbackcreate') }}" class="{{ routeActive('feedbackcreate') }}">
-                                         Create New
-                                     </a>
-                                 </li>
-                             </ul> --}}
 
 
                     </li>

@@ -174,69 +174,15 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::view('chart-peity', 'admin.charts.chart-peity')->name('chart-peity');
 	});
 
-	Route::prefix('form-controls')->group( function(){
-		Route::view('form-validation', 'admin.forms.form-validation')->name('form-validation');
-		Route::view('base-input', 'admin.forms.base-input')->name('base-input');
-		Route::view('radio-checkbox-control', 'admin.forms.radio-checkbox-control')->name('radio-checkbox-control');
-		Route::view('input-group', 'admin.forms.input-group')->name('input-group');
-		Route::view('megaoptions', 'admin.forms.megaoptions')->name('megaoptions');
-	});
 
-	Route::prefix('form-widgets')->group( function(){
-		Route::view('datepicker', 'admin.forms.datepicker')->name('datepicker');
-		Route::view('time-picker', 'admin.forms.time-picker')->name('time-picker');
-		Route::view('datetimepicker', 'admin.forms.datetimepicker')->name('datetimepicker');
-		Route::view('daterangepicker', 'admin.forms.daterangepicker')->name('daterangepicker');
-		Route::view('touchspin', 'admin.forms.touchspin')->name('touchspin');
-		Route::view('select2', 'admin.forms.select2')->name('select2');
-		Route::view('switch', 'admin.forms.switch')->name('switch');
-		Route::view('typeahead', 'admin.forms.typeahead')->name('typeahead');
-		Route::view('clipboard', 'admin.forms.clipboard')->name('clipboard');
-	});
 
-	Route::prefix('form-layout')->group( function(){
-		Route::view('default-form', 'admin.forms.default-form')->name('default-form');
-		Route::view('form-wizard', 'admin.forms.form-wizard')->name('form-wizard');
-		Route::view('form-wizard-two', 'admin.forms.form-wizard-two')->name('form-wizard-two');
-		Route::view('form-wizard-three', 'admin.forms.form-wizard-three')->name('form-wizard-three');
-	});
 
-	Route::prefix('bootstrap-tables')->group( function(){
-		Route::view('bootstrap-basic-table', 'admin.tables.bootstrap-tables.bootstrap-basic-table')->name('bootstrap-basic-table');
-		Route::view('bootstrap-sizing-table', 'admin.tables.bootstrap-tables.bootstrap-sizing-table')->name('bootstrap-sizing-table');
-		Route::view('bootstrap-border-table', 'admin.tables.bootstrap-tables.bootstrap-border-table')->name('bootstrap-border-table');
-		Route::view('bootstrap-styling-table', 'admin.tables.bootstrap-tables.bootstrap-styling-table')->name('bootstrap-styling-table');
-		Route::view('table-components', 'admin.tables.bootstrap-tables.table-components')->name('table-components');
-	});
 
-	Route::prefix('data-tables')->group( function(){
-		Route::view('datatable-basic-init', 'admin.tables.data-tables.datatable-basic-init')->name('datatable-basic-init');
-		Route::view('datatable-advance', 'admin.tables.data-tables.datatable-advance')->name('datatable-advance');
-		Route::view('datatable-styling', 'admin.tables.data-tables.datatable-styling')->name('datatable-styling');
-		Route::view('datatable-AJAX', 'admin.tables.data-tables.datatable-AJAX')->name('datatable-AJAX');
-		Route::view('datatable-server-side', 'admin.tables.data-tables.datatable-server-side')->name('datatable-server-side');
-		Route::view('datatable-plugin', 'admin.tables.data-tables.datatable-plugin')->name('datatable-plugin');
-		Route::view('datatable-API', 'admin.tables.data-tables.datatable-API')->name('datatable-API');
-		Route::view('datatable-data-source', 'admin.tables.data-tables.datatable-data-source')->name('datatable-data-source');
-	});
 
-	Route::prefix('ex-data-tables')->group( function(){
-		Route::view('datatable-ext-autofill', 'admin.tables.ex-data-tables.datatable-ext-autofill')->name('datatable-ext-autofill');
-		Route::view('datatable-ext-basic-button', 'admin.tables.ex-data-tables.datatable-ext-basic-button')->name('datatable-ext-basic-button');
-		Route::view('datatable-ext-col-reorder', 'admin.tables.ex-data-tables.datatable-ext-col-reorder')->name('datatable-ext-col-reorder');
-		Route::view('datatable-ext-fixed-header', 'admin.tables.ex-data-tables.datatable-ext-fixed-header')->name('datatable-ext-fixed-header');
-		Route::view('datatable-ext-key-table', 'admin.tables.ex-data-tables.datatable-ext-key-table')->name('datatable-ext-key-table');
-		Route::view('datatable-ext-responsive', 'admin.tables.ex-data-tables.datatable-ext-responsive')->name('datatable-ext-responsive');
-		Route::view('datatable-ext-row-reorder', 'admin.tables.ex-data-tables.datatable-ext-row-reorder')->name('datatable-ext-row-reorder');
-		Route::view('datatable-ext-scroller', 'admin.tables.ex-data-tables.datatable-ext-scroller')->name('datatable-ext-scroller');
-	});
-
+	
 	Route::view('jsgrid-table', 'admin.tables.jsgrid-table')->name('jsgrid-table');
 
-	Route::prefix('project')->group( function(){
-		Route::view('projects', 'admin.apps.project.projects')->name('projects');
-		Route::view('projectcreate', 'admin.apps.project.projectcreate')->name('projectcreate');
-	});
+
 	Route::view('file-manager', 'admin.apps.file-manager')->name('file-manager');
 	Route::view('kanban', 'admin.apps.kanban')->name('kanban');
 
