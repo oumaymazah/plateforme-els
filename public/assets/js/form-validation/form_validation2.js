@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+
         // Validation en temps réel
         form.querySelectorAll('input, textarea, select').forEach(field => {
             const eventType = (field.type === 'checkbox' || field.type === 'radio') ? 'change' : 'input';
@@ -197,4 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+
+    
 });

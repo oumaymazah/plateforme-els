@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $project_title = '| Viho - Premium Admin Template';
-        View::share('title', $project_title);   
+        View::share('title', $project_title);
+        
     }
 }

@@ -10,6 +10,7 @@
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="<?php echo e(asset('assets/images/favicon.png')); ?>" type="image/x-icon">
     <link rel="shortcut icon" href="<?php echo e(asset('assets/images/favicon.png')); ?>" type="image/x-icon">
+ 
     <title><?php echo $__env->yieldContent('title'); ?></title>
     <!-- Google font-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -40,7 +41,7 @@
           <?php echo $__env->yieldContent('content'); ?>
           <!-- Container-fluid Ends-->
         </div>
-       
+
 
         <footer class="footer">
             <div class="container-fluid">

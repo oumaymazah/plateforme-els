@@ -172,13 +172,21 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        
+
                          {{-- zedtouu  ta formation --}}
                          <a class="nav-link menu-title {{ prefixActive('/formation') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Formations </span></a>
                          <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/formation') }};">
                              <li><a href="{{ route('formations') }}" class="{{routeActive('formations')}}">Formations List</a></li>
                              <li><a href="{{ route('formationcreate') }}" class="{{routeActive('formationcreate')}}">Create new </a></li>
                          </ul>
+                         <a class="nav-link menu-title {{ prefixActive('/quizzes') }}" href="javascript:void(0)">
+                            <i data-feather="box"></i>
+                            <span>Quiz</span>
+                        </a>
+                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/quizzes') }};">
+                            <li><a href="{{ route('admin.quizzes.index') }}" class="{{ routeActive('admin.quizzes.index') }}">Liste des Quiz</a></li>
+                            <li><a href="{{ route('admin.quizzes.create') }}" class="{{ routeActive('admin.quizzes.create') }}">Créer un nouveau</a></li>
+                        </ul>
 
                          {{-- categorie --}}
 

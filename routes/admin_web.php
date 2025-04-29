@@ -3,22 +3,28 @@
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AdminQuizController;
 use App\Http\Controllers\Auth\EditController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\ChapitreController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\PanierController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\QuizAttemptController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ReponseController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\RoleMiddleware;
-use App\Http\Controllers\PanierController;
-use App\Http\Controllers\ReservationController;
+
+
+
 
 
 
@@ -179,7 +185,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-	
+
 	Route::view('jsgrid-table', 'admin.tables.jsgrid-table')->name('jsgrid-table');
 
 
@@ -414,23 +420,12 @@ Route::post('/api/reservations/cancel', [ReservationController::class, 'cancelRe
 	Route::get('/api/preview/docx', 'App\Http\Controllers\LessonControllerr@previewDocx');
 	Route::get('/api/preview/zip', 'App\Http\Controllers\LessonControllerr@previewZip');
 
+   
 
 
 
 
 
-
-	Route::prefix('feedbacks')->group(function () {
-		Route::get('/', [FeedbackController::class, 'index'])->name('feedbacks');
-		Route::get('/feedbackcreate', [FeedbackController::class, 'create'])->name('feedbackcreate');
-		Route::post('/', [FeedbackController::class, 'store'])->name('feedbackstore');
-		Route::get('/{id}', [FeedbackController::class, 'show'])->name('feedbackshow');
-		Route::get('/{id}/edit', [FeedbackController::class, 'edit'])->name('feedbackedit');
-		Route::put('/{id}', [FeedbackController::class, 'update'])->name('feedbackupdate');
-		Route::delete('/{id}', [FeedbackController::class, 'destroy'])->name('feedbackdestroy');
-		Route::post('/deleteSelected', [FeedbackController::class, 'deleteSelected'])->name('deleteSelected');
-
-	});
 
 });
 //route pour les gestions des roles et des permissions
@@ -445,7 +440,38 @@ Route::middleware(['auth', 'role:admin|super-admin'])->name('admin.')->prefix('a
     Route::delete('/users/{user}/roles/{role}',[UserController::class,'removeRole'])->name('users.roles.remove');
     Route::delete('/users/{user}/permissions/{permission}',[UserController::class,'revokePermission'])->name('users.permissions.revoke');
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
+     // Quiz
+     Route::resource('quizzes', QuizController::class)->except(['edit', 'update']);
+     Route::post('/quizzes/{quiz}/publish', [QuizController::class, 'publish'])->name('quizzes.publish');
+     Route::post('/quizzes/{quiz}/toggle', [QuizController::class, 'toggle'])->name('quizzes.toggle');
+     Route::get('/quizzes/template/{type}', [QuizController::class, 'downloadTemplate'])->name('quizzes.download-template');
+      // Questions
+     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+     Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
+     Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+     Route::get('/questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
+     // Tentatives
+      Route::get('/quiz-attempts', [AdminQuizController::class, 'index'])
+          ->name('quiz-attempts.index');
 
+     Route::get('/quiz-attempts/{attempt}', [AdminQuizController::class, 'show'])
+          ->name('quiz-attempts.show');
+});
+Route::middleware(['auth', 'role:etudiant'])->group(function() {
+     // Quiz
+     Route::post('/quizzes/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quizzes.start');
+     Route::get('/quizzes/attempt/{attempt}', [QuizAttemptController::class, 'attempt'])->name('quizzes.attempt');
+     Route::post('/quizzes/attempt/{attempt}/answer', [QuizAttemptController::class, 'answer'])->name('quizzes.answer');
+     Route::post('/quizzes/attempt/{attempt}/tab-switch', [QuizAttemptController::class, 'tabSwitch'])->name('quizzes.tab-switch');
+     Route::get('/quizzes/result/{attempt}', [QuizAttemptController::class, 'result'])->name('quizzes.result');
+     Route::get('/quizzes/attempt/{attempt}/finish', [QuizAttemptController::class, 'finishAttempt'])->name('quizzes.finish');
+     Route::post('/feedbacks', [FeedbackController::class, 'store'])
+     ->name('feedbacks.store');
+     // Certificats
+     Route::get('/certificats/{user}/formations/{training}/visualiser', [CertificationController::class, 'show'])
+         ->name('certificates.show');
+     Route::get('/certificats/{user}/formations/{training}/telecharger', [CertificationController::class, 'download'])
+         ->name('certificates.download');
 });
 
 

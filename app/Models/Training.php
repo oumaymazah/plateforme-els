@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Models\Cart;
 use App\Models\Category;
-use App\Models\Course;
+use App\Models\Certification;
 
+use App\Models\Course;
 use App\Models\Feedback;
+use App\Models\Quiz;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -59,7 +61,14 @@ class Training extends Model
     {
         return $this->hasMany(Feedback::class);
     }
-
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+    public function certificates()
+    {
+        return $this->hasMany(Certification::class);
+    }
     // Convertit les secondes en format HH:MM:SS
     public function secondsToTime($totalSeconds)
     {
@@ -81,7 +90,7 @@ class Training extends Model
         }
 
         $parts = explode(':', $time);
-        
+
         if (count($parts) === 3) {
             // Format HH:MM:SS
             $result = (int)$parts[0] * 3600 + (int)$parts[1] * 60 + (int)$parts[2];
@@ -93,7 +102,7 @@ class Training extends Model
             Log::info("Training {$this->id}: Convertir {$time} (HH:MM) en secondes: {$result}");
             return $result;
         }
-        
+
         Log::warning("Training {$this->id}: Format de durée non reconnu: {$time}");
         return 0;
     }
@@ -145,7 +154,7 @@ class Training extends Model
             }
         });
     }
-    
+
     // Accesseur pour vérifier si dans le panier
     public function getInCartAttribute()
     {
@@ -166,7 +175,7 @@ class Training extends Model
 
     // Découpe la durée en heures, minutes, secondes
     $parts = explode(':', $this->duration);
-    
+
     $hours = (int)$parts[0];
     $minutes = (int)($parts[1] ?? 0);
     $seconds = (int)($parts[2] ?? 0);

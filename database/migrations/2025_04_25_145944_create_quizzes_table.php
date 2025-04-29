@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCertificationsTable extends Migration
+class CreateQuizzesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,16 @@ class CreateCertificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('certifications', function (Blueprint $table) {
+        Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
-            $table->string('certificate_number')->unique();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('training_id');
-            $table->date('obtained_date');
-            $table->string('status'); // Ex: "Délivrée", "Validée", "Refusée"
-
-            // Définition des clés étrangères
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('training_id')->references('id')->on('trainings')->onDelete('cascade');
+            $table->string('title');
+            $table->enum('type', ['final', 'placement']);
+            $table->integer('duration'); // en minutes
+            $table->integer('passing_score')->nullable(); // seulement pour les quiz finaux
+            $table->boolean('is_published')->default(false);
             $table->timestamps();
-
-
 
 
         });
@@ -39,6 +35,6 @@ class CreateCertificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('certifications');
+        Schema::dropIfExists('quizzes');
     }
 }

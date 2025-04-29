@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Formation;
+
 use App\Models\Training;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,7 @@ class Certification extends Model
         'training_id',
         'obtained_date',
         'status',
+        'certificate_number',
     ];
 
     // Relation avec l'étudiant
@@ -28,6 +30,17 @@ class Certification extends Model
     public function training()
     {
         return $this->belongsTo(Training::class);
+    }
+
+    public function generateCertificate()
+    {
+        $pdf = Pdf::loadView('certificates.certificate', [
+            'user' => $this->user,
+            'training' => $this->training,
+            'certification' => $this
+        ]);
+
+        return $pdf; // Retourne l'instance sans streamer
     }
 
 }

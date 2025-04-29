@@ -172,13 +172,21 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        
+
                          
                          <a class="nav-link menu-title <?php echo e(prefixActive('/formation')); ?>" href="javascript:void(0)"><i data-feather="box"></i><span>Formations </span></a>
                          <ul class="nav-submenu menu-content" style="display: <?php echo e(prefixBlock('/formation')); ?>;">
                              <li><a href="<?php echo e(route('formations')); ?>" class="<?php echo e(routeActive('formations')); ?>">Formations List</a></li>
                              <li><a href="<?php echo e(route('formationcreate')); ?>" class="<?php echo e(routeActive('formationcreate')); ?>">Create new </a></li>
                          </ul>
+                         <a class="nav-link menu-title <?php echo e(prefixActive('/quizzes')); ?>" href="javascript:void(0)">
+                            <i data-feather="box"></i>
+                            <span>Quiz</span>
+                        </a>
+                        <ul class="nav-submenu menu-content" style="display: <?php echo e(prefixBlock('/quizzes')); ?>;">
+                            <li><a href="<?php echo e(route('admin.quizzes.index')); ?>" class="<?php echo e(routeActive('admin.quizzes.index')); ?>">Liste des Quiz</a></li>
+                            <li><a href="<?php echo e(route('admin.quizzes.create')); ?>" class="<?php echo e(routeActive('admin.quizzes.create')); ?>">Créer un nouveau</a></li>
+                        </ul>
 
                          
 

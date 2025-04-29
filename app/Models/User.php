@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Certification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -28,7 +29,7 @@ class User extends Authenticatable
         'first_login',
         'validation_code',
         'code_reset_password',
-        
+
 
     ];
 
@@ -50,4 +51,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function certificates()
+    {
+        return $this->hasMany(Certification::class);
+    }
 }

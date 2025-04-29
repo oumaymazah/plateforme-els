@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Formation;
+
+use App\Models\QuizAttempt;
+use App\Models\Training;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +16,7 @@ class Feedback extends Model
     protected $fillable = [
         'user_id',
         'rating_count',
+        'quiz_attempt_id',
         'training_id',
     ];
 
@@ -23,6 +26,10 @@ class Feedback extends Model
     public function training()
     {
         return $this->belongsTo(Training::class);
+    }
+    public function quizAttempt()
+    {
+        return $this->belongsTo(QuizAttempt::class);
     }
 
     // (Chaque Feedback appartient à un Utilisateur)
