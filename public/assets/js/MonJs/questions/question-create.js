@@ -1,47 +1,56 @@
-
-
 document.addEventListener("DOMContentLoaded", function() {
+    // Éléments DOM
     let responseCountInput = document.getElementById("response_count");
+    let questionType = document.getElementById("question_type");
     let reponsesContainer = document.getElementById("reponses-container");
     let form = document.getElementById("question-form");
     let submitBtn = document.getElementById("submit-btn");
     let errorMessage = document.getElementById("error-message");
+    let statementInput = document.getElementById("statement");
+    let cancelBtn = document.querySelector('button[data-bs-dismiss="modal"]'); // Bouton Annuler
+    let addQuestionModal = document.getElementById('addQuestionModal'); // Modal
 
-    if (!responseCountInput || !reponsesContainer || !form || !submitBtn || !errorMessage) {
+    // Variable pour suivre si le formulaire a été soumis
+    let formSubmitted = false;
+
+    // Vérifier que tous les éléments sont présents
+    if (!responseCountInput || !reponsesContainer || !form || !submitBtn || !errorMessage || !questionType) {
         console.error("Un ou plusieurs éléments du formulaire sont manquants.");
         return;
     }
-    function generateResponseFields(responseCount) {
+
+    // Fonction pour générer les champs de réponse en fonction du nombre et du type
+    function generateResponseFields() {
+        const responseCount = parseInt(responseCountInput.value);
+        const isSingleChoice = questionType.value === "single";
+        const inputType = isSingleChoice ? "radio" : "checkbox";
+        const inputName = isSingleChoice ? "correct_answer" : "correct_answers[]";
+
         reponsesContainer.innerHTML = "";
+
         for (let i = 0; i < responseCount; i++) {
             let reponseDiv = document.createElement("div");
-            reponseDiv.classList.add("row", "mb-3", "align-items-center");
+            reponseDiv.classList.add("mb-3");
+
             reponseDiv.innerHTML = `
-                <div class="col-md-8">
-                    <label class="form-label">Réponse ${i + 1} <span class="text-danger">*</span></label>
-
-                    <div class="input-group">
-
-                        <input class="form-control response-input" type="text" name="reponses[${i}][content]" placeholder="Entrez la réponse ${i + 1}" required>
-                        <div class="input-group-text">
-                            <input type="hidden" name="reponses[${i}][is_correct]" value="0">
-                            <input type="checkbox" name="reponses[${i}][is_correct]" value="1" class="form-check-input">
-                        </div>
+                <div class="input-group">
+                    <div class="input-group-text">
+                        <input type="${inputType}" name="${inputName}" value="${i}" class="form-check-input"
+                            ${isSingleChoice && i === 0 ? 'checked' : ''}>
                     </div>
+                    <input type="text" name="answers[]" class="form-control response-input"
+                           placeholder="Réponse ${i + 1}" required>
                     <div class="invalid-feedback">Ce champ de réponse est obligatoire.</div>
                 </div>
             `;
+
             reponsesContainer.appendChild(reponseDiv);
         }
-    
-        // Ajouter un écouteur pour chaque champ généré
-        let responseInputs = document.querySelectorAll(".response-input");
-        responseInputs.forEach(input => {
+
+        // Ajout des écouteurs pour supprimer les erreurs uniquement après soumission
+        document.querySelectorAll(".response-input").forEach(input => {
             input.addEventListener("input", function() {
-                if (this.value.trim() === "") {
-                    this.classList.add("is-invalid");
-                    this.classList.remove("is-valid");
-                } else {
+                if (formSubmitted && this.value.trim() !== "") {
                     this.classList.remove("is-invalid");
                     this.classList.add("is-valid");
                 }
@@ -49,148 +58,135 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // function generateResponseFields(responseCount) {
-    //     reponsesContainer.innerHTML = "";
-    //     for (let i = 0; i < responseCount; i++) {
-    //         let reponseDiv = document.createElement("div");
-    //         reponseDiv.classList.add("row", "mb-3");
-    //         reponseDiv.innerHTML = `
-    //             <div class="col-md-8">
-    //                 <label class="form-label">Réponse ${i + 1} <span class="text-danger">*</span></label>
-    //                 <input class="form-control response-input" type="text" name="reponses[${i}][content]" placeholder="Entrez la réponse ${i + 1}" required>
-    //                 <div class="invalid-feedback">Ce champ de réponse est obligatoire.</div>
-    //             </div>
-    //             <div class="col-md-4 d-flex align-items-center">
-    //                 <input type="hidden" name="reponses[${i}][is_correct]" value="0">
-    //                 <input type="checkbox" name="reponses[${i}][is_correct]" value="1" class="form-check-input me-2">
-    //             </div>
-    //         `;
-    //         reponsesContainer.appendChild(reponseDiv);
-    //     }
+    // Fonction pour réinitialiser le formulaire complètement
+    function resetForm() {
+        // Réinitialiser la variable de soumission
+        formSubmitted = false;
 
-    //     // Ajouter un écouteur pour chaque champ généré
-    //     let responseInputs = document.querySelectorAll(".response-input");
-    //     responseInputs.forEach(input => {
-    //         input.addEventListener("input", function() {
-    //             if (this.value.trim() === "") {
-    //                 this.classList.add("is-invalid");
-    //                 this.classList.remove("is-valid");
-    //             } else {
-    //                 this.classList.remove("is-invalid");
-    //                 this.classList.add("is-valid");
-    //             }
-    //         });
-    //     });
-    // }
+        // Réinitialisation du formulaire HTML
+        form.reset();
 
-    let initialResponseCount = parseInt(responseCountInput.dataset.initial || 1);
-    if (initialResponseCount > 0) {
-        generateResponseFields(initialResponseCount);
+        // Réinitialiser l'état de validation - supprimer toutes les classes
+        if (statementInput) {
+            statementInput.classList.remove("is-invalid", "is-valid");
+            statementInput.value = "";
+        }
+
+        // Masquer le message d'erreur
+        errorMessage.classList.add("d-none");
+        errorMessage.innerHTML = "";
+
+        // Réinitialiser les réponses avec les valeurs par défaut
+        if (responseCountInput) {
+            responseCountInput.value = responseCountInput.getAttribute("data-initial") || "4";
+        }
+
+        if (questionType) {
+            questionType.value = "single";
+        }
+
+        // Regénérer les champs de réponse
+        generateResponseFields();
     }
 
-    responseCountInput.addEventListener("change", function() {
-        generateResponseFields(parseInt(this.value));
-    });
+    // Initialisation au chargement
+    generateResponseFields();
 
+    // Écouteurs d'événements
+    responseCountInput.addEventListener("change", generateResponseFields);
+    questionType.addEventListener("change", generateResponseFields);
+
+    // Ajout d'un écouteur pour le champ de titre - actif uniquement après soumission
+    if (statementInput) {
+        statementInput.addEventListener("input", function() {
+            if (formSubmitted && this.value.trim() !== "") {
+                this.classList.remove("is-invalid");
+                this.classList.add("is-valid");
+            }
+        });
+    }
+
+    // Validation à la soumission
     submitBtn.addEventListener("click", function(event) {
         event.preventDefault();
+
+        // Marquer le formulaire comme soumis
+        formSubmitted = true;
+
         let isValid = true;
         let errorMessages = [];
 
-        let statementInput = document.getElementById("statement");
-        if (statementInput.value.trim() === "") {
-            isValid = false;
-            errorMessages.push("Veuillez entrer un énoncé valide.");
-            statementInput.classList.add("is-invalid");
-            statementInput.classList.remove("is-valid");
-        } else {
-            statementInput.classList.remove("is-invalid");
-            statementInput.classList.add("is-valid");
-        }
+        // Réinitialiser toutes les validations précédentes
+        document.querySelectorAll(".is-valid, .is-invalid").forEach(element => {
+            element.classList.remove("is-valid", "is-invalid");
+        });
 
-        // Vérifier si un quiz est sélectionné (soit via select, soit via hidden input)
-        let quizIdInput = document.getElementById("quiz_id");
-        let quizSelected = false;
-        
-        if (quizIdInput) {
-            // Si le select existe
-            if (quizIdInput.value === "") {
+        // Valider l'énoncé
+        if (statementInput) {
+            if (statementInput.value.trim() === "") {
                 isValid = false;
-                errorMessages.push("Veuillez sélectionner un quiz valide.");
-                quizIdInput.classList.add("is-invalid");
-                quizIdInput.classList.remove("is-valid");
+                statementInput.classList.add("is-invalid");
             } else {
-                quizIdInput.classList.remove("is-invalid");
-                quizIdInput.classList.add("is-valid");
-                quizSelected = true;
-            }
-        } else {
-            // Si le select n'existe pas, vérifier l'input hidden
-            let hiddenQuizId = document.getElementById("hidden_quiz_id");
-            if (hiddenQuizId && hiddenQuizId.value !== "") {
-                quizSelected = true;
-            } else {
-                isValid = false;
-                errorMessages.push("Aucun quiz n'est sélectionné.");
+                statementInput.classList.add("is-valid");
             }
         }
 
-        let checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
-        if (checkboxes.length === 0) {
+        // Vérifier si un quiz est sélectionné
+        let hiddenQuizId = document.getElementById("hidden_quiz_id");
+        if (!hiddenQuizId || hiddenQuizId.value === "") {
             isValid = false;
-            errorMessages.push("Veuillez cocher au moins une réponse comme correcte.");
+            errorMessages.push("Aucun quiz n'est sélectionné.");
         }
 
-        let responseFields = form.querySelectorAll('input[name^="reponses"][name$="[content]"]');
-        let hasEmptyResponse = false;
+        // Vérifier qu'au moins une réponse est cochée comme correcte
+        const isSingleChoice = questionType.value === "single";
+        const selector = isSingleChoice ? 'input[type="radio"][name="correct_answer"]:checked' : 'input[type="checkbox"][name="correct_answers[]"]:checked';
+        let checkedAnswers = form.querySelectorAll(selector);
+
+        if (checkedAnswers.length === 0) {
+            isValid = false;
+            errorMessages.push("Veuillez marquer au moins une réponse comme correcte.");
+        }
+
+        // Vérifier que tous les champs de réponse sont remplis
+        let responseFields = form.querySelectorAll('input[name="answers[]"]');
         responseFields.forEach(function(input) {
             if (input.value.trim() === '') {
                 isValid = false;
-                hasEmptyResponse = true;
                 input.classList.add("is-invalid");
-                input.classList.remove("is-valid");
             } else {
-                input.classList.remove("is-invalid");
                 input.classList.add("is-valid");
             }
         });
 
-        if (hasEmptyResponse) {
-            errorMessages.push("Veuillez remplir tous les champs de réponse.");
-        }
-
-        if (!isValid) {
+        // Afficher les erreurs ou soumettre le formulaire
+        if (!isValid && errorMessages.length > 0) {
             errorMessage.innerHTML = errorMessages.join("<br>");
             errorMessage.classList.remove("d-none");
 
-            // Masquer le message d'erreur après 2 secondes
+            // Masquer le message d'erreur après 3 secondes
             setTimeout(function() {
                 errorMessage.classList.add("d-none");
-            }, 2000);
-        } else {
+            }, 3000);
+        } else if (isValid) {
             form.submit();
         }
     });
+
+    // NOUVELLES PARTIES POUR RÉINITIALISER LE FORMULAIRE
+
+    // 1. Réinitialiser quand on clique sur Annuler
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", resetForm);
+    }
+
+    // 2. Réinitialiser quand on ferme la modal (en cliquant hors de la modal ou sur X)
+    if (addQuestionModal) {
+        addQuestionModal.addEventListener('hidden.bs.modal', resetForm);
+    }
+
+    // 3. Réinitialiser quand on ouvre la modal
+    if (addQuestionModal) {
+        addQuestionModal.addEventListener('show.bs.modal', resetForm);
+    }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

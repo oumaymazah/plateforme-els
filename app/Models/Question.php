@@ -30,4 +30,25 @@ class Question extends Model
     {
         return $this->answers()->where('is_correct', true);
     }
+     /**
+     * Détermine si cette question est à choix unique
+     * (basé sur le nombre de réponses correctes)
+     */
+    public function isSingleChoice()
+    {
+        return $this->answers()->where('is_correct', true)->count() <= 1;
+    }
+
+    /**
+     * Détermine si cette question est à choix multiple
+     * (basé sur le nombre de réponses correctes)
+     */
+    public function isMultipleChoice()
+    {
+        return $this->answers()->where('is_correct', true)->count() > 1;
+    }
+    public function getQuestionType()
+    {
+        return $this->isMultipleChoice() ? 'multiple' : 'single';
+    }
 }

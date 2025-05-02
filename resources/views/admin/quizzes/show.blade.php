@@ -1,10 +1,15 @@
 @extends('layouts.admin.master')
+
 @push('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{{ asset('assets/css/MonCss/quizzes/quizShowPage.css') }}">
 @endpush
+
 @section('content')
-    {{-- Affichage du message de succès --}}
+<div class="container-fluid">
+    <!-- Alert Messages -->
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -12,7 +17,6 @@
     </div>
     @endif
 
-    {{-- Affichage des erreurs de validation --}}
     @if($errors->any())
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <ul class="mb-0">
@@ -24,436 +28,314 @@
     </div>
     @endif
 
-    
-<div class="container">
-    <div class="card shadow">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h4 class="m-0 font-weight-bold text-primary">Détails du Quiz: {{ $quiz->title }}</h4>
-            <div>
-                <a href="{{ route('admin.quizzes.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Retour
-                </a>
+    <!-- Titre du quiz en card header -->
+    <div class="card quiz-header-card">
+        <div class="card-body d-flex justify-content-between align-items-center">
+
+            <a href="{{ route('admin.quizzes.index') }}" class="back-icon">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+
+            <div style="width: 165px;"><!-- Espace vide pour l'équilibre --></div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Quiz Information Card -->
+        <div class="col-md-6">
+            <div class="card quiz-info-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Informations générales</h5>
+                    <div class="action-icons-container">
+                        @if(!$quiz->is_published)
+                        <form action="{{ route('admin.quizzes.publish', $quiz->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="action-icon action-icon-publish" data-bs-toggle="tooltip" data-bs-placement="top" title="Publier">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
+                        @else
+                        <form action="{{ route('admin.quizzes.toggle', $quiz->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="action-icon action-icon-unpublish" data-bs-toggle="tooltip" data-bs-placement="top" title="Dépublier">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                        </form>
+                        @endif
+                        <form action="{{ route('admin.quizzes.destroy', $quiz->id) }}" method="POST" class="d-inline delete-quiz-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="action-icon action-icon-delete delete-quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body quiz-info-card-body">
+                    <table class="table quiz-info-table">
+                        <tr>
+                            <th>Statut</th>
+                            <td>
+                                @if($quiz->is_published)
+                                    <span class="badge status-published"><i class="fas fa-check-circle me-1"></i> Publié</span>
+                                @else
+                                    <span class="badge status-draft"><i class="fas fa-clock me-1"></i> Non publié</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Titre de Quiz</th>
+                            <td>{{ $quiz->title }}</td>
+                        </tr>
+                        <tr>
+                            <th>Formation associée</th>
+                            <td>{{ $quiz->training->title }}</td>
+                        </tr>
+                        <tr>
+                            <th>Type</th>
+                            <td>
+                                @if($quiz->isPlacementTest())
+                                    <span class="badge badge-placement">Test de niveau</span>
+                                @else
+                                    <span class="badge badge-final">Quiz final</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Durée</th>
+                            <td>{{ $quiz->duration }} minutes</td>
+                        </tr>
+                        @if($quiz->isFinalQuiz())
+                        <tr>
+                            <th>Score de passage</th>
+                            <td>{{ $quiz->passing_score }}/20</td>
+                        </tr>
+                        @endif
+                        <tr>
+                            <th>Nombre de questions</th>
+                            <td>{{ $quiz->questions->count() }}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="card-body">
-            <!-- Statut de publication -->
-            @if(!$quiz->is_published)
-                <div class="alert alert-warning">
-                    <h5><i class="fas fa-exclamation-triangle"></i> Ce quiz n'est pas publié</h5>
-                    <p class="mb-0">Les étudiants ne peuvent pas voir ou passer ce quiz.</p>
-                </div>
-            @else
-                <div class="alert alert-success">
-                    <h5><i class="fas fa-check-circle"></i> Ce quiz est publié</h5>
-                    <p class="mb-0">Visible par les étudiants dans la formation: {{ $quiz->training->title }}</p>
-                </div>
-            @endif
-
-            <!-- Informations de base -->
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Informations générales</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-sm">
-                                <tr>
-                                    <th>Formation associée:</th>
-                                    <td>{{ $quiz->training->title }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Type:</th>
-                                    <td>
-                                        @if($quiz->isPlacementTest())
-                                            <span class="badge badge-info">Test de niveau</span>
-                                        @else
-                                            <span class="badge badge-primary">Quiz final</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Durée:</th>
-                                    <td>{{ $quiz->duration }} minutes</td>
-                                </tr>
-                                @if($quiz->isFinalQuiz())
-                                <tr>
-                                    <th>Score de passage:</th>
-                                    <td>{{ $quiz->passing_score }}/20</td>
-                                </tr>
-                                @endif
-                                <tr>
-                                    <th>Nombre de questions:</th>
-                                    <td>{{ $quiz->questions->count() }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Actions</h5>
-                        </div>
-                        <div class="card-body text-center">
-                            @if(!$quiz->is_published)
-                                <form action="{{ route('admin.quizzes.publish', $quiz->id) }}" method="POST" class="mb-3">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success btn-block">
-                                        <i class="fas fa-check"></i> Publier ce quiz
-                                    </button>
-                                </form>
-                            @else
-                                <form action="{{ route('admin.quizzes.toggle', $quiz->id) }}" method="POST" class="mb-3">
-                                    @csrf
-                                    <button type="submit" class="btn btn-warning btn-block">
-                                        <i class="fas fa-eye-slash"></i> Dépublier ce quiz
-                                    </button>
-                                </form>
-                            @endif
-
-                            {{-- <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="btn btn-primary btn-block mb-3">
-                                <i class="fas fa-edit"></i> Modifier
-                            </a> --}}
-
-                            <form action="{{ route('admin.quizzes.destroy', $quiz->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Supprimer définitivement ce quiz?')">
-                                    <i class="fas fa-trash"></i> Supprimer
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Liste des questions -->
-            <div class="card mb-4">
-                <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Questions ({{ $quiz->questions->count() }})</h5>
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
-                        <i class="fas fa-plus"></i> Ajouter une question
-                    </button>
-                </div>
-                <div class="card-body">
-                    @if($quiz->questions->isEmpty())
-                        <div class="alert alert-info">
-                            Aucune question n'a été ajoutée à ce quiz.
-                        </div>
-                    @else
-
-                        <div class="accordion" id="questionsAccordion">
-                            @foreach($quiz->questions as $index => $question)
-                            <div class="card mb-2">
-                                <div class="card-header" id="heading{{ $index }}">
-                                    <h6 class="mb-0 d-flex justify-content-between align-items-center">
-                                        <button class="btn btn-link text-start w-100"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#collapse{{ $index }}"
-                                                aria-expanded="false"
-                                                aria-controls="collapse{{ $index }}">
-                                            Question {{ $index + 1 }}: {{ Str::limit($question->question_text, 50) }}
-                                            <span class="badge bg-secondary ms-2">{{ $question->points }} pts</span>
-                                        </button>
-                                        <div>
-                                            {{-- <button class="btn btn-sm btn-info"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editQuestionModal"
-                                                    data-question-id="{{ $question->id }}">
-                                                <i class="fas fa-edit"></i>
-                                            </button> --}}
-                                            <form action="{{ route('admin.questions.destroy', $question->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cette question?')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </h6>
-                                </div>
-
-                                <div id="collapse{{ $index }}"
-                                     class="collapse"
-                                     aria-labelledby="heading{{ $index }}"
-                                     data-bs-parent="#questionsAccordion">
-                                    <div class="card-body">
-                                        <p><strong>Question complète:</strong> {{ $question->question_text }}</p>
-
-                                        <h6>Réponses possibles:</h6>
-                                        <ul class="list-group">
-                                            @foreach($question->answers as $answer)
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                {{ $answer->answer_text }}
-                                                @if($answer->is_correct)
-                                                    <span class="badge bg-success">Correcte</span>
-                                                @endif
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Statistiques (si le quiz est publié) -->
-            @if($quiz->is_published && $quiz->attempts->count() > 0)
-            <div class="card">
-                <div class="card-header bg-light">
+        <!-- Card pour les statistiques -->
+        <div class="col-md-6">
+            <div class="card quiz-actions-card">
+                <div class="card-header">
                     <h5 class="mb-0">Statistiques</h5>
                 </div>
                 <div class="card-body">
+                    @if($quiz->is_published && $quiz->attempts->count() > 0)
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="card bg-primary text-white text-center">
-                                <div class="card-body">
-                                    <h5>Tentatives</h5>
-                                    <h3>{{ $quiz->attempts->count() }}</h3>
-                                </div>
+                            <div class="quiz-stats-card" style="background-color: rgba(43, 110, 212, 0.1);">
+                                <i class="fas fa-users text-primary"></i>
+                                <h3>{{ $quiz->attempts->count() }}</h3>
+                                <p>Tentatives</p>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card bg-success text-white text-center">
-                                <div class="card-body">
-                                    <h5>Taux de réussite</h5>
-                                    <h3>{{ number_format(($quiz->attempts->where('passed', true)->count() / $quiz->attempts->count()) * 100, 1) }}%</h3>
-                                </div>
+                            <div class="quiz-stats-card" style="background-color: rgba(52, 195, 143, 0.1);">
+                                <i class="fas fa-chart-pie text-success"></i>
+                                <h3>{{ number_format(($quiz->attempts->where('passed', true)->count() / $quiz->attempts->count()) * 100, 1) }}%</h3>
+                                <p>Taux de réussite</p>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card bg-info text-white text-center">
-                                <div class="card-body">
-                                    <h5>Score moyen</h5>
-                                    <h3>{{ number_format($quiz->attempts->avg('score'), 1) }}/20</h3>
+                            <div class="quiz-stats-card" style="background-color: rgba(100, 116, 139, 0.1);">
+                                <i class="fas fa-star text-warning"></i>
+                                <h3>{{ number_format($quiz->attempts->avg('score'), 1) }}</h3>
+                                <p>Score moyen / 20</p>
+                            </div>
+                        </div>
+                    </div>
+                    @elseif($quiz->is_published)
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Aucune statistique disponible</h4>
+                        <p>Ce quiz n'a pas encore été tenté par des apprenants.</p>
+                    </div>
+                    @else
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle text-warning"></i>
+                        <h4>Quiz non publié</h4>
+                        <p>Publiez ce quiz pour permettre aux apprenants de le passer et voir les statistiques.</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions Section -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Gestion des questions</h5>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
+                <i class="fas fa-plus me-2"></i> Ajouter une question
+            </button>
+        </div>
+        <div class="card-body">
+            @if($quiz->questions->isEmpty())
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-question"></i>
+                    <h4>Aucune question ajoutée</h4>
+                    <p>Commencez par ajouter des questions à ce quiz pour que les étudiants puissent le passer.</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
+                        <i class="fas fa-plus me-2"></i> Ajouter une première question
+                    </button>
+                </div>
+            @else
+                <div class="two-panel-layout">
+                    <!-- Questions Sidebar (maintenant à gauche) -->
+                    <div class="questions-sidebar">
+                        <div class="card mb-0">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Questions ({{ $quiz->questions->count() }})</h5>
+                            </div>
+                            <div class="card-body">
+                                @foreach($quiz->questions as $index => $question)
+                                <div class="question-card" id="question-card-{{ $index }}">
+                                    <div class="question-header" onclick="showQuestionDetails({{ $index }})">
+                                        <div>
+                                            <h6>Question {{ $index + 1 }}</h6>
+                                            <small class="text-muted">{{ Str::limit($question->question_text, 40) }}</small>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge-points me-3">{{ $question->points }} pts</span>
+                                            <a href="#" class="delete-question-btn"
+                                               data-delete-url="{{ route('admin.questions.destroy', $question->id) }}"
+                                               data-csrf="{{ csrf_token() }}" onclick="event.stopPropagation();">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question Detail Panel (maintenant à droite) -->
+                    <div class="question-detail-panel">
+                        <div id="questionDetailsContainer">
+                            <div class="no-question-selected">
+                                <i class="fas fa-hand-point-left"></i>
+                                <h5>Sélectionnez une question</h5>
+                                <p>Cliquez sur une question à gauche pour afficher ses détails</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>
 </div>
 
-<!-- Modal pour ajouter une question -->
-<div class="modal fade" id="addQuestionModal" tabindex="-1" role="dialog" aria-labelledby="addQuestionModalLabel" aria-hidden="true" >
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <form action="{{ route('admin.questions.store') }}" method="POST" class="needs-validation" novalidate>
-                @csrf
-                <input type="hidden" name="quiz_id" value="{{ $quiz->id }}">
+<!-- Templates cachés pour les détails de questions -->
+@foreach($quiz->questions as $index => $question)
+<template id="question-details-{{ $index }}">
+    <div class="question-details">
+        <h5>Question {{ $index + 1 }}</h5>
+        <div class="mb-4">
+            <h6 class="text-secondary"><strong>Énoncé</strong></h6>
+            <p>{{ $question->question_text }}</p>
+        </div>
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addQuestionModalLabel">Ajouter une nouvelle question</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <div>
+            <h6 class="text-secondary"><strong>Réponses possibles</strong></h6>
+            <div class="answer-list">
+                @foreach($question->answers as $answer)
+                <div class="answer-item {{ $answer->is_correct ? 'correct' : '' }}">
+                    <div>{{ $answer->answer_text }}</div>
+                    @if($answer->is_correct)
+                    <span class="correct-badge">Correcte</span>
+                    @endif
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="question_text">Question</label>
-                        <textarea name="question_text" id="question_text" class="form-control" rows="3" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="points">Points</label>
-                        <input type="number" name="points" id="points" class="form-control" value="1" min="1" required>
-                    </div>
-
-                    <h5>Réponses</h5>
-                    <div id="answers-container">
-                        @for($i = 1; $i <= 4; $i++)
-                        <div class="form-group answer-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        {{-- <input type="radio" name="correct_answer" value="{{ $i }}" {{ $i == 1 ? 'checked' : '' }}> --}}
-                                        <input type="checkbox" name="correct_answers[]" value="{{ $i }}">
-                                    </div>
-                                </div>
-                                <input type="text" name="answers[]" class="form-control" placeholder="Réponse {{ $i }}" required>
-                            </div>
-                        </div>
-                        @endfor
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </div>
-            </form>
+                @endforeach
+            </div>
         </div>
     </div>
-</div>
+</template>
+@endforeach
 
-<!-- Modal d'édition de question -->
-<div class="modal fade" id="editQuestionModal" tabindex="-1" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form id="editQuestionForm" method="POST">
-                @csrf
-                @method('PUT')
-
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="editQuestionModalLabel">Modifier la question</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="edit_question_text" class="form-label">Question</label>
-                        <textarea class="form-control" id="edit_question_text" name="question_text" rows="3" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_points" class="form-label">Points</label>
-                        <input type="number" class="form-control" id="edit_points" name="points" min="1" required>
-                    </div>
-
-                    <h5 class="mt-4">Réponses</h5>
-                    <div id="edit-answers-container" class="answers-container">
-                        <!-- Les réponses seront chargées ici -->
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Modal d'édition de question -->
-{{-- <div class="modal fade" id="editQuestionModal" tabindex="-1" role="dialog" aria-labelledby="editQuestionModalLabel" aria-hidden="true">
+<!-- Modal pour ajouter une question (amélioré) -->
+<div class="modal fade" id="addQuestionModal" tabindex="-1" role="dialog" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form id="editQuestionForm" method="POST">
+            <form action="{{ route('admin.questions.store') }}" method="POST" class="needs-validation" novalidate id="question-form">
                 @csrf
-                @method('PUT')
+                <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" id="hidden_quiz_id">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editQuestionModalLabel">Modifier la question</h5>
+                    <h5 class="modal-title" id="addQuestionModalLabel">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Ajouter une nouvelle question
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label for="edit_question_text">Question</label>
-                        <textarea name="question_text" id="edit_question_text" class="form-control" rows="3" required></textarea>
+                    <div class="mb-4">
+                        <label for="question_text" class="form-label">Énoncé de la question</label>
+                        <textarea name="question_text" id="statement" class="form-control" rows="3" placeholder="Entrez votre question ici..." required></textarea>
+                        <div class="invalid-feedback">Veuillez entrer un énoncé pour cette question.</div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="edit_points">Points</label>
-                        <input type="number" name="points" id="edit_points" class="form-control" min="1" required>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label for="points" class="form-label">Points</label>
+                            <div class="input-group">
+                                <input type="number" name="points" id="points" class="form-control" value="1" min="1" required>
+                                <span class="input-group-text">pts</span>
+                                <div class="invalid-feedback">Veuillez entrer une valeur valide.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="question_type" class="form-label">Type de question</label>
+                            <select class="form-select" id="question_type" name="question_type">
+                                <option value="single">Réponse unique</option>
+                                <option value="multiple">Réponses multiples</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="response_count" class="form-label">Nombre de réponses</label>
+                            <select class="form-select" id="response_count" name="response_count" data-initial="4">
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4" selected>4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <h5>Réponses</h5>
-                    <div id="edit-answers-container">
-                        <!-- Les réponses seront injectées ici par JavaScript -->
-                    </div>
+                    <h5 class="border-bottom pb-2 mb-4">Réponses</h5>
+                    <div class="alert alert-danger d-none" id="error-message"></div>
+
+                    <div id="reponses-container" class="mb-3"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="button" class="btn btn-primary" id="submit-btn">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-</div> --}}
-@endsection
+</div>
 
-
-
-@section('scripts')
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-$(document).ready(function() {
-    // Gestion de l'édition des questions
-    $(document).on('click', '.edit-question', function(e) {
-        e.preventDefault();
-        var questionId = $(this).data('id');
+<script src="{{ asset('assets/js/MonJs/questions/question-create.js') }}"></script>
+<script src="{{ asset('assets/js/MonJs/questions/showpage.js') }}"></script>
 
-        // Charger les données via AJAX
-        $.get("{{ route('admin.questions.edit', '') }}/" + questionId, function(data) {
-            // Remplir le formulaire
-            $('#edit_question_text').val(data.question.question_text);
-            $('#edit_points').val(data.question.points);
-
-            // Vider le conteneur des réponses
-            $('#edit-answers-container').empty();
-
-            // Ajouter chaque réponse
-            // Ajouter chaque réponse
-            $.each(data.answers, function(index, answer) {
-                var isChecked = answer.is_correct ? 'checked' : '';
-                var answerHtml = `
-                <div class="form-group answer-group mb-2">
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <input type="radio" name="correct_answer" value="${answer.id}" ${isChecked}>
-                        </span>
-                        <input type="text" name="answers[${index}][text]" class="form-control" value="${answer.answer_text}" required>
-                        <input type="hidden" name="answers[${index}][id]" value="${answer.id}">
-                    </div>
-                </div>
-                `;
-                $('#edit-answers-container').append(answerHtml);
-            });
-
-            // Mettre à jour l'action du formulaire
-            $('#editQuestionForm').attr('action', "{{ route('admin.questions.update', '') }}/" + questionId);
-
-            // Afficher le modal
-            // $('#editQuestionModal').modal('show');
-            var myModal = new bootstrap.Modal(document.getElementById('editQuestionModal'));
-            myModal.show();
-        }).fail(function() {
-            alert('Erreur lors du chargement de la question');
-        });
-    });
-
-    // Soumission du formulaire d'édition
-    $('#editQuestionForm').submit(function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var url = form.attr('action');
-
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: form.serialize(),
-            success: function(response) {
-                // $('#editQuestionModal').modal('hide');
-                var myModal = bootstrap.Modal.getInstance(document.getElementById('editQuestionModal'));
-                myModal.hide();
-                location.reload(); // Recharger la page pour voir les modifications
-            },
-            error: function(xhr) {
-                if (xhr.status === 422) {
-                    // Afficher les erreurs de validation
-                    var errors = xhr.responseJSON.errors;
-                    alert(Object.values(errors).join('\n'));
-                } else {
-                    alert('Une erreur est survenue');
-                }
-            }
-        });
-    });
-});
-</script>
-
-
+@endpush
 
 @endsection
-
-
