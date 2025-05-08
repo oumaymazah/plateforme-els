@@ -179,14 +179,17 @@
                              <li><a href="{{ route('formations') }}" class="{{routeActive('formations')}}">Formations List</a></li>
                              <li><a href="{{ route('formationcreate') }}" class="{{routeActive('formationcreate')}}">Create new </a></li>
                          </ul>
+                        @hasanyrole('admin|super-admin')
                          <a class="nav-link menu-title {{ prefixActive('/quizzes') }}" href="javascript:void(0)">
                             <i data-feather="box"></i>
                             <span>Quiz</span>
                         </a>
                         <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/quizzes') }};">
                             <li><a href="{{ route('admin.quizzes.index') }}" class="{{ routeActive('admin.quizzes.index') }}">Liste des Quiz</a></li>
-                            <li><a href="{{ route('admin.quizzes.create') }}" class="{{ routeActive('admin.quizzes.create') }}">Créer un nouveau</a></li>
+                            <li><a href="{{ route('admin.quizzes.create') }}" class="{{ routeActive('admin.quizzes.create') }}">Nouveau Quiz</a></li>
                         </ul>
+                        @endhasanyrole
+                         {{-- <a class="nav-link menu-title {{ prefixActive('/quizzes') }}" href="javascript:void(0)"><i data-feather="box"></i><span>Quiz </span></a>
 
                          {{-- categorie --}}
 
@@ -271,9 +274,11 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav {{routeActive('bookmark')}}" href="{{ route('bookmark') }}"><i data-feather="heart"></i><span>Bookmarks</span></a>
                     </li>
+                    @hasanyrole('admin|super-admin')
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav {{routeActive('contacts')}}" href="{{ route('contacts') }}"><i data-feather="list"></i><span>Utilisateurs et Accès</span></a>
                     </li>
+                    @endhasanyrole
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav {{routeActive('task')}}" href="{{ route('task') }}"><i data-feather="check-square"></i><span>Tasks</span></a>
                     </li>

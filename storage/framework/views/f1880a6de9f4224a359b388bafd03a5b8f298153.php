@@ -230,6 +230,7 @@
                                 </div>
                             </div>
 
+
                             <div class="action-icons">
                                 <i class="icofont icofont-ui-edit edit-icon action-icon" data-edit-url="<?php echo e(route('formationedit', $formation->id)); ?>"></i>
                                 <i class="icofont icofont-ui-delete delete-icon action-icon" data-delete-url="<?php echo e(route('formationdestroy', $formation->id)); ?>" data-csrf="<?php echo e(csrf_token()); ?>"></i>
@@ -378,69 +379,75 @@
         font-weight: bold;
         z-index: 10;
     }
+   
 </style>
+
+
+
 <script>
     // Script prioritaire qui s'exécute immédiatement
     (function() {
         // Récupérer la valeur du panier depuis localStorage
         const count = parseInt(localStorage.getItem('cartCount') || '0');
         if (count <= 0) return; // Ne rien faire s'il n'y a pas d'articles
-        
+
         // Créer l'élément badge
         const badge = document.createElement('span');
         badge.className = 'cart-badge custom-violet-badge badge-preloaded';
         badge.textContent = count.toString();
         badge.style.display = 'block';
-        
+
         // Stocker l'élément dans une variable globale pour référence future
         window.__preloadedBadge = badge;
-        
+
         // Fonction qui tente d'ajouter le badge au conteneur du panier
         function attachBadge() {
             // Liste des sélecteurs possibles pour l'icône du panier
             const selectors = [
-                '.shopping-cart-icon', 
-                'svg[data-icon="shopping-cart"]', 
-                '.cart-icon', 
-                'a[href*="panier"] svg', 
+                '.shopping-cart-icon',
+                'svg[data-icon="shopping-cart"]',
+                '.cart-icon',
+                'a[href*="panier"] svg',
                 '.cart-container svg',
                 'a[href*="panier"]',
                 '.cart-link',
                 '.header-cart'
             ];
-            
+
             // Essayer de trouver l'icône du panier
             let cartIcon = null;
             for (const selector of selectors) {
                 cartIcon = document.querySelector(selector);
                 if (cartIcon) break;
             }
-            
+
             if (!cartIcon) {
                 // Réessayer rapidement si l'icône n'est pas encore disponible
                 setTimeout(attachBadge, 10);
                 return;
             }
-            
+
             // Trouver le conteneur de l'icône
             const cartContainer = cartIcon.closest('a, div, button, .cart-container') || cartIcon;
-            
+
             // Vérifier si un badge existe déjà
             if (!cartContainer.querySelector('.cart-badge, .custom-violet-badge')) {
                 // Forcer la position relative sur le conteneur
                 cartContainer.style.position = 'relative';
-                
+
                 // Ajouter le badge
                 cartContainer.appendChild(badge);
             }
         }
-        
+
         // Commencer la tentative d'attachement immédiatement
         attachBadge();
-        
+
         // Aussi ajouter un écouteur pour le chargement du DOM complet
         document.addEventListener('DOMContentLoaded', attachBadge);
     })();
+
+
 </script>
 
 

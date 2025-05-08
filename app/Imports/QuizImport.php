@@ -175,6 +175,31 @@ class QuizImport implements ToCollection, WithHeadingRow // WithHeadingRow est u
                  // Si l'extension n'est ni json, ni csv, ni xlsx (devrait être attrapé par la validation du form aussi)
                  return ['Validation: Format de fichier non supporté. Utilisez CSV, XLSX ou JSON.'];
             }
+           // Vérification de la somme des points pour les quiz de type "final"
+            if ($quizType === 'final') {
+                $totalPoints = 0;
+
+                if ($isJson) {
+                    // Pour les fichiers JSON, calculer la somme des points
+                    foreach ($jsonContent as $item) {
+                        if (isset($item['points']) && is_numeric($item['points'])) {
+                            $totalPoints += (float)$item['points'];
+                        }
+                    }
+                } else if (in_array($extension, ['csv', 'xlsx']) && isset($rows)) {
+                    // Pour les fichiers CSV/XLSX, calculer la somme des points
+                    foreach ($rows as $row) {
+                        if (isset($row['points']) && is_numeric($row['points'])) {
+                            $totalPoints += (float)$row['points'];
+                        }
+                    }
+                }
+
+                // Vérifier si la somme est égale à 20
+                if ($totalPoints != 20) {
+                    $errors[] = "La somme des points pour un quiz final doit être égale à 20. Somme actuelle: $totalPoints points.";
+                }
+            }
 
             return $errors; // Retourne le tableau des erreurs accumulées
 

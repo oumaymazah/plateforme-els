@@ -179,15 +179,16 @@
                              <li><a href="<?php echo e(route('formations')); ?>" class="<?php echo e(routeActive('formations')); ?>">Formations List</a></li>
                              <li><a href="<?php echo e(route('formationcreate')); ?>" class="<?php echo e(routeActive('formationcreate')); ?>">Create new </a></li>
                          </ul>
+                        <?php if(auth()->check() && auth()->user()->hasAnyRole('admin|super-admin')): ?>
                          <a class="nav-link menu-title <?php echo e(prefixActive('/quizzes')); ?>" href="javascript:void(0)">
                             <i data-feather="box"></i>
                             <span>Quiz</span>
                         </a>
                         <ul class="nav-submenu menu-content" style="display: <?php echo e(prefixBlock('/quizzes')); ?>;">
                             <li><a href="<?php echo e(route('admin.quizzes.index')); ?>" class="<?php echo e(routeActive('admin.quizzes.index')); ?>">Liste des Quiz</a></li>
-                            <li><a href="<?php echo e(route('admin.quizzes.create')); ?>" class="<?php echo e(routeActive('admin.quizzes.create')); ?>">Créer un nouveau</a></li>
+                            <li><a href="<?php echo e(route('admin.quizzes.create')); ?>" class="<?php echo e(routeActive('admin.quizzes.create')); ?>">Nouveau Quiz</a></li>
                         </ul>
-
+                        <?php endif; ?>
                          
 
                          <a class="nav-link menu-title <?php echo e(prefixActive('/categorie')); ?>" href="javascript:void(0)"><i data-feather="box"></i><span>Categories </span></a>
@@ -271,9 +272,11 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav <?php echo e(routeActive('bookmark')); ?>" href="<?php echo e(route('bookmark')); ?>"><i data-feather="heart"></i><span>Bookmarks</span></a>
                     </li>
+                    <?php if(auth()->check() && auth()->user()->hasAnyRole('admin|super-admin')): ?>
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav <?php echo e(routeActive('contacts')); ?>" href="<?php echo e(route('contacts')); ?>"><i data-feather="list"></i><span>Utilisateurs et Accès</span></a>
                     </li>
+                    <?php endif; ?>
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav <?php echo e(routeActive('task')); ?>" href="<?php echo e(route('task')); ?>"><i data-feather="check-square"></i><span>Tasks</span></a>
                     </li>

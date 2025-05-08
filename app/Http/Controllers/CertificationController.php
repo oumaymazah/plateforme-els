@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Certification;
 use App\Models\Training;
 use App\Models\User;
+use Illuminate\Support\Facades\Str;
 use Illuminate\Http\Request;
 
 class CertificationController extends Controller

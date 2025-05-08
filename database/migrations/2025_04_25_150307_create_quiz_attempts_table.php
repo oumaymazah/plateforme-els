@@ -17,7 +17,8 @@ class CreateQuizAttemptsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('quiz_id');
-            $table->integer('score');
+            // $table->integer('score');
+            $table->decimal('score', 5, 2);
             $table->boolean('passed')->default(false);
  	        $table->string('level')->nullable();
             $table->integer('tab_switches')->default(0);

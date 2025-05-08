@@ -1,7 +1,7 @@
 
 
-//Ce fichier se concentre sur l'affichage et la manipulation des formations, la gestion des carrousels, 
-// la création des cartes de formation, et les actions sur 
+//Ce fichier se concentre sur l'affichage et la manipulation des formations, la gestion des carrousels,
+// la création des cartes de formation, et les actions sur
 // les formations (modification, suppression). Il réagit aux événements déclenchés par le fichier categories.js.
 
 
@@ -67,13 +67,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             ]
         });
-        
+
         // Marquer comme initialisé
         carouselInitialized[carouselSelector] = true;
-        
+
         // Mettre à jour les flèches initialement
         updateCarouselArrows($carousel);
-        
+
         // Gérer les événements de changement
         $carousel.on('afterChange', function(event, slick) {
             updateCarouselArrows($carousel);
@@ -85,10 +85,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-    
+
     function updateCarouselArrows($carousel) {
         if (!$carousel.hasClass('slick-initialized')) return;
-        
+
         const currentSlide = $carousel.slick('slickCurrentSlide');
         const slideCount = $carousel.find('.slick-slide:not(.slick-cloned)').length;
         const slidesToShow = $carousel.slick('slickGetOption', 'slidesToShow');
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $nextArrow.removeClass('slick-disabled').attr('aria-disabled', 'false');
         }
     }
-    
+
 
     //Rôle: Rafraîchit tous les carrousels initialisés.
 
@@ -124,15 +124,15 @@ document.addEventListener('DOMContentLoaded', function() {
 // Vide son contenu
 // Ajoute les nouveaux éléments
 // Réinitialise le carousel ou affiche un message si aucun élément
-    
+
 function updateSingleCarousel(selector, items) {
     const carousel = document.querySelector(selector);
     if (!carousel) return;
-    
+
     if ($(carousel).hasClass('slick-initialized')) {
         $(carousel).slick('unslick');
     }
-    
+
     // Vérifier d'abord s'il y a des formations avant de vider le carousel
     if (items.length > 0) {
         carousel.innerHTML = '';
@@ -151,14 +151,14 @@ function updateSingleCarousel(selector, items) {
     function createFormationCard(formation) {
         const duration = formation.duration || '00:00:00';
         const coursesCount = formation.cours_count || 0;
-        
+
         // Formater la durée pour affichage
         let formattedDuration = '';
         if (duration) {
             const durationParts = duration.split(':');
             const hours = parseInt(durationParts[0]);
             const minutes = parseInt(durationParts[1]);
-            
+
             if (hours > 0) {
                 formattedDuration += `${hours}h `;
             }
@@ -166,7 +166,7 @@ function updateSingleCarousel(selector, items) {
                 formattedDuration += `${minutes}min`;
             }
         }
-        
+
         const card = document.createElement('div');
         card.className = 'formation-card-container';
         // Utiliser le titre complet
@@ -183,30 +183,30 @@ function updateSingleCarousel(selector, items) {
             !hasRating && isFree ? 'compact-card' : '',
             !hasRating && !isFree && hasPaidPrice ? 'price-bottom' : ''
         ].filter(Boolean).join(' ');
-        
+
         let html = `
-            <div class="${cardClasses}" data-duration="${duration}" 
+            <div class="${cardClasses}" data-duration="${duration}"
                  data-courses-count="${coursesCount}">
                 ${formation.status && formation.is_bestseller ? '<span class="badge-bestseller">Meilleure vente</span>' : ''}
-                
-                ${formation.image 
+
+                ${formation.image
                     ? `<img src="${window.location.origin}/storage/${formation.image}" alt="${fullTitle}">`
                     : '<div class="placeholder-image">Image de formation</div>'
                 }
-                
+
                 <div class="title-container">
                     <h4 class="formation-title ${fullTitle.length < 50 ? 'title-short' : ''}" title="${fullTitle}">${fullTitle}</h4>
                 </div>
                 <div class="formation-instructor ${!hasRating ? 'no-rating' : ''}">
-                    ${formation.user 
+                    ${formation.user
                         ? `${formation.user.name} ${formation.user.lastname || ''}`
                         : 'Professeur non défini'
                     }
                 </div>
-                
+
                 <div class="formation-description" style="display:none;">
                     ${formation.description || 'Aucune description disponible'}
-                </div>           
+                </div>
                 <div class="formation-rating-price ${!hasRating ? 'no-rating' : ''}">
                     <div class="formation-rating">
         `;
@@ -215,7 +215,7 @@ function updateSingleCarousel(selector, items) {
             const fullStars = Math.floor(rating);
             const decimalPart = rating - fullStars;
             const hasHalfStar = decimalPart >= 0.25;
-            
+
             let starsHtml = '';
             for (let i = 1; i <= 5; i++) {
                 if (i <= fullStars) {
@@ -232,13 +232,13 @@ function updateSingleCarousel(selector, items) {
                          <span class="rating-count">(${formation.total_feedbacks})</span>
                      `;
         }
-        
+
         html += `
                     </div>
                     <div class="price-container ${!hasRating ? 'no-rating' : ''}">
-                        ${formation.price == 0 
+                        ${formation.price == 0
                             ? ``
-                            : formation.discount > 0 
+                            : formation.discount > 0
                                 ? `<div style="display: flex; align-items: center;">
                                     <span class="original-price">${parseFloat(formation.price).toFixed(3)} DT</span>
                                     <span class="discount-badge">-${formation.discount}%</span>
@@ -248,19 +248,19 @@ function updateSingleCarousel(selector, items) {
                         }
                     </div>
                 </div>
-                
+
                 <!-- Déplacer le badge gratuit ici pour qu'il soit toujours à la même position -->
                 <div class="card-badges">
                     ${formation.price == 0 ? '<span class="badge-free">Gratuite</span>' : ''}
                 </div>
-                
+
                 <div class="action-menu">
                     <div class="action-dots">
                         <i class="fas fa-ellipsis-v"></i>
                     </div>
                     <div class="action-dropdown">
                         <div class="action-item edit-action" data-edit-url="${window.location.origin}/formation/${formation.id}/edit">
-                            Modifier        
+                            Modifier
                         </div>
                         <div class="action-item delete-action" data-delete-url="${window.location.origin}/formation/${formation.id}">
                             Supprimer
@@ -268,9 +268,9 @@ function updateSingleCarousel(selector, items) {
                     </div>
                 </div>
         `;
-        
+
         card.innerHTML = html;
-    
+
         return card;
     }
 
@@ -282,20 +282,20 @@ function updateSingleCarousel(selector, items) {
         document.querySelectorAll('.action-dots').forEach(dots => {
             dots.addEventListener('click', function(e) {
                 e.stopPropagation(); // Empêcher la propagation de l'événement
-                
+
                 // Fermer tous les autres menus ouverts
                 document.querySelectorAll('.action-dropdown.show').forEach(dropdown => {
                     if (!dropdown.parentNode.contains(e.target)) {
                         dropdown.classList.remove('show');
                     }
                 });
-                
+
                 // Basculer l'affichage du menu actuel
                 const dropdown = this.nextElementSibling;
                 dropdown.classList.toggle('show');
             });
         });
-        
+
         // Gestionnaire pour les actions d'édition
         document.querySelectorAll('.edit-action').forEach(action => {
             action.addEventListener('click', function(e) {
@@ -303,14 +303,14 @@ function updateSingleCarousel(selector, items) {
                 window.location.href = this.dataset.editUrl;
             });
         });
-        
+
         // Gestionnaire pour les actions de suppression
         document.querySelectorAll('.delete-action').forEach(action => {
             action.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const deleteUrl = this.dataset.deleteUrl;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-                
+
                 // Message de confirmation
                 if (confirm('Êtes-vous sûr de vouloir supprimer cette formation ?')) {
                     // Utiliser le formulaire pour soumettre la requête DELETE
@@ -318,19 +318,19 @@ function updateSingleCarousel(selector, items) {
                     form.method = 'POST';
                     form.action = deleteUrl;
                     form.style.display = 'none';
-                    
+
                     // Simuler la méthode DELETE pour Laravel
                     const methodField = document.createElement('input');
                     methodField.type = 'hidden';
                     methodField.name = '_method';
                     methodField.value = 'DELETE';
-                    
+
                     // Ajouter le token CSRF
                     const tokenField = document.createElement('input');
                     tokenField.type = 'hidden';
                     tokenField.name = '_token';
                     tokenField.value = csrfToken;
-                    
+
                     // Ajouter les champs au formulaire et soumettre
                     form.appendChild(methodField);
                     form.appendChild(tokenField);
@@ -350,7 +350,7 @@ function updateSingleCarousel(selector, items) {
                 });
             }
         });
-        
+
         // Réattacher les gestionnaires après chaque mise à jour du DOM
         attachActionIconHandlers();
     }
@@ -365,11 +365,11 @@ function updateSingleCarousel(selector, items) {
         const allFormations = [];
         const publishedFormations = [];
         const unpublishedFormations = [];
-        
+
         formations.forEach(formation => {
             const formationCard = createFormationCard(formation);
             allFormations.push(formationCard);
-            
+
             if (formation.status) {
                 publishedFormations.push(formationCard);
             } else {
@@ -382,7 +382,7 @@ function updateSingleCarousel(selector, items) {
         attachActionIconHandlers();
         activateTab('#top-home-tab', '#top-home');
     }
-    
+
 //     Gère les onglets (tous/publiés/non publiés).
 // Fonctionnement:
 
@@ -394,7 +394,7 @@ function updateSingleCarousel(selector, items) {
     function activateTab(tabSelector, contentSelector) {
         const tab = document.querySelector(tabSelector);
         if (!tab) return;
-        
+
         // Mettre à jour l'état actif des onglets
         document.querySelectorAll('.nav-tabs .nav-link').forEach(tab => {
             tab.classList.remove('active');
@@ -402,7 +402,7 @@ function updateSingleCarousel(selector, items) {
         });
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
-        
+
         // Afficher le contenu de l'onglet
         document.querySelectorAll('.tab-pane').forEach(pane => {
             pane.classList.remove('show', 'active');
@@ -410,7 +410,7 @@ function updateSingleCarousel(selector, items) {
         const contentPane = document.querySelector(contentSelector);
         if (contentPane) {
             contentPane.classList.add('show', 'active');
-            
+
             // Rafraîchir le carousel visible
             const visibleCarousel = contentPane.querySelector('.slick-initialized');
             if (visibleCarousel) {
@@ -418,30 +418,30 @@ function updateSingleCarousel(selector, items) {
             }
         }
     }
-    
+
     function setupTabHandlers() {
         // Gestion des onglets Bootstrap
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
             const target = $(e.target).attr("href");
-            
+
             if (target === "#top-contact" && !$('.formations-carousel-published').hasClass('slick-initialized')) {
                 initCarousel('.formations-carousel-published');
             } else if (target === "#top-profile" && !$('.formations-carousel-unpublished').hasClass('slick-initialized')) {
                 initCarousel('.formations-carousel-unpublished');
             }
-            
+
             // Rafraîchir le carousel visible
             const visibleCarousel = document.querySelector(`${target} .slick-initialized`);
             if (visibleCarousel) {
                 $(visibleCarousel).slick('refresh');
             }
         });
-        
+
         // Gestion des onglets standard
         document.querySelectorAll('.nav-tabs .nav-link').forEach(tab => {
             tab.addEventListener('click', function(e) {
                 e.preventDefault();
-                
+
                 const tabId = this.getAttribute('href');
                 activateTab(`#${this.id}`, tabId);
             });
@@ -451,22 +451,22 @@ function updateSingleCarousel(selector, items) {
     function init() {
         // Configurer les gestionnaires d'onglets
         setupTabHandlers();
-        
+
         // Initialiser le premier carrousel visible
         initCarousel('.formations-carousel');
-        
+
         // Initialiser les menus d'action
         initActionMenus();
-        
+
         // Mettre à jour les carrousels lors du redimensionnement
         window.addEventListener('resize', updateAllCarousels);
-        
+
         // Écouter l'événement personnalisé pour mettre à jour les formations
         document.addEventListener('updateFormations', function(e) {
             updateFormationsCarousels(e.detail.formations);
         });
     }
-    
+
     // Lancer l'initialisation
     init();
 });

@@ -17,6 +17,7 @@ class QuizAttempt extends Model
         'quiz_id',
         'score',
         'passed',
+        'level',
         'tab_switches',
         'completed',
         'started_at',
@@ -47,7 +48,7 @@ class QuizAttempt extends Model
 
     public function isCheated()
     {
-        return $this->tab_switches > 3;
+        return $this->tab_switches >= 2;
     }
 	//cet methode calculer le temps reste pour finir le quiz il calculer en seconds puis il
 	//envoyer danns le blade celui qui convert le temps en minutes ou en une autre forme

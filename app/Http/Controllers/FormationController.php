@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Feedback;
+use App\Models\Quiz;
 use App\Models\Training;
 use App\Models\User;
 use Carbon\Carbon;
@@ -24,10 +25,28 @@ class FormationController extends Controller
         $this->middleware('auth');
     }
 
+    // public function show($id)
+    // {
+    //     $formation = Training::with(['user', 'category', 'feedbacks', 'courses'])
+    //         ->findOrFail($id);
+
+    //     $formation->total_feedbacks = $formation->feedbacks->count();
+    //     $formation->average_rating = $formation->feedbacks->avg('rating_count');
+    //     $formation->sum_ratings = $formation->feedbacks->sum('rating_count');
+
+    //     return view('admin.apps.formation.formationshow', compact('formation'));
+    // }
     public function show($id)
     {
-        $formation = Training::with(['user', 'category', 'feedbacks', 'courses'])
-            ->findOrFail($id);
+        $formation = Training::with([
+            'user',
+            'category',
+            'feedbacks',
+            'courses',
+            'quizzes' => function($query) {
+                $query->where('is_published', true);
+            }
+        ])->findOrFail($id);
 
         $formation->total_feedbacks = $formation->feedbacks->count();
         $formation->average_rating = $formation->feedbacks->avg('rating_count');
@@ -110,7 +129,7 @@ public function edit($id)
     if ($request->has('start_date')) {
         $request->merge(['start_date' => Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d')]);
     }
-    
+
     if ($request->has('end_date')) {
         $request->merge(['end_date' => Carbon::createFromFormat('d/m/Y', $request->end_date)->format('Y-m-d')]);
     }
@@ -224,13 +243,13 @@ public function edit($id)
         ]);
         session()->flash('current_formation_id', $formation->id);
         session()->flash('from_formation', true);
-        
+
         // Flasher les données pour SweetAlert2 et pour conserver les données du formulaire
         return back()->withInput()
             ->with('success', 'Formation créée avec succès')
             ->with('formation_id', $formation->id)
             ->with('old_data', $formationData);
- 
+
     } catch (\Exception $e) {
         // En cas d'erreur, annuler la transaction
         if (isset($formation) && DB::transactionLevel() > 0) {
@@ -261,7 +280,7 @@ public function update(Request $request, $id)
         $startDate = \Carbon\Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d');
         $request->merge(['start_date' => $startDate]);
     }
-    
+
     if ($request->has('end_date')) {
         $endDate = \Carbon\Carbon::createFromFormat('d/m/Y', $request->end_date)->format('Y-m-d');
         $request->merge(['end_date' => $endDate]);
@@ -357,7 +376,7 @@ public function update(Request $request, $id)
     //         $startDate = \Carbon\Carbon::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d');
     //         $request->merge(['start_date' => $startDate]);
     //     }
-        
+
     //     if ($request->has('end_date')) {
     //         $endDate = \Carbon\Carbon::createFromFormat('d/m/Y', $request->end_date)->format('Y-m-d');
     //         $request->merge(['end_date' => $endDate]);

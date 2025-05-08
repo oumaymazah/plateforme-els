@@ -420,7 +420,7 @@ Route::post('/api/reservations/cancel', [ReservationController::class, 'cancelRe
 	Route::get('/api/preview/docx', 'App\Http\Controllers\LessonControllerr@previewDocx');
 	Route::get('/api/preview/zip', 'App\Http\Controllers\LessonControllerr@previewZip');
 
-   
+
 
 
 
@@ -457,7 +457,7 @@ Route::middleware(['auth', 'role:admin|super-admin'])->name('admin.')->prefix('a
      Route::get('/quiz-attempts/{attempt}', [AdminQuizController::class, 'show'])
           ->name('quiz-attempts.show');
 });
-Route::middleware(['auth', 'role:etudiant'])->group(function() {
+Route::middleware(['auth', 'role:etudiant', 'extend.quiz.session'])->group(function() {
      // Quiz
      Route::post('/quizzes/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quizzes.start');
      Route::get('/quizzes/attempt/{attempt}', [QuizAttemptController::class, 'attempt'])->name('quizzes.attempt');
@@ -465,7 +465,9 @@ Route::middleware(['auth', 'role:etudiant'])->group(function() {
      Route::post('/quizzes/attempt/{attempt}/tab-switch', [QuizAttemptController::class, 'tabSwitch'])->name('quizzes.tab-switch');
      Route::get('/quizzes/result/{attempt}', [QuizAttemptController::class, 'result'])->name('quizzes.result');
      Route::get('/quizzes/attempt/{attempt}/finish', [QuizAttemptController::class, 'finishAttempt'])->name('quizzes.finish');
+     Route::get('/check-feedback', [App\Http\Controllers\FeedbackController::class, 'checkFeedback'])->name('feedbacks.check');
      Route::post('/feedbacks', [FeedbackController::class, 'store'])
+
      ->name('feedbacks.store');
      // Certificats
      Route::get('/certificats/{user}/formations/{training}/visualiser', [CertificationController::class, 'show'])

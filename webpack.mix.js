@@ -1,4 +1,9 @@
 const mix = require('laravel-mix');
+// Compiler le JS
+mix.js('resources/js/quizzes/quiz-monitor.js', 'public/js');
+
+// Compiler le CSS
+mix.postCss('resources/css/quizzes.css', 'public/css');
 
 /*
  |--------------------------------------------------------------------------

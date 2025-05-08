@@ -19,7 +19,11 @@ class Certification extends Model
         'status',
         'certificate_number',
     ];
-
+    protected $dates = [
+        'obtained_date',
+        'created_at',
+        'updated_at'
+    ];
     // Relation avec l'étudiant
     public function user()
     {
