@@ -13,6 +13,7 @@ class AdminManager {
       $(document)
         .on('click', '#load-users', () => this.loadUsers())
         .on('click', '#load-roles', () => this.loadRoles())
+        .on('click', '#load-evaluation', () => this.loadEvaluations())
         .on('click', '#load-permission', () => this.loadPermissions())
         .on('click', '#loadCreateUserForm', () => this.loadCreateUserForm())
         .on('click', '#loadCreateRoleForm', () => this.loadCreateRoleForm())
@@ -35,6 +36,7 @@ class AdminManager {
         .on('change', '.toggle-status-switch', (e) => this.toggleUserStatus(e))
         .on('click', '.toggle-status-menu', (e) => this.toggleUserStatusMenu(e))
         .on('click', '.view-user-roles', (e) => this.viewUserRoles(e))
+        .on('click', '.view-quiz-detail', (e) => this.viewQuizDetail(e))
         .on('click', '.remove-role', (e) => this.removeRoleFromUser(e))  // Handler pour supprimer un rôle
         .on('click', '.revoke-permission', (e) => this.revokePermissionFromUser(e))  // Handler pour révoquer une permission
         .on('change', '#role-filter, #status-filter', () => this.applyFilters())
@@ -64,6 +66,9 @@ class AdminManager {
           setTimeout(() => this.loadRoles(), 100);
         } else if (returnView === 'permissions') {
           setTimeout(() => this.loadPermissions(), 100);
+        }else if (returnView === 'evaluations') {
+            setTimeout(() => this.loadEvaluations(), 100);
+
         } else {
           // Fallback: détecter en fonction du titre ou du contenu
           const modalTitle = $('#exampleModalLabel').text().toLowerCase();
@@ -74,6 +79,9 @@ class AdminManager {
             setTimeout(() => this.loadRoles(), 100);
           } else if (modalTitle.includes('permission')) {
             setTimeout(() => this.loadPermissions(), 100);
+          }
+          else if (modalTitle.includes('evaluation')) {
+            setTimeout(() => this.loadEvaluations(), 100);
           }
         }
 
@@ -122,6 +130,140 @@ class AdminManager {
         error: (xhr) => this.handleError(xhr)
       });
     }
+    // loadEvaluations() {
+
+    //     console.log("Loading evaluation view");
+
+    //     $.ajax({
+    //       url: $('#load-evaluation').data('evaluation-url'),
+    //       type: 'GET',
+    //       success: (response) => {
+    //         $('#blog-container').html(response);
+    //         this.initDataTable('#evaluations-table');
+    //         this.initSelect2();
+    //         // Initialiser la validation du formulaire après le chargement
+    //         if (window.initFormValidation) {
+    //           console.log("Initializing form validation after loading users");
+    //           window.initFormValidation();
+    //         }
+    //       },
+    //       error: (xhr) => this.handleError(xhr)
+    //     });
+    //   }
+    loadEvaluations() {
+        console.log("Loading evaluation view");
+
+        $.ajax({
+            url: $('#load-evaluation').data('evaluation-url'),
+            type: 'GET',
+            success: (response) => {
+                $('#blog-container').html(response);
+                // Ne pas initialiser DataTable ici car cela interfère avec la pagination
+                // this.initDataTable('#evaluations-table');
+                this.initSelect2();
+
+                // Important: Initialiser les gestionnaires pour la pagination et le filtrage
+                this.initEvaluationHandlers();
+            },
+            error: (xhr) => this.handleError(xhr)
+        });
+    }
+
+    // Nouvelle méthode améliorée pour initialiser les gestionnaires d'événements pour les évaluations
+    initEvaluationHandlers() {
+        console.log("Initializing evaluation handlers");
+
+        // Détacher les anciens gestionnaires pour éviter les duplications
+        // $(document).off('click', '.view-quiz-detail');
+        $(document).off('click', '.pagination a');
+        $(document).off('submit', '.filter-form');
+        $(document).off('click', '.reset-filters');
+
+        // Réattacher les gestionnaires
+        // Gestion des clics sur le lien "view-quiz-detail"
+        // $(document).on('click', '.view-quiz-detail', (e) => {
+        //     e.preventDefault();
+        //     const url = $(e.currentTarget).data('viewEvaluation-url');
+        //     console.log("View quiz detail clicked, URL:", url);
+        //     this.loadQuizDetail(url);
+        // });
+
+        // Gestion des clics sur les liens de pagination
+        $(document).on('click', '.pagination a', (e) => {
+            e.preventDefault();
+            const url = $(e.currentTarget).attr('href');
+            console.log("Pagination link clicked, URL:", url);
+            this.loadEvaluationWithUrl(url);
+        });
+
+        // Gestion de la soumission du formulaire de filtrage
+        $(document).on('submit', '.filter-form', (e) => {
+            e.preventDefault();
+            const form = $(e.currentTarget);
+            const url = form.attr('action') || window.location.href;
+            const data = form.serialize();
+            console.log("Filter form submitted, URL:", url, "Data:", data);
+            this.loadEvaluationWithUrl(url + '?' + data);
+        });
+
+        // Gestion du clic sur le bouton réinitialiser des filtres
+        $(document).on('click', '.reset-filters', (e) => {
+            e.preventDefault();
+            const url = $(e.currentTarget).attr('href');
+            console.log("Reset filters clicked, URL:", url);
+            this.loadEvaluationWithUrl(url);
+        });
+    }
+
+    // Ajoutez cette méthode si elle n'existe pas déjà
+    // loadQuizDetail(url) {
+    //     console.log("Loading quiz detail with URL:", url);
+
+    //     $.ajax({
+    //         url: url,
+    //         type: 'GET',
+    //         success: (response) => {
+    //             $('#blog-container').html(response);
+    //             // Ajouter un bouton de retour si nécessaire
+    //             if ($('#blog-container .back-btn').length === 0) {
+    //                 $('#blog-container').prepend(
+    //                     '<button class="btn btn-sm btn-outline-secondary mb-3 back-btn" data-back-tab="evaluations">' +
+    //                     '<i class="fas fa-arrow-left mr-1"></i> Retour aux évaluations</button>'
+    //                 );
+    //             }
+    //         },
+    //         error: (xhr) => this.handleError(xhr)
+    //     });
+    // }
+
+    // Méthode améliorée pour charger l'évaluation avec URL
+    loadEvaluationWithUrl(url) {
+        console.log("Loading evaluation with URL:", url);
+
+        // Ajouter un indicateur de chargement
+        $('#blog-container').append('<div class="loading-overlay"><div class="spinner-border text-primary" role="status"><span class="sr-only">Chargement...</span></div></div>');
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: (response) => {
+                $('#blog-container').html(response);
+                // Ne pas initialiser DataTable car cela interfère avec la pagination
+                // this.initDataTable('#evaluations-table');
+                this.initSelect2();
+
+                // Réinitialiser les gestionnaires d'événements
+                this.initEvaluationHandlers();
+            },
+            error: (xhr) => {
+                // Supprimer l'overlay en cas d'erreur
+                $('.loading-overlay').remove();
+                this.handleError(xhr);
+            }
+        });
+    }
+
+
 
     loadRoles() {
 
@@ -158,6 +300,7 @@ class AdminManager {
         error: (xhr) => this.handleError(xhr)
       });
     }
+
 
     // Form loading methods with data-return-view attribute
     loadCreateUserForm() {
@@ -607,6 +750,26 @@ class AdminManager {
         error: (xhr) => this.handleError(xhr)
       });
     }
+    viewQuizDetail(e) {
+        e.preventDefault();
+        const url = $(e.currentTarget).data('url');
+        console.log("Loading user roles view with URL:", url);
+
+        this.showLoader();
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: (response) => {
+            $('#blog-container').html(response);
+            // Initialiser la validation du formulaire après le chargement
+            if (window.initFormValidation) {
+              console.log("Initializing form validation after loading user roles");
+              window.initFormValidation();
+            }
+          },
+          error: (xhr) => this.handleError(xhr)
+        });
+      }
 
     applyFilters() {
       const role = $('#role-filter').val();

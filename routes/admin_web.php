@@ -454,8 +454,10 @@ Route::middleware(['auth', 'role:admin|super-admin'])->name('admin.')->prefix('a
       Route::get('/quiz-attempts', [AdminQuizController::class, 'index'])
           ->name('quiz-attempts.index');
 
-     Route::get('/quiz-attempts/{attempt}', [AdminQuizController::class, 'show'])
+    Route::get('/quiz-attempts/{attempt}', [AdminQuizController::class, 'show'])
           ->name('quiz-attempts.show');
+    Route::delete('/quiz-attempts/{attempt}', [AdminQuizController::class, 'destroy'])
+          ->name('quiz-attempts.destroy');
 });
 Route::middleware(['auth', 'role:etudiant', 'extend.quiz.session'])->group(function() {
      // Quiz

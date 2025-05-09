@@ -3,6 +3,7 @@
 @section('title') Gestion des Utilisateurs & Permissions @endsection
 
 @push('css')
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2.css') }}">
@@ -95,6 +96,13 @@
                                                 </a>
                                             </li>
                                         @endcan
+                                        <li>
+                                            <a id="load-evaluation" href="javascript:void(0)"
+                                               data-evaluation-url="{{ route('admin.quiz-attempts.index') }}"
+                                               aria-label="Afficher la liste des evaluations">
+                                               <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> Évaluations
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -133,12 +141,13 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('assets/js/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{asset('assets/js/select2/select2.full.min.js')}}"></script>
 <script src="{{asset('assets/js/select2/select2-custom.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/sweet-alert/sweetalert.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2/select2.full.min.js') }}"></script>
-<script src="{{ asset('assets/js/datatables/jquery.dataTables.min.js') }}"></script>
+
 <script src="{{ asset('assets/ajax/admin-management.js') }}"></script>
 <script src="{{ asset('assets/js/form-validation/form_validation3.js') }}"></script>
 @endpush

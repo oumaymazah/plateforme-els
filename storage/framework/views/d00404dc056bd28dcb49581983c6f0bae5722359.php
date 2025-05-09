@@ -31,7 +31,7 @@
 
                         </div>
 
-                        <h4 class="mb-4"><?php echo e($currentQuestion->question_text); ?></h4>
+
 
                         <!-- Message pour indiquer si c'est une question à choix multiple -->
                         <?php
@@ -41,11 +41,11 @@
 
                         <?php if($isMultipleChoice): ?>
                             <div class="alert alert-info mb-3">
-                                <i class="fas fa-info-circle"></i>
+                                <i class="fa fa-info-circle"></i>
                                 Cette question peut avoir plusieurs bonnes réponses. Cochez toutes les réponses que vous pensez être correctes.
                             </div>
                         <?php endif; ?>
-
+                        <h4 class="mb-4"><?php echo e($currentQuestion->question_text); ?></h4>
                         <div class="list-group mb-4">
                             <?php $__currentLoopData = $currentQuestion->answers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $answer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <label class="list-group-item d-flex align-items-center">
@@ -65,12 +65,12 @@
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-outline-secondary" id="prev-btn"
                                 <?php echo e($currentQuestionIndex > 0 ? '' : 'disabled'); ?>>
-                                <i class="fas fa-arrow-left"></i> Précédent
+                                <i class="fa fa-backward"></i> Précédent
                             </button>
                             <button type="submit" class="btn btn-primary" id="next-btn">
                                 <?php echo e($currentQuestionIndex < count($questions) - 1 ? 'Suivant' : 'Terminer'); ?>
 
-                                <i class="fas fa-arrow-right"></i>
+                                <i class="fa fa-forward"></i>
                             </button>
                         </div>
                     </form>
