@@ -9,7 +9,12 @@
 @endpush
 
 @section('content')
-
+@if(session('error'))
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
     <section>
 	    <div class="container-fluid p-0">
 	        <div class="row m-0">
@@ -19,12 +24,13 @@
                             @csrf
 	                        <h4>Créer un compte</h4>
 	                        <h6>Entrez vos informations personnelles pour créer un compte</h6>
+
 	                        <div class="form-group">
 	                            <label>Votre Nom</label>
 	                            <div class="small-group">
 	                                <div class="input-group">
 	                                    <span class="input-group-text"><i class="icon-user"></i></span>
-	                                    <input class="form-control @error('name') is-invalid @enderror" name="name" type="text" required placeholder="Prénom" />
+	                                    <input class="form-control @error('name') is-invalid @enderror" name="name" type="text" required placeholder="Prénom" value="{{ old('name') }}" />
                                         <div class="invalid-feedback js-error">Veuillez entrer un prénom.</div>
                                         @error('name')
 	                                        <div class="invalid-feedback laravel-error" style="display: block;">{{ $message }}</div>
@@ -32,7 +38,7 @@
 	                                </div>
 	                                <div class="input-group">
 	                                    <span class="input-group-text"><i class="icon-user"></i></span>
-	                                    <input class="form-control @error('lastname') is-invalid @enderror" name="lastname" type="text" required placeholder="Nom de famille" />
+	                                    <input class="form-control @error('lastname') is-invalid @enderror" name="lastname" type="text" required placeholder="Nom de famille" value="{{ old('lastname') }}" />
                                         <div class="invalid-feedback js-error">Veuillez entrer un nom.</div>
                                         @error('lastname')
 	                                        <div class="invalid-feedback laravel-error" style="display: block;">{{ $message }}</div>
@@ -45,7 +51,7 @@
 	                            <label>Adresse Email</label>
 	                            <div class="input-group">
 	                                <span class="input-group-text"><i class="icon-email"></i></span>
-	                                <input class="form-control @error('email') is-invalid @enderror"  name="email" type="email" required placeholder="exemple@gmail.com" />
+	                                <input class="form-control @error('email') is-invalid @enderror"  name="email" type="email" required placeholder="exemple@gmail.com" value="{{ old('email') }}"  />
                                     <div class="invalid-feedback js-error">Veuillez entrer une adresse email valide.</div>
                                     @error('email')
 	                                    <div class="invalid-feedback laravel-error" style="display: block;">{{ $message }}</div>
@@ -58,7 +64,7 @@
 	                            <label>Numéro de Téléphone</label>
 	                            <div class="input-group">
 	                                <span class="input-group-text"><i class="fa fa-phone"></i></span>
-	                                <input class="form-control @error('phone') is-invalid @enderror" type="text" name="phone" required placeholder="+216 12 345 678" />
+	                                <input class="form-control @error('phone') is-invalid @enderror" type="text" name="phone" required placeholder="+216 12 345 678" value="{{ old('phone') }}"/>
                                     <div class="invalid-feedback js-error">
                                         Veuillez entrer un numéro de téléphone valide.
                                     </div>
@@ -72,7 +78,7 @@
 	                            <label>Mot de passe</label>
 	                            <div class="input-group">
 	                                <span class="input-group-text"><i class="icon-lock"></i></span>
-	                                <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" required placeholder="*********" />
+	                                <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" required placeholder="*********" value="{{ old('password') }}" />
 	                                <div class="show-hide"><span class="show"> </span></div>
                                     <div class="invalid-feedback js-error">Le mot de passe doit contenir au moins 8 caractères.</div>
                                     @error('password')
@@ -83,7 +89,7 @@
 
                             <div class="form-group">
                                 <div class="checkbox">
-                                    <input id="checkbox1" type="checkbox" name="privacy_policy" value="1" required />
+                                    <input id="checkbox1" type="checkbox" name="privacy_policy" value="1" required {{ old('privacy_policy') ? 'checked' : '' }} />
                                     <label class="text-muted" for="checkbox1">J'accepte la <span>Politique de confidentialité</span></label>
                                     <div class="invalid-feedback js-error">Veuillez accepter la Politique de confidentialité.</div>
                                     @error('privacy_policy')

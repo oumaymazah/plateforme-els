@@ -188,6 +188,11 @@ class UserController extends Controller
         $oldStatus = $user->status;
         $user->status = $user->status === 'active' ? 'inactive' : 'active';
         $user->save();
+        if ($oldStatus === 'inactive' && $user->status === 'active' && $user->validation_code !== null ) {
+            $user->validation_code = null;
+            $user->save();
+
+        }
 
         // Si l'utilisateur passe de 'inactive' à 'active', réinitialiser le compteur de tentatives
         if ($oldStatus === 'inactive' && $user->status === 'active') {
@@ -196,6 +201,7 @@ class UserController extends Controller
 
             session([$sessionKey => 0]);
             session([$sessionTimerKey => null]);
+
         }
 
         return response()->json([

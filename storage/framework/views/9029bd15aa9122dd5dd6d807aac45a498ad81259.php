@@ -8,7 +8,13 @@
 <?php $__env->stopPush(); ?>
 
 <?php $__env->startSection('content'); ?>
+<?php if(session('error')): ?>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <?php echo e(session('error')); ?>
 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<?php endif; ?>
     <section>
 	    <div class="container-fluid p-0">
 	        <div class="row m-0">
@@ -18,6 +24,7 @@
                             <?php echo csrf_field(); ?>
 	                        <h4>Créer un compte</h4>
 	                        <h6>Entrez vos informations personnelles pour créer un compte</h6>
+
 	                        <div class="form-group">
 	                            <label>Votre Nom</label>
 	                            <div class="small-group">
@@ -30,7 +37,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" name="name" type="text" required placeholder="Prénom" />
+unset($__errorArgs, $__bag); ?>" name="name" type="text" required placeholder="Prénom" value="<?php echo e(old('name')); ?>" />
                                         <div class="invalid-feedback js-error">Veuillez entrer un prénom.</div>
                                         <?php $__errorArgs = ['name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -52,7 +59,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" name="lastname" type="text" required placeholder="Nom de famille" />
+unset($__errorArgs, $__bag); ?>" name="lastname" type="text" required placeholder="Nom de famille" value="<?php echo e(old('lastname')); ?>" />
                                         <div class="invalid-feedback js-error">Veuillez entrer un nom.</div>
                                         <?php $__errorArgs = ['lastname'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -79,7 +86,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>"  name="email" type="email" required placeholder="exemple@gmail.com" />
+unset($__errorArgs, $__bag); ?>"  name="email" type="email" required placeholder="exemple@gmail.com" value="<?php echo e(old('email')); ?>"  />
                                     <div class="invalid-feedback js-error">Veuillez entrer une adresse email valide.</div>
                                     <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -106,7 +113,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" type="text" name="phone" required placeholder="+216 12 345 678" />
+unset($__errorArgs, $__bag); ?>" type="text" name="phone" required placeholder="+216 12 345 678" value="<?php echo e(old('phone')); ?>"/>
                                     <div class="invalid-feedback js-error">
                                         Veuillez entrer un numéro de téléphone valide.
                                     </div>
@@ -134,7 +141,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" type="password" name="password" required placeholder="*********" />
+unset($__errorArgs, $__bag); ?>" type="password" name="password" required placeholder="*********" value="<?php echo e(old('password')); ?>" />
 	                                <div class="show-hide"><span class="show"> </span></div>
                                     <div class="invalid-feedback js-error">Le mot de passe doit contenir au moins 8 caractères.</div>
                                     <?php $__errorArgs = ['password'];
@@ -152,7 +159,7 @@ unset($__errorArgs, $__bag); ?>
 
                             <div class="form-group">
                                 <div class="checkbox">
-                                    <input id="checkbox1" type="checkbox" name="privacy_policy" value="1" required />
+                                    <input id="checkbox1" type="checkbox" name="privacy_policy" value="1" required <?php echo e(old('privacy_policy') ? 'checked' : ''); ?> />
                                     <label class="text-muted" for="checkbox1">J'accepte la <span>Politique de confidentialité</span></label>
                                     <div class="invalid-feedback js-error">Veuillez accepter la Politique de confidentialité.</div>
                                     <?php $__errorArgs = ['privacy_policy'];
