@@ -85,15 +85,7 @@
                                                <i class="me-2 fas fa-user-tag" aria-hidden="true"></i> Rôles
                                             </a>
                                         </li>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('gérer des permissions')): ?>
-                                            <li>
-                                                <a id="load-permission" href="javascript:void(0)"
-                                                data-permission-url="<?php echo e(route('admin.permissions.index')); ?>"
-                                                aria-label="Afficher la liste des permissions">
-                                                <i class="me-2 fas fa-key" aria-hidden="true"></i> Permissions
-                                                </a>
-                                            </li>
-                                        <?php endif; ?>
+                                       
                                         <li>
                                             <a id="load-evaluation" href="javascript:void(0)"
                                                data-evaluation-url="<?php echo e(route('admin.quiz-attempts.index')); ?>"

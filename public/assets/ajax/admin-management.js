@@ -14,19 +14,18 @@ class AdminManager {
         .on('click', '#load-users', () => this.loadUsers())
         .on('click', '#load-roles', () => this.loadRoles())
         .on('click', '#load-evaluation', () => this.loadEvaluations())
-        .on('click', '#load-permission', () => this.loadPermissions())
+
         .on('click', '#loadCreateUserForm', () => this.loadCreateUserForm())
         .on('click', '#loadCreateRoleForm', () => this.loadCreateRoleForm())
-        .on('click', '#loadCreatePermissionForm', () => this.loadCreatePermissionForm())
+
         .on('click', '.back-btn', (e) => this.handleBackButton(e));
 
       // Forms
       $(document)
         .on('submit', '#create-user-form', (e) => this.handleUserForm(e))
         .on('submit', '#edit-role-form', (e) => this.handleRoleForm(e))
-        .on('submit', '#create-role-form', (e) => this.handleRoleForm(e))
-        .on('submit', '#create-permission-form', (e) => this.handlePermissionForm(e))
-        .on('submit', '#edit-permission-form', (e) => this.handlePermissionForm(e));
+        .on('submit', '#create-role-form', (e) => this.handleRoleForm(e));
+
 
       // Actions
       $(document)
@@ -38,13 +37,12 @@ class AdminManager {
         .on('click', '.view-user-roles', (e) => this.viewUserRoles(e))
         .on('click', '.view-quiz-detail', (e) => this.viewQuizDetail(e))
         .on('click', '.remove-role', (e) => this.removeRoleFromUser(e))  // Handler pour supprimer un rôle
-        .on('click', '.revoke-permission', (e) => this.revokePermissionFromUser(e))  // Handler pour révoquer une permission
+
         .on('change', '#role-filter, #status-filter', () => this.applyFilters())
         .on('click', '.edit-role', (e) => this.loadEditRoleForm(e))
-        .on('click', '.edit-permission', (e) => this.loadEditPermissionForm(e))
+
         .on('click', '#reset-filters', () => this.resetFilters())
-        .on('change', '#role-filter-permission', () => this.applyFiltersPermission()) // Ajout du bouton de réinitialisation
-        .on('click', '#reset-filters-permissions', () => this.resetFiltersPermission());
+
 
       // Gestionnaire pour le bouton d'annulation
       $(document).on('click', '.cancel-user-creation', () => {
@@ -64,9 +62,7 @@ class AdminManager {
           setTimeout(() => this.loadUsers(), 100);
         } else if (returnView === 'roles') {
           setTimeout(() => this.loadRoles(), 100);
-        } else if (returnView === 'permissions') {
-          setTimeout(() => this.loadPermissions(), 100);
-        }else if (returnView === 'evaluations') {
+        } else if (returnView === 'evaluations') {
             setTimeout(() => this.loadEvaluations(), 100);
 
         } else {
@@ -77,10 +73,7 @@ class AdminManager {
             setTimeout(() => this.loadUsers(), 100);
           } else if (modalTitle.includes('rôle') || modalTitle.includes('role')) {
             setTimeout(() => this.loadRoles(), 100);
-          } else if (modalTitle.includes('permission')) {
-            setTimeout(() => this.loadPermissions(), 100);
-          }
-          else if (modalTitle.includes('evaluation')) {
+          } else if (modalTitle.includes('evaluation')) {
             setTimeout(() => this.loadEvaluations(), 100);
           }
         }
@@ -103,8 +96,6 @@ class AdminManager {
             this.loadUsers();
         } else if (targetTab === 'roles') {
             this.loadRoles();
-        } else if (targetTab === 'permissions') {
-            this.loadPermissions();
         }
     }
 
@@ -283,23 +274,7 @@ class AdminManager {
       });
     }
 
-    loadPermissions() {
 
-      $.ajax({
-        url: $('#load-permission').data('permission-url'),
-        type: 'GET',
-        success: (response) => {
-          $('#blog-container').html(response);
-          this.initDataTable('#permissions-table');
-          // Initialiser la validation du formulaire après le chargement
-          if (window.initFormValidation) {
-            console.log("Initializing form validation after loading permissions");
-            window.initFormValidation();
-          }
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
 
 
     // Form loading methods with data-return-view attribute
@@ -362,28 +337,7 @@ class AdminManager {
         );
     }
 
-    loadCreatePermissionForm() {
-        $('#exampleModal .modal-body').empty();
-        if (!$('#exampleModal').hasClass('show')) {
-            $('#exampleModal').modal('show');
-          }
-      $.ajax({
-        url: $('#loadCreatePermissionForm').data('create-url'),
-        type: 'GET',
-        success: (response) => {
-          $('#exampleModal .modal-body').html(response);
-          $('#exampleModalLabel').text('Créer une permission');
-          // AJOUT: attribut data pour savoir où rediriger après fermeture
-          $('#exampleModal').data('return-view', 'permissions');
-          // Initialiser la validation du formulaire après le chargement
-          if (window.initFormValidation) {
-            console.log("Initializing form validation for create permission form");
-            window.initFormValidation();
-          }
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-    }
+
 
     loadEditRoleForm(e) {
         $('#exampleModal .modal-body').empty();
@@ -407,28 +361,7 @@ class AdminManager {
           error: (xhr) => this.handleError(xhr)
         });
       }
-    loadEditPermissionForm(e){
-        $('#exampleModal .modal-body').empty();
-        if (!$('#exampleModal').hasClass('show')) {
-            $('#exampleModal').modal('show');
-          }
-        const url = $(e.currentTarget).data('edit-permission-url');
-        $.ajax({
-          url:url,
-          type: 'GET',
-          success: (response) => {
-            $('#exampleModal .modal-body').html(response);
-            $('#exampleModal').data('return-view', 'permissions');
-            this.initSelect2();
-            // Initialiser la validation du formulaire après le chargement
-            if (window.initFormValidation) {
-              console.log("Initializing form validation for edit role form");
-              window.initFormValidation();
-            }
-          },
-          error: (xhr) => this.handleError(xhr)
-        });
-    }
+
 
 
 
@@ -475,25 +408,7 @@ class AdminManager {
       });
     }
 
-    handlePermissionForm(e) {
-      e.preventDefault();
-      const form = $(e.target);
 
-      // Initialiser la validation du formulaire avant traitement
-      if (window.initFormValidation) {
-        console.log("Initializing form validation during permission form submission");
-        window.initFormValidation();
-      }
-
-      this.submitForm(form, () => {
-
-        // Seulement fermer en cas de succès
-        $('#exampleModal').modal('hide');
-        setTimeout(() => {
-          this.loadPermissions();
-        }, 300);
-      });
-    }
 
     // Désactiver le bouton pendant la soumission
     disableSubmitButton(form, loadingText = 'Traitement en cours...') {
@@ -802,42 +717,8 @@ class AdminManager {
         error: (xhr) => this.handleError(xhr)
       });
     }
-    applyFiltersPermission(){
-        const role = $('#role-filter-permission').val();
 
-    //   this.showLoader();
-      $.ajax({
-        url: $('#load-permission').data('permission-url'),
-        type: 'GET',
-        data: {
-          role: role,
-
-        },
-        success: (response) => {
-          $('#blog-container').html(response);
-          this.initDataTable('#permissions-table');
-          this.initSelect2();
-          // Initialiser la validation du formulaire après le chargement
-          if (window.initFormValidation) {
-            console.log("Initializing form validation after applying filters");
-            window.initFormValidation();
-          }
-
-          // Restaurer les valeurs des filtres après le rechargement
-          $('#role-filter-permission').val(role);
-
-        },
-        error: (xhr) => this.handleError(xhr)
-      });
-
-
-    }
-    // Méthode pour réinitialiser les filtres
-    resetFiltersPermission() {
-        $('#role-filter-permission').val('');
-        this.loadPermissions();
-      }
-
+    
 
     // Méthode pour réinitialiser les filtres
     resetFilters() {

@@ -44,9 +44,10 @@
                         <div class="stat-icon warning">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
+                        
                         <div class="stat-content">
-                            <span class="stat-value"><?php echo e($attempts->where('cheated', true)->count()); ?></span>
-                            <span class="stat-label">Alertes</span>
+                            <span class="stat-value"><?php echo e($attempts->where('tab_switches', '>=', 2)->count()); ?></span>
+                            <span class="stat-label">Tentatives de triche</span>
                         </div>
                     </div>
                 </div>

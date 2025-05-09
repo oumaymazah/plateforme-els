@@ -87,15 +87,7 @@
                                                <i class="me-2 fas fa-user-tag" aria-hidden="true"></i> Rôles
                                             </a>
                                         </li>
-                                        @can('gérer des permissions')
-                                            <li>
-                                                <a id="load-permission" href="javascript:void(0)"
-                                                data-permission-url="{{ route('admin.permissions.index') }}"
-                                                aria-label="Afficher la liste des permissions">
-                                                <i class="me-2 fas fa-key" aria-hidden="true"></i> Permissions
-                                                </a>
-                                            </li>
-                                        @endcan
+                                       
                                         <li>
                                             <a id="load-evaluation" href="javascript:void(0)"
                                                data-evaluation-url="{{ route('admin.quiz-attempts.index') }}"
