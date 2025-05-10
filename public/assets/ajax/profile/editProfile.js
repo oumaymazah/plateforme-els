@@ -553,6 +553,57 @@ $(document).ready(function() {
     }
 
     // Gestion des formulaires par AJAX
+    // $(document).on('submit', '.ajax-form', function(e) {
+    //     e.preventDefault();
+
+    //     const form = $(this);
+    //     const url = form.attr('action');
+    //     const method = form.attr('method');
+    //     const formData = form.serialize();
+
+    //     $('#content-loader').show();
+
+    //     $.ajax({
+    //         url: url,
+    //         type: method,
+    //         data: formData,
+    //         success: function(response) {
+    //             $('#content-loader').hide();
+
+    //             if (response.message) {
+    //                 showAlert(response.message, 'success');
+    //             }
+
+    //             // Gestion spécifique pour le formulaire de mot de passe
+    //             if (form.attr('id') === 'edit-password-form' || form.data('reload-tab') === 'account') {
+    //                 loadTabContent('account');
+    //                 return;
+    //             }
+
+    //             // Gestion normale pour les autres formulaires
+    //             if (form.data('reload-tab')) {
+    //                 loadTabContent(form.data('reload-tab'));
+    //             }
+    //         },
+    //         error: function(xhr) {
+    //             $('#content-loader').hide();
+
+    //             if (xhr.responseJSON && xhr.responseJSON.error) {
+    //                 showAlert(xhr.responseJSON.error, 'danger');
+    //             } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+    //                 let errorMsg = '';
+    //                 $.each(xhr.responseJSON.errors, function(key, value) {
+    //                     errorMsg += value + '<br>';
+    //                 });
+    //                 showAlert(errorMsg, 'danger');
+    //             } else {
+    //                 showAlert('Une erreur est survenue. Veuillez réessayer.', 'danger');
+    //             }
+    //         }
+    //     });
+    // });
+
+    // Gestion des formulaires par AJAX
     $(document).on('submit', '.ajax-form', function(e) {
         e.preventDefault();
 
@@ -588,14 +639,23 @@ $(document).ready(function() {
             error: function(xhr) {
                 $('#content-loader').hide();
 
-                if (xhr.responseJSON && xhr.responseJSON.error) {
-                    showAlert(xhr.responseJSON.error, 'danger');
-                } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
                     let errorMsg = '';
                     $.each(xhr.responseJSON.errors, function(key, value) {
-                        errorMsg += value + '<br>';
+                        // Vérifier si la valeur est un tableau ou une chaîne
+                        if (Array.isArray(value)) {
+                            // Si c'est un tableau, ajouter chaque message d'erreur
+                            value.forEach(function(message) {
+                                errorMsg += message + '<br>';
+                            });
+                        } else {
+                            // Si c'est une chaîne, l'ajouter directement
+                            errorMsg += value + '<br>';
+                        }
                     });
                     showAlert(errorMsg, 'danger');
+                } else if (xhr.responseJSON && xhr.responseJSON.error) {
+                    showAlert(xhr.responseJSON.error, 'danger');
                 } else {
                     showAlert('Une erreur est survenue. Veuillez réessayer.', 'danger');
                 }

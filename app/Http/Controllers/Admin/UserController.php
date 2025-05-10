@@ -73,38 +73,63 @@ class UserController extends Controller
 
 
 
-    public function store(Request $request)
+public function store(Request $request)
 {
-    // Formater d'abord le numéro de téléphone
-    $countryCode = '+216';
-    $localNumber = $request->input('phone');
-    $fullPhoneNumber = $countryCode . ' ' . $localNumber;
-    $formattedPhoneNumber = PhoneNumber::make($fullPhoneNumber, 'TN')->formatE164();
+    $request->flash();
 
-    // Préparer les messages d'erreurs personnalisés
-    $messages = [
+    // Validation standard des autres champs
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'phone' => 'required',
+        'roles' => 'required',
+    ], [
+        'name.required' => 'Le nom est obligatoire.',
+        'lastname.required' => 'Le prénom est obligatoire.',
+        'email.required' => 'L\'email est obligatoire.',
+        'email.email' => 'Veuillez entrer une adresse email valide.',
         'email.unique' => 'Cet email est déjà utilisé par un autre utilisateur.',
-        'phone.phone' => 'Le numéro de téléphone doit être valide pour la Tunisie.',
-        'phone.unique' => 'Ce numéro de téléphone est déjà associé à un compte existant.',
-    ];
+        'phone.required' => 'Le numéro de téléphone est obligatoire.',
+    ]);
 
-    $validator = Validator::make(
-        array_merge($request->all(), ['phone' => $formattedPhoneNumber]),
-        [
-            'name' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'phone' => 'required|phone:TN|unique:users,phone',
-            'email' => 'required|email|unique:users,email',
-            'roles' => 'required'
-        ],
-        $messages
-    );
+    // Collection d'erreurs commune pour toutes les validations
+    $errors = $validator->errors();
 
-    // Si la validation échoue, retourner les erreurs
-    if ($validator->fails()) {
+    // Initialiser la variable pour la portée
+    $fullPhoneNumber = '';
+
+
+        $countryCode = '+216';
+        $localNumber = $request->input('phone');
+
+        if (!empty($localNumber)) {
+            // Formater le numéro
+            $fullPhoneNumber = $countryCode . $localNumber;
+
+            // Vérifier si le format correspond à un numéro tunisien (8 chiffres)
+            if (preg_match('/^\+216(\d{8})$/', $fullPhoneNumber, $matches)) {
+
+                // Vérifier si le préfixe est valide
+
+                    // Vérifier si le numéro existe déjà dans la base de données
+                $existingUser = User::where('phone', $fullPhoneNumber)->first();
+                if ($existingUser) {
+                    $errors->add('phone', 'Ce numéro de téléphone est déjà associé à un compte existant.');
+                }
+
+            } else {
+                // Si le format n'est pas valide
+                $errors->add('phone', 'Le numéro de téléphone doit être valide pour la Tunisie (8 chiffres).');
+            }
+        }
+
+
+    // Si des erreurs sont présentes, rediriger
+    if ($validator->fails() || $errors->isNotEmpty()) {
         return response()->json([
             'success' => false,
-            'errors' => $validator->errors()
+            'errors' => $errors
         ], 422);
     }
 
@@ -119,7 +144,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
-            'phone' => $formattedPhoneNumber,
+            'phone' => $fullPhoneNumber,
             'email' => $request->email,
             'password' => bcrypt($password),
             'status' => 'inactive',
@@ -156,8 +181,6 @@ class UserController extends Controller
 
 
 
-
-
     public function destroy(User $user)
     {
         $user->delete();
@@ -172,16 +195,7 @@ class UserController extends Controller
 
 
 
-    // public function toggleStatus(User $user)
-    // {
-    //     $user->status = $user->status === 'active' ? 'inactive' : 'active';
-    //     $user->save();
-    //     return response()->json([
-    //         'message' => 'Statut modifié avec succès.',
-    //         'success' => true,
-    //         'status' => $user->status
-    //     ]);
-    // }
+    
 
     public function toggleStatus(User $user)
     {

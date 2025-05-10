@@ -67,6 +67,8 @@ class EditController extends Controller
 public function checkEmailAvailability(Request $request)
 {
     $messages = [
+        'email.email' => 'Veuillez entrer une adresse e-mail valide.',
+        'email.string' => 'L\'adresse e-mail doit être une chaîne de caractères.',
         'email.required' => 'Une adresse e-mail valide est requise pour mettre à jour votre compte.',
     ];
     $request->validate([
@@ -253,23 +255,43 @@ public function checkEmailAvailability(Request $request)
         return view('admin.apps.profile.editPassword');
     }
 
-    //entrer l'ancien et le nouveau mot de passe et confirmer le nouveau mot de passe
+
+
     public function updatePassword(Request $request)
     {
-        $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'old_password' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'old_password.required' => 'L\'ancien mot de passe est requis.',
+            'password.required' => 'Le nouveau mot de passe est requis.',
+            'password.min' => 'Le mot de passe doit contenir au moins :min caractères.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
         ]);
-
+        $errors = $validator->errors();
         $user = Auth::user();
         if (!Hash::check($request->old_password, $user->password)) {
-            return response()->json(['error' => 'Le mot de passe actuel est incorrect.'], 422);
+            $errors->add('old_password', 'Le mot de passe actuel est incorrect.');
+
         }
+
+        if ($validator->fails() || $errors->isNotEmpty()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $errors
+            ], 422);
+        }
+
+
 
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return response()->json(['message' => 'Votre mot de passe a été mis à jour avec succès.'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Votre mot de passe a été mis à jour avec succès.'
+        ], 200);
     }
 
 }

@@ -29,7 +29,7 @@ class User extends Authenticatable
         'first_login',
         'validation_code',
         'code_reset_password',
-
+       
 
     ];
 
@@ -50,6 +50,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+
     ];
 
     public function certificates()
