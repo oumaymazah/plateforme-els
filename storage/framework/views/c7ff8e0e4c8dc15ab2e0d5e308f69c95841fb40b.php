@@ -1,5 +1,6 @@
 <?php $__env->startPush('css'); ?>
     <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/verifyCode_password.css')); ?>">
+
 <?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
 <div class="container py-5">
@@ -97,6 +98,7 @@ unset($__errorArgs, $__bag); ?> border-start-0" name="password_confirmation" req
                                 <div class="invalid-feedback js-error">Veuillez confirmer votre mot de passe pour finaliser la procédure.</div>
                             </div>
                         </div>
+
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-lg py-3 fw-medium text-white" style="background-color: #2B6ED4; border: none;">
                                 <span class="me-2">Changer mon mot de passe</span>
@@ -124,50 +126,10 @@ unset($__errorArgs, $__bag); ?> border-start-0" name="password_confirmation" req
 </div>
 <?php $__env->startPush('scripts'); ?>
     <script src="<?php echo e(asset('assets/js/form-validation/form_validation2.js')); ?>"></script>
+
 <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
 
-<style>
-    body {
-        background-color: #f8f9fa;
-        font-family: 'Poppins', sans-serif;
-    }
 
-    .card {
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .form-control {
-        border-color: #e0e0e0;
-    }
-
-    .form-control:focus, .btn:focus {
-        box-shadow: 0 0 0 0.25rem rgba(43, 110, 212, 0.25);
-        border-color: #2B6ED4;
-    }
-
-    .btn {
-        transition: all 0.3s ease;
-    }
-
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(43, 110, 212, 0.3);
-    }
-
-    .fade-in {
-        animation: fadeIn 0.5s;
-    }
-
-    @keyframes  fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #2B6ED4, #1a4faf);
-    }
-</style>
 
 <?php echo $__env->make('admin.authentication.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\apprendre laravel\platformeEls\resources\views/auth/reset-password.blade.php ENDPATH**/ ?>

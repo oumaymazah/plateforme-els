@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/select2.css')); ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/sweetalert2.css')); ?>">
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/datatables.css')); ?>">
@@ -40,13 +41,7 @@
 
 <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="max-width: 600px;"></div>
 
-<?php $__env->startComponent('components.breadcrumb'); ?>
-    <?php $__env->slot('breadcrumb_title'); ?>
-        <h3>Gestion des Utilisateurs & Permissions</h3>
-    <?php $__env->endSlot(); ?>
-    <li class="breadcrumb-item">Administration</li>
-    <li class="breadcrumb-item active">Utilisateurs & Permissions</li>
-<?php echo $__env->renderComponent(); ?>
+
 
 <div class="container-fluid">
     <div class="email-wrap bookmark-wrap">
@@ -85,7 +80,7 @@
                                                <i class="me-2 fas fa-user-tag" aria-hidden="true"></i> Rôles
                                             </a>
                                         </li>
-                                       
+
                                         <li>
                                             <a id="load-evaluation" href="javascript:void(0)"
                                                data-evaluation-url="<?php echo e(route('admin.quiz-attempts.index')); ?>"

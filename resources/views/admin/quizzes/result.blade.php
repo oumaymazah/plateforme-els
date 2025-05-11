@@ -217,7 +217,7 @@
         margin-bottom: 1rem;
     }
 
-   
+
     .accordion .card {
         margin-bottom: 1rem;
         border: none !important;

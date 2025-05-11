@@ -1,7 +1,4 @@
-
-
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +20,7 @@
     </div>
     <div class="content">
         <h2 style="color: #2c3e50;">Réinitialisation de votre mot de passe</h2>
-        <p>Bonjour <strong><?php echo e($name); ?></strong>,</p>
+        <p>Bonjour <strong><?php echo e($lastname); ?></strong>,</p>
         <p>Vous avez demandé à réinitialiser votre mot de passe. Veuillez utiliser le code ci-dessous :</p>
         <div class="code"><?php echo e($code); ?></div>
     </div>

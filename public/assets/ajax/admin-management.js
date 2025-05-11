@@ -96,6 +96,8 @@ class AdminManager {
             this.loadUsers();
         } else if (targetTab === 'roles') {
             this.loadRoles();
+        }else if (targetTab === 'evaluation') {
+            this.loadEvaluations();
         }
     }
 
@@ -170,14 +172,7 @@ class AdminManager {
         $(document).off('submit', '.filter-form');
         $(document).off('click', '.reset-filters');
 
-        // Réattacher les gestionnaires
-        // Gestion des clics sur le lien "view-quiz-detail"
-        // $(document).on('click', '.view-quiz-detail', (e) => {
-        //     e.preventDefault();
-        //     const url = $(e.currentTarget).data('viewEvaluation-url');
-        //     console.log("View quiz detail clicked, URL:", url);
-        //     this.loadQuizDetail(url);
-        // });
+
 
         // Gestion des clics sur les liens de pagination
         $(document).on('click', '.pagination a', (e) => {
@@ -206,26 +201,7 @@ class AdminManager {
         });
     }
 
-    // Ajoutez cette méthode si elle n'existe pas déjà
-    // loadQuizDetail(url) {
-    //     console.log("Loading quiz detail with URL:", url);
 
-    //     $.ajax({
-    //         url: url,
-    //         type: 'GET',
-    //         success: (response) => {
-    //             $('#blog-container').html(response);
-    //             // Ajouter un bouton de retour si nécessaire
-    //             if ($('#blog-container .back-btn').length === 0) {
-    //                 $('#blog-container').prepend(
-    //                     '<button class="btn btn-sm btn-outline-secondary mb-3 back-btn" data-back-tab="evaluations">' +
-    //                     '<i class="fas fa-arrow-left mr-1"></i> Retour aux évaluations</button>'
-    //                 );
-    //             }
-    //         },
-    //         error: (xhr) => this.handleError(xhr)
-    //     });
-    // }
 
     // Méthode améliorée pour charger l'évaluation avec URL
     loadEvaluationWithUrl(url) {
@@ -718,7 +694,7 @@ class AdminManager {
       });
     }
 
-    
+
 
     // Méthode pour réinitialiser les filtres
     resetFilters() {

@@ -130,9 +130,7 @@
                         <tr class="data-row">
                             <td>
                                 <div class="user-info">
-                                    {{-- <div class="user-avatar">
-                                        <span>{{ substr($attempt->user->name, 0, 1) }}</span>
-                                    </div> --}}
+
                                     <span>{{ $attempt->user->name }} {{ $attempt->user->lastname ?? '' }}</span>
                                 </div>
                             </td>
@@ -1146,53 +1144,6 @@
             });
         });
 
-        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-        // dropdownToggles.forEach(function(toggle) {
-        //     toggle.addEventListener('click', function(event) {
-        //         event.stopPropagation();
-        //         const dropdownMenu = this.nextElementSibling;
-
-        //         // Masquer tous les autres menus déroulants
-        //         document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
-        //             if (menu !== dropdownMenu) {
-        //                 menu.classList.remove('show');
-        //             }
-        //         });
-
-        //         // Basculer l'affichage du menu actuel
-        //         dropdownMenu.classList.toggle('show');
-        //     });
-        // });
-
-        // // Fermer les menus déroulants quand on clique ailleurs
-        // document.addEventListener('click', function(event) {
-        //     if (!event.target.closest('.dropdown-evaluation-actions')) {
-        //         document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
-        //             menu.classList.remove('show');
-        //         });
-        //     }
-        // });
-        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-        dropdownToggles.forEach(function(toggle) {
-            toggle.addEventListener('click', function() {
-                // Trouver la ligne parente
-                const parentRow = this.closest('.data-row');
-                if (parentRow) {
-                    // Désactiver temporairement les effets de survol sur cette ligne
-                    parentRow.classList.add('dropdown-active');
-
-                    // Réactiver les effets lorsque le dropdown est fermé
-                    document.addEventListener('click', function removeDropdownActive() {
-                        if (!document.querySelector('.dropdown-menu.show')) {
-                            parentRow.classList.remove('dropdown-active');
-                            document.removeEventListener('click', removeDropdownActive);
-                        }
-                    });
-                }
-            });
-        });
 
     });
 </script>
